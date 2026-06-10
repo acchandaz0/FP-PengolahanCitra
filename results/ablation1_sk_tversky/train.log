@@ -1,0 +1,593 @@
+2026-06-09 13:39:18 | INFO     | Log file: /home/mci/arsyadl/mmsk/results/ablation1_sk_tversky/train.log
+2026-06-09 13:39:19 | INFO     | VRAM cap      : 20 GB / 51 GB total (fraction=0.394)
+2026-06-09 13:39:19 | INFO     | Using device : cuda:0
+2026-06-09 13:39:19 | INFO     | Model        : SK-3D U-Net (plain Selective Kernel)
+2026-06-09 13:39:19 | INFO     | Loss         : Tversky (α=0.3, β=0.7)  [Ablation 1]
+2026-06-09 13:39:19 | INFO     | Output dir   : /home/mci/arsyadl/mmsk/results/ablation1_sk_tversky
+2026-06-09 13:39:19 | INFO     | Total parameters: 12,515,251
+2026-06-09 13:39:19 | INFO     | AMP (mixed precision): ON
+2026-06-09 13:39:19 | INFO     | Preparing datasets...
+2026-06-09 13:39:19 | INFO     | [Validation] Scanning 1344 .npz files...
+2026-06-09 13:39:19 | DEBUG    |   [1/1344] OK: BraTS-GLI-00005-100.npz
+2026-06-09 13:39:19 | WARNING  | [CORRUPT] BraTS-GLI-00008-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:19 | WARNING  | [CORRUPT] BraTS-GLI-00008-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:20 | WARNING  | [CORRUPT] BraTS-GLI-00008-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:20 | WARNING  | [CORRUPT] BraTS-GLI-00008-103.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:20 | WARNING  | [CORRUPT] BraTS-GLI-00009-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:20 | WARNING  | [CORRUPT] BraTS-GLI-00009-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:20 | WARNING  | [CORRUPT] BraTS-GLI-00020-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:20 | WARNING  | [CORRUPT] BraTS-GLI-00020-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:20 | WARNING  | [CORRUPT] BraTS-GLI-00027-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:20 | WARNING  | [CORRUPT] BraTS-GLI-00027-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:21 | WARNING  | [CORRUPT] BraTS-GLI-00046-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:21 | WARNING  | [CORRUPT] BraTS-GLI-00046-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:21 | WARNING  | [CORRUPT] BraTS-GLI-00060-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:21 | WARNING  | [CORRUPT] BraTS-GLI-00060-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:21 | WARNING  | [CORRUPT] BraTS-GLI-00063-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:21 | WARNING  | [CORRUPT] BraTS-GLI-00063-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:21 | WARNING  | [CORRUPT] BraTS-GLI-00080-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:22 | WARNING  | [CORRUPT] BraTS-GLI-00080-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:22 | WARNING  | [CORRUPT] BraTS-GLI-00096-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:22 | WARNING  | [CORRUPT] BraTS-GLI-00096-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:22 | WARNING  | [CORRUPT] BraTS-GLI-00463-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:22 | WARNING  | [CORRUPT] BraTS-GLI-00463-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:22 | WARNING  | [CORRUPT] BraTS-GLI-00469-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:22 | WARNING  | [CORRUPT] BraTS-GLI-00469-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:23 | WARNING  | [CORRUPT] BraTS-GLI-00483-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:23 | WARNING  | [CORRUPT] BraTS-GLI-00483-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:23 | WARNING  | [CORRUPT] BraTS-GLI-00485-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:23 | WARNING  | [CORRUPT] BraTS-GLI-00485-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:23 | WARNING  | [CORRUPT] BraTS-GLI-00491-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:23 | WARNING  | [CORRUPT] BraTS-GLI-00491-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:23 | WARNING  | [CORRUPT] BraTS-GLI-00498-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:23 | WARNING  | [CORRUPT] BraTS-GLI-00498-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:24 | WARNING  | [CORRUPT] BraTS-GLI-00505-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:24 | WARNING  | [CORRUPT] BraTS-GLI-00505-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:24 | WARNING  | [CORRUPT] BraTS-GLI-00506-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:24 | WARNING  | [CORRUPT] BraTS-GLI-00506-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:24 | WARNING  | [CORRUPT] BraTS-GLI-00507-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:24 | WARNING  | [CORRUPT] BraTS-GLI-00507-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:24 | WARNING  | [CORRUPT] BraTS-GLI-00512-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:25 | WARNING  | [CORRUPT] BraTS-GLI-00512-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:25 | WARNING  | [CORRUPT] BraTS-GLI-00517-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:25 | WARNING  | [CORRUPT] BraTS-GLI-00517-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:25 | WARNING  | [CORRUPT] BraTS-GLI-00518-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:25 | WARNING  | [CORRUPT] BraTS-GLI-00518-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:25 | WARNING  | [CORRUPT] BraTS-GLI-00528-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:25 | WARNING  | [CORRUPT] BraTS-GLI-00528-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:25 | WARNING  | [CORRUPT] BraTS-GLI-00529-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:25 | WARNING  | [CORRUPT] BraTS-GLI-00529-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:26 | WARNING  | [CORRUPT] BraTS-GLI-00533-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:26 | WARNING  | [CORRUPT] BraTS-GLI-00533-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:26 | WARNING  | [CORRUPT] BraTS-GLI-00547-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:26 | WARNING  | [CORRUPT] BraTS-GLI-00547-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:27 | WARNING  | [CORRUPT] BraTS-GLI-00553-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:27 | WARNING  | [CORRUPT] BraTS-GLI-00556-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:27 | WARNING  | [CORRUPT] BraTS-GLI-00556-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:27 | WARNING  | [CORRUPT] BraTS-GLI-00557-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:27 | WARNING  | [CORRUPT] BraTS-GLI-00557-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:27 | WARNING  | [CORRUPT] BraTS-GLI-02060-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:27 | WARNING  | [CORRUPT] BraTS-GLI-02060-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:28 | WARNING  | [CORRUPT] BraTS-GLI-02061-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:28 | WARNING  | [CORRUPT] BraTS-GLI-02061-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:28 | WARNING  | [CORRUPT] BraTS-GLI-02061-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:28 | WARNING  | [CORRUPT] BraTS-GLI-02061-103.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:28 | WARNING  | [CORRUPT] BraTS-GLI-02062-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:28 | WARNING  | [CORRUPT] BraTS-GLI-02062-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:28 | WARNING  | [CORRUPT] BraTS-GLI-02062-103.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:28 | WARNING  | [CORRUPT] BraTS-GLI-02062-104.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:28 | WARNING  | [CORRUPT] BraTS-GLI-02062-105.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:29 | WARNING  | [CORRUPT] BraTS-GLI-02063-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:29 | WARNING  | [CORRUPT] BraTS-GLI-02063-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:29 | WARNING  | [CORRUPT] BraTS-GLI-02063-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:29 | WARNING  | [CORRUPT] BraTS-GLI-02063-103.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:29 | WARNING  | [CORRUPT] BraTS-GLI-02063-104.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:29 | WARNING  | [CORRUPT] BraTS-GLI-02063-105.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:29 | WARNING  | [CORRUPT] BraTS-GLI-02063-106.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:29 | WARNING  | [CORRUPT] BraTS-GLI-02064-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:30 | WARNING  | [CORRUPT] BraTS-GLI-02064-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:30 | WARNING  | [CORRUPT] BraTS-GLI-02066-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:30 | WARNING  | [CORRUPT] BraTS-GLI-02066-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:30 | WARNING  | [CORRUPT] BraTS-GLI-02066-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:30 | WARNING  | [CORRUPT] BraTS-GLI-02066-103.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:30 | WARNING  | [CORRUPT] BraTS-GLI-02066-104.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:30 | WARNING  | [CORRUPT] BraTS-GLI-02066-105.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:30 | WARNING  | [CORRUPT] BraTS-GLI-02068-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:30 | WARNING  | [CORRUPT] BraTS-GLI-02068-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:30 | WARNING  | [CORRUPT] BraTS-GLI-02069-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:31 | WARNING  | [CORRUPT] BraTS-GLI-02069-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:31 | WARNING  | [CORRUPT] BraTS-GLI-02069-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:31 | WARNING  | [CORRUPT] BraTS-GLI-02069-103.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:31 | WARNING  | [CORRUPT] BraTS-GLI-02070-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:31 | WARNING  | [CORRUPT] BraTS-GLI-02070-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:31 | WARNING  | [CORRUPT] BraTS-GLI-02070-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:31 | WARNING  | [CORRUPT] BraTS-GLI-02071-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:31 | WARNING  | [CORRUPT] BraTS-GLI-02071-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:31 | WARNING  | [CORRUPT] BraTS-GLI-02072-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:31 | WARNING  | [CORRUPT] BraTS-GLI-02072-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:32 | WARNING  | [CORRUPT] BraTS-GLI-02072-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:32 | WARNING  | [CORRUPT] BraTS-GLI-02072-103.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:32 | WARNING  | [CORRUPT] BraTS-GLI-02072-104.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:32 | WARNING  | [CORRUPT] BraTS-GLI-02072-105.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:32 | WARNING  | [CORRUPT] BraTS-GLI-02074-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:32 | WARNING  | [CORRUPT] BraTS-GLI-02074-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:32 | WARNING  | [CORRUPT] BraTS-GLI-02076-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:32 | WARNING  | [CORRUPT] BraTS-GLI-02076-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:32 | WARNING  | [CORRUPT] BraTS-GLI-02077-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:32 | WARNING  | [CORRUPT] BraTS-GLI-02077-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:33 | WARNING  | [CORRUPT] BraTS-GLI-02078-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:33 | WARNING  | [CORRUPT] BraTS-GLI-02078-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:33 | WARNING  | [CORRUPT] BraTS-GLI-02078-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:33 | WARNING  | [CORRUPT] BraTS-GLI-02078-103.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:33 | WARNING  | [CORRUPT] BraTS-GLI-02079-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:33 | WARNING  | [CORRUPT] BraTS-GLI-02079-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:33 | WARNING  | [CORRUPT] BraTS-GLI-02081-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:33 | WARNING  | [CORRUPT] BraTS-GLI-02081-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:33 | WARNING  | [CORRUPT] BraTS-GLI-02081-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:34 | WARNING  | [CORRUPT] BraTS-GLI-02082-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:34 | WARNING  | [CORRUPT] BraTS-GLI-02082-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:34 | WARNING  | [CORRUPT] BraTS-GLI-02082-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:35 | WARNING  | [CORRUPT] BraTS-GLI-02083-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:35 | WARNING  | [CORRUPT] BraTS-GLI-02083-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:35 | WARNING  | [CORRUPT] BraTS-GLI-02083-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:35 | WARNING  | [CORRUPT] BraTS-GLI-02083-103.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:35 | WARNING  | [CORRUPT] BraTS-GLI-02084-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:39:36 | WARNING  | [CORRUPT] BraTS-GLI-02084-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:47:57 | INFO     | Log file: /home/mci/arsyadl/mmsk/results/ablation1_sk_tversky/train.log
+2026-06-09 13:47:57 | INFO     | VRAM cap      : 20 GB / 51 GB total (fraction=0.394)
+2026-06-09 13:47:57 | INFO     | Using device : cuda:0
+2026-06-09 13:47:57 | INFO     | Model        : SK-3D U-Net (plain Selective Kernel)
+2026-06-09 13:47:57 | INFO     | Loss         : Tversky (α=0.3, β=0.7)  [Ablation 1]
+2026-06-09 13:47:57 | INFO     | Output dir   : /home/mci/arsyadl/mmsk/results/ablation1_sk_tversky
+2026-06-09 13:47:57 | INFO     | Total parameters: 12,515,251
+2026-06-09 13:47:57 | INFO     | AMP (mixed precision): ON
+2026-06-09 13:47:57 | INFO     | Preparing datasets...
+2026-06-09 13:47:57 | INFO     | [Validation] Scanning 1344 .npz files...
+2026-06-09 13:47:57 | DEBUG    |   [1/1344] OK: BraTS-GLI-00005-100.npz
+2026-06-09 13:47:57 | WARNING  | [CORRUPT] BraTS-GLI-00008-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:47:58 | WARNING  | [CORRUPT] BraTS-GLI-00008-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:47:58 | WARNING  | [CORRUPT] BraTS-GLI-00008-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:47:58 | WARNING  | [CORRUPT] BraTS-GLI-00008-103.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:47:58 | WARNING  | [CORRUPT] BraTS-GLI-00009-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:47:58 | WARNING  | [CORRUPT] BraTS-GLI-00009-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:47:58 | WARNING  | [CORRUPT] BraTS-GLI-00020-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:47:58 | WARNING  | [CORRUPT] BraTS-GLI-00020-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:47:58 | WARNING  | [CORRUPT] BraTS-GLI-00027-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:47:58 | WARNING  | [CORRUPT] BraTS-GLI-00027-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:47:59 | WARNING  | [CORRUPT] BraTS-GLI-00046-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:47:59 | WARNING  | [CORRUPT] BraTS-GLI-00046-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:47:59 | WARNING  | [CORRUPT] BraTS-GLI-00060-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:47:59 | WARNING  | [CORRUPT] BraTS-GLI-00060-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:47:59 | WARNING  | [CORRUPT] BraTS-GLI-00063-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:47:59 | WARNING  | [CORRUPT] BraTS-GLI-00063-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:00 | WARNING  | [CORRUPT] BraTS-GLI-00080-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:00 | WARNING  | [CORRUPT] BraTS-GLI-00080-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:00 | WARNING  | [CORRUPT] BraTS-GLI-00096-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:00 | WARNING  | [CORRUPT] BraTS-GLI-00096-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:00 | WARNING  | [CORRUPT] BraTS-GLI-00463-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:00 | WARNING  | [CORRUPT] BraTS-GLI-00463-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:00 | WARNING  | [CORRUPT] BraTS-GLI-00469-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:00 | WARNING  | [CORRUPT] BraTS-GLI-00469-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:01 | WARNING  | [CORRUPT] BraTS-GLI-00483-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:01 | WARNING  | [CORRUPT] BraTS-GLI-00483-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:01 | WARNING  | [CORRUPT] BraTS-GLI-00485-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:01 | WARNING  | [CORRUPT] BraTS-GLI-00485-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:01 | WARNING  | [CORRUPT] BraTS-GLI-00491-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:01 | WARNING  | [CORRUPT] BraTS-GLI-00491-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:01 | WARNING  | [CORRUPT] BraTS-GLI-00498-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:01 | WARNING  | [CORRUPT] BraTS-GLI-00498-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:02 | WARNING  | [CORRUPT] BraTS-GLI-00505-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:02 | WARNING  | [CORRUPT] BraTS-GLI-00505-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:02 | WARNING  | [CORRUPT] BraTS-GLI-00506-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:02 | WARNING  | [CORRUPT] BraTS-GLI-00506-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:02 | WARNING  | [CORRUPT] BraTS-GLI-00507-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:02 | WARNING  | [CORRUPT] BraTS-GLI-00507-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:02 | WARNING  | [CORRUPT] BraTS-GLI-00512-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:02 | WARNING  | [CORRUPT] BraTS-GLI-00512-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:03 | WARNING  | [CORRUPT] BraTS-GLI-00517-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:03 | WARNING  | [CORRUPT] BraTS-GLI-00517-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:03 | WARNING  | [CORRUPT] BraTS-GLI-00518-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:03 | WARNING  | [CORRUPT] BraTS-GLI-00518-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:03 | WARNING  | [CORRUPT] BraTS-GLI-00528-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:03 | WARNING  | [CORRUPT] BraTS-GLI-00528-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:03 | WARNING  | [CORRUPT] BraTS-GLI-00529-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:03 | WARNING  | [CORRUPT] BraTS-GLI-00529-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:03 | WARNING  | [CORRUPT] BraTS-GLI-00533-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:03 | WARNING  | [CORRUPT] BraTS-GLI-00533-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:04 | WARNING  | [CORRUPT] BraTS-GLI-00547-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:04 | WARNING  | [CORRUPT] BraTS-GLI-00547-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:04 | WARNING  | [CORRUPT] BraTS-GLI-00553-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:05 | WARNING  | [CORRUPT] BraTS-GLI-00556-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:05 | WARNING  | [CORRUPT] BraTS-GLI-00556-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:05 | WARNING  | [CORRUPT] BraTS-GLI-00557-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:05 | WARNING  | [CORRUPT] BraTS-GLI-00557-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:05 | WARNING  | [CORRUPT] BraTS-GLI-02060-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:05 | WARNING  | [CORRUPT] BraTS-GLI-02060-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:05 | WARNING  | [CORRUPT] BraTS-GLI-02061-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:05 | WARNING  | [CORRUPT] BraTS-GLI-02061-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:05 | WARNING  | [CORRUPT] BraTS-GLI-02061-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:05 | WARNING  | [CORRUPT] BraTS-GLI-02061-103.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:06 | WARNING  | [CORRUPT] BraTS-GLI-02062-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:06 | WARNING  | [CORRUPT] BraTS-GLI-02062-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:06 | WARNING  | [CORRUPT] BraTS-GLI-02062-103.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:06 | WARNING  | [CORRUPT] BraTS-GLI-02062-104.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:06 | WARNING  | [CORRUPT] BraTS-GLI-02062-105.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:06 | WARNING  | [CORRUPT] BraTS-GLI-02063-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:06 | WARNING  | [CORRUPT] BraTS-GLI-02063-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:06 | WARNING  | [CORRUPT] BraTS-GLI-02063-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:06 | WARNING  | [CORRUPT] BraTS-GLI-02063-103.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:06 | WARNING  | [CORRUPT] BraTS-GLI-02063-104.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:07 | WARNING  | [CORRUPT] BraTS-GLI-02063-105.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:07 | WARNING  | [CORRUPT] BraTS-GLI-02063-106.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:07 | WARNING  | [CORRUPT] BraTS-GLI-02064-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:07 | WARNING  | [CORRUPT] BraTS-GLI-02064-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:07 | WARNING  | [CORRUPT] BraTS-GLI-02066-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:07 | WARNING  | [CORRUPT] BraTS-GLI-02066-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:07 | WARNING  | [CORRUPT] BraTS-GLI-02066-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:07 | WARNING  | [CORRUPT] BraTS-GLI-02066-103.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:07 | WARNING  | [CORRUPT] BraTS-GLI-02066-104.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:08 | WARNING  | [CORRUPT] BraTS-GLI-02066-105.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:08 | WARNING  | [CORRUPT] BraTS-GLI-02068-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:08 | WARNING  | [CORRUPT] BraTS-GLI-02068-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:08 | WARNING  | [CORRUPT] BraTS-GLI-02069-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:08 | WARNING  | [CORRUPT] BraTS-GLI-02069-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:08 | WARNING  | [CORRUPT] BraTS-GLI-02069-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:08 | WARNING  | [CORRUPT] BraTS-GLI-02069-103.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:08 | WARNING  | [CORRUPT] BraTS-GLI-02070-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:08 | WARNING  | [CORRUPT] BraTS-GLI-02070-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:08 | WARNING  | [CORRUPT] BraTS-GLI-02070-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:09 | WARNING  | [CORRUPT] BraTS-GLI-02071-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:09 | WARNING  | [CORRUPT] BraTS-GLI-02071-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:09 | WARNING  | [CORRUPT] BraTS-GLI-02072-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:09 | WARNING  | [CORRUPT] BraTS-GLI-02072-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:09 | WARNING  | [CORRUPT] BraTS-GLI-02072-102.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:09 | WARNING  | [CORRUPT] BraTS-GLI-02072-103.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:09 | WARNING  | [CORRUPT] BraTS-GLI-02072-104.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:09 | WARNING  | [CORRUPT] BraTS-GLI-02072-105.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:09 | WARNING  | [CORRUPT] BraTS-GLI-02074-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:09 | WARNING  | [CORRUPT] BraTS-GLI-02074-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:10 | WARNING  | [CORRUPT] BraTS-GLI-02076-100.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:48:10 | WARNING  | [CORRUPT] BraTS-GLI-02076-101.npz → Unexpected raw label values (not in {0,1,2,4}): [3]
+2026-06-09 13:50:38 | INFO     | Log file: /home/mci/arsyadl/mmsk/results/ablation1_sk_tversky/train.log
+2026-06-09 13:50:38 | INFO     | VRAM cap      : 20 GB / 51 GB total (fraction=0.394)
+2026-06-09 13:50:38 | INFO     | Using device : cuda:0
+2026-06-09 13:50:38 | INFO     | Model        : SK-3D U-Net (plain Selective Kernel)
+2026-06-09 13:50:38 | INFO     | Loss         : Tversky (α=0.3, β=0.7)  [Ablation 1]
+2026-06-09 13:50:38 | INFO     | Output dir   : /home/mci/arsyadl/mmsk/results/ablation1_sk_tversky
+2026-06-09 13:50:38 | INFO     | Labels       : BraTS 2024 — 0=BG,1=NCR,2=ED,3=NET,4=ET
+2026-06-09 13:50:38 | INFO     | Total parameters: 12,515,251
+2026-06-09 13:50:38 | INFO     | AMP (mixed precision): ON
+2026-06-09 13:50:38 | INFO     | Preparing datasets...
+2026-06-09 13:50:38 | INFO     | [Validation] Scanning 1344 .npz files...
+2026-06-09 13:50:38 | DEBUG    |   [1/1344] OK: BraTS-GLI-00005-100.npz
+2026-06-09 13:50:48 | DEBUG    |   [101/1344] OK: BraTS-GLI-02066-101.npz
+2026-06-09 13:50:59 | DEBUG    |   [201/1344] OK: BraTS-GLI-02103-100.npz
+2026-06-09 13:51:09 | DEBUG    |   [301/1344] OK: BraTS-GLI-02145-100.npz
+2026-06-09 13:51:20 | DEBUG    |   [401/1344] OK: BraTS-GLI-02194-100.npz
+2026-06-09 13:51:30 | DEBUG    |   [501/1344] OK: BraTS-GLI-02236-101.npz
+2026-06-09 13:51:40 | DEBUG    |   [601/1344] OK: BraTS-GLI-02315-100.npz
+2026-06-09 13:51:51 | DEBUG    |   [701/1344] OK: BraTS-GLI-02549-100.npz
+2026-06-09 13:52:02 | DEBUG    |   [801/1344] OK: BraTS-GLI-02736-101.npz
+2026-06-09 13:52:13 | DEBUG    |   [901/1344] OK: BraTS-GLI-02793-100.npz
+2026-06-09 13:52:23 | DEBUG    |   [1001/1344] OK: BraTS-GLI-02851-100.npz
+2026-06-09 14:05:41 | INFO     | Log file: results/ablation1_sk_tversky/train.log
+2026-06-09 14:05:41 | INFO     | VRAM cap      : 20 GB / 51 GB total (fraction=0.394)
+2026-06-09 14:05:41 | INFO     | Using device : cuda:0
+2026-06-09 14:05:41 | INFO     | Model        : SK-3D U-Net (plain Selective Kernel)
+2026-06-09 14:05:41 | INFO     | Loss         : Tversky (α=0.3, β=0.7)  [Ablation 1]
+2026-06-09 14:05:41 | INFO     | Output dir   : results/ablation1_sk_tversky
+2026-06-09 14:05:41 | INFO     | Labels       : BraTS 2024 — 0=BG,1=NCR,2=ED,3=NET,4=ET
+2026-06-09 14:05:41 | INFO     | Total parameters: 12,515,251
+2026-06-09 14:05:41 | INFO     | AMP (mixed precision): ON
+2026-06-09 14:05:41 | INFO     | Preparing datasets...
+2026-06-09 14:05:41 | INFO     | [Validation] Scanning 1344 .npz files...
+2026-06-09 14:05:41 | DEBUG    |   [1/1344] OK: BraTS-GLI-00005-100.npz
+2026-06-09 14:05:51 | DEBUG    |   [101/1344] OK: BraTS-GLI-02066-101.npz
+2026-06-09 14:06:01 | DEBUG    |   [201/1344] OK: BraTS-GLI-02103-100.npz
+2026-06-09 14:06:10 | DEBUG    |   [301/1344] OK: BraTS-GLI-02145-100.npz
+2026-06-09 14:06:20 | DEBUG    |   [401/1344] OK: BraTS-GLI-02194-100.npz
+2026-06-09 14:06:30 | DEBUG    |   [501/1344] OK: BraTS-GLI-02236-101.npz
+2026-06-09 14:06:40 | DEBUG    |   [601/1344] OK: BraTS-GLI-02315-100.npz
+2026-06-09 14:06:50 | DEBUG    |   [701/1344] OK: BraTS-GLI-02549-100.npz
+2026-06-09 14:07:00 | DEBUG    |   [801/1344] OK: BraTS-GLI-02736-101.npz
+2026-06-09 14:07:10 | DEBUG    |   [901/1344] OK: BraTS-GLI-02793-100.npz
+2026-06-09 14:07:20 | DEBUG    |   [1001/1344] OK: BraTS-GLI-02851-100.npz
+2026-06-09 16:18:27 | INFO     | Log file: results/ablation1_sk_tversky/train.log
+2026-06-09 16:18:28 | INFO     | VRAM cap      : 20 GB / 51 GB total (fraction=0.394)
+2026-06-09 16:18:28 | INFO     | Using device : cuda:0
+2026-06-09 16:18:28 | INFO     | Model        : SK-3D U-Net (plain Selective Kernel)
+2026-06-09 16:18:28 | INFO     | Loss         : Tversky (α=0.3, β=0.7)  [Ablation 1]
+2026-06-09 16:18:28 | INFO     | Output dir   : results/ablation1_sk_tversky
+2026-06-09 16:18:28 | INFO     | Labels       : BraTS 2024 — 0=BG,1=NCR,2=ED,3=NET,4=ET
+2026-06-09 16:18:28 | INFO     | Total parameters: 12,515,251
+2026-06-09 16:18:28 | INFO     | AMP (mixed precision): ON
+2026-06-09 16:18:28 | INFO     | Preparing datasets...
+2026-06-09 16:18:28 | INFO     | [Validation] Scanning 1344 .npz files...
+2026-06-09 16:18:28 | DEBUG    |   [1/1344] OK: BraTS-GLI-00005-100.npz
+2026-06-09 16:18:38 | DEBUG    |   [101/1344] OK: BraTS-GLI-02066-101.npz
+2026-06-09 16:18:48 | DEBUG    |   [201/1344] OK: BraTS-GLI-02103-100.npz
+2026-06-09 16:18:58 | DEBUG    |   [301/1344] OK: BraTS-GLI-02145-100.npz
+2026-06-09 16:19:09 | DEBUG    |   [401/1344] OK: BraTS-GLI-02194-100.npz
+2026-06-09 16:19:19 | DEBUG    |   [501/1344] OK: BraTS-GLI-02236-101.npz
+2026-06-09 16:19:30 | DEBUG    |   [601/1344] OK: BraTS-GLI-02315-100.npz
+2026-06-09 16:19:41 | DEBUG    |   [701/1344] OK: BraTS-GLI-02549-100.npz
+2026-06-09 16:19:51 | DEBUG    |   [801/1344] OK: BraTS-GLI-02736-101.npz
+2026-06-09 16:20:02 | DEBUG    |   [901/1344] OK: BraTS-GLI-02793-100.npz
+2026-06-09 16:20:13 | DEBUG    |   [1001/1344] OK: BraTS-GLI-02851-100.npz
+2026-06-09 16:20:24 | DEBUG    |   [1101/1344] OK: BraTS-GLI-02902-100.npz
+2026-06-09 16:20:35 | DEBUG    |   [1201/1344] OK: BraTS-GLI-02961-100.npz
+2026-06-09 16:20:46 | DEBUG    |   [1301/1344] OK: BraTS-GLI-03026-100.npz
+2026-06-09 16:20:50 | INFO     | [Validation] Done. 1344 healthy, 0 dropped.
+2026-06-09 16:20:50 | INFO     | [Validation] Scanning 269 .npz files...
+2026-06-09 16:20:51 | DEBUG    |   [1/269] OK: BraTS-GLI-02405-100.npz
+2026-06-09 16:20:59 | WARNING  | [CORRUPT] BraTS-GLI-02494-103.npz → Bad CRC-32 for file 'images.npy'
+2026-06-09 16:21:01 | DEBUG    |   [101/269] OK: BraTS-GLI-02507-101.npz
+2026-06-09 16:21:12 | DEBUG    |   [201/269] OK: BraTS-GLI-02584-101.npz
+2026-06-09 16:21:19 | INFO     | [Validation] Done. 268 healthy, 1 dropped.
+2026-06-09 16:21:19 | WARNING  | [Validation] Corrupt/invalid files:
+2026-06-09 16:21:19 | WARNING  |   ✗ /home/mci/arsyadl/braTS/preprocessed_test/BraTS-GLI-02494-103.npz  (Bad CRC-32 for file 'images.npy')
+2026-06-09 16:21:19 | INFO     | Attempting batch_size=2, accum_steps=2 (effective batch=4) ...
+2026-06-09 16:46:32 | INFO     | Log file: results/ablation1_sk_tversky/train.log
+2026-06-09 16:46:32 | INFO     | VRAM cap      : 20 GB / 51 GB total (fraction=0.394)
+2026-06-09 16:46:32 | INFO     | Using device : cuda:0
+2026-06-09 16:46:32 | INFO     | Model        : SK-3D U-Net (plain Selective Kernel)
+2026-06-09 16:46:32 | INFO     | Loss         : Tversky (α=0.3, β=0.7)  [Ablation 1]
+2026-06-09 16:46:32 | INFO     | Output dir   : results/ablation1_sk_tversky
+2026-06-09 16:46:32 | INFO     | Labels       : BraTS 2024 — 0=BG,1=NCR,2=ED,3=NET,4=ET
+2026-06-09 16:46:32 | INFO     | Total parameters: 12,515,251
+2026-06-09 16:46:32 | INFO     | AMP (mixed precision): ON
+2026-06-09 16:46:32 | INFO     | Preparing datasets...
+2026-06-09 16:46:32 | INFO     | [Validation] Scanning 1344 .npz files...
+2026-06-09 16:46:32 | DEBUG    |   [1/1344] OK: BraTS-GLI-00005-100.npz
+2026-06-09 16:46:43 | DEBUG    |   [101/1344] OK: BraTS-GLI-02066-101.npz
+2026-06-09 16:46:53 | DEBUG    |   [201/1344] OK: BraTS-GLI-02103-100.npz
+2026-06-09 16:47:03 | DEBUG    |   [301/1344] OK: BraTS-GLI-02145-100.npz
+2026-06-09 16:47:14 | DEBUG    |   [401/1344] OK: BraTS-GLI-02194-100.npz
+2026-06-09 16:47:24 | DEBUG    |   [501/1344] OK: BraTS-GLI-02236-101.npz
+2026-06-09 16:47:35 | DEBUG    |   [601/1344] OK: BraTS-GLI-02315-100.npz
+2026-06-09 16:47:45 | DEBUG    |   [701/1344] OK: BraTS-GLI-02549-100.npz
+2026-06-09 16:47:55 | DEBUG    |   [801/1344] OK: BraTS-GLI-02736-101.npz
+2026-06-09 16:48:05 | DEBUG    |   [901/1344] OK: BraTS-GLI-02793-100.npz
+2026-06-09 16:48:16 | DEBUG    |   [1001/1344] OK: BraTS-GLI-02851-100.npz
+2026-06-09 16:48:26 | DEBUG    |   [1101/1344] OK: BraTS-GLI-02902-100.npz
+2026-06-09 16:48:36 | DEBUG    |   [1201/1344] OK: BraTS-GLI-02961-100.npz
+2026-06-09 16:48:46 | DEBUG    |   [1301/1344] OK: BraTS-GLI-03026-100.npz
+2026-06-09 16:48:50 | INFO     | [Validation] Done. 1344 healthy, 0 dropped.
+2026-06-09 16:48:50 | INFO     | [Validation] Scanning 269 .npz files...
+2026-06-09 16:48:50 | DEBUG    |   [1/269] OK: BraTS-GLI-02405-100.npz
+2026-06-09 16:48:58 | WARNING  | [CORRUPT] BraTS-GLI-02494-103.npz → Bad CRC-32 for file 'images.npy'
+2026-06-09 16:49:00 | DEBUG    |   [101/269] OK: BraTS-GLI-02507-101.npz
+2026-06-09 16:49:10 | DEBUG    |   [201/269] OK: BraTS-GLI-02584-101.npz
+2026-06-09 16:49:16 | INFO     | [Validation] Done. 268 healthy, 1 dropped.
+2026-06-09 16:49:16 | WARNING  | [Validation] Corrupt/invalid files:
+2026-06-09 16:49:16 | WARNING  |   ✗ /home/mci/arsyadl/braTS/preprocessed_test/BraTS-GLI-02494-103.npz  (Bad CRC-32 for file 'images.npy')
+2026-06-09 16:49:16 | INFO     | Attempting batch_size=2, accum_steps=2 (effective batch=4) ...
+2026-06-09 16:49:18 | WARNING  | CUDA OOM at batch_size=2 (VRAM cap active) — fallback: batch_size=1 + accum_steps=4 (effective batch=4)
+2026-06-09 16:49:18 | INFO     | Train batches : 1344 (batch_size=1)
+2026-06-09 16:49:18 | INFO     | Val batches   : 268
+2026-06-09 16:49:18 | INFO     | Accum steps   : 4 (effective batch = 4)
+2026-06-09 16:49:18 | INFO     | Starting training for 300 epochs
+2026-06-09 16:49:18 | INFO     | ============================================================
+2026-06-09 16:49:18 | INFO     | Epoch 1/300
+2026-06-09 16:49:19 | DEBUG    |   Batch    0/1344 | Loss: 0.9772
+2026-06-09 16:49:27 | DEBUG    |   Batch   10/1344 | Loss: 0.9894
+2026-06-09 16:49:34 | DEBUG    |   Batch   20/1344 | Loss: 0.9555
+2026-06-09 16:49:42 | DEBUG    |   Batch   30/1344 | Loss: 0.9881
+2026-06-09 16:49:50 | DEBUG    |   Batch   40/1344 | Loss: 0.9748
+2026-06-09 16:49:57 | DEBUG    |   Batch   50/1344 | Loss: 0.9418
+2026-06-09 16:50:05 | DEBUG    |   Batch   60/1344 | Loss: 0.9808
+2026-06-09 16:50:13 | DEBUG    |   Batch   70/1344 | Loss: 0.9381
+2026-06-09 16:50:21 | DEBUG    |   Batch   80/1344 | Loss: 0.9794
+2026-06-09 16:50:28 | DEBUG    |   Batch   90/1344 | Loss: 0.9876
+2026-06-09 16:50:36 | DEBUG    |   Batch  100/1344 | Loss: 0.9606
+2026-06-09 16:50:44 | DEBUG    |   Batch  110/1344 | Loss: 0.9895
+2026-06-09 16:50:51 | DEBUG    |   Batch  120/1344 | Loss: 0.9940
+2026-06-09 16:50:59 | DEBUG    |   Batch  130/1344 | Loss: 0.8818
+2026-06-09 16:51:07 | DEBUG    |   Batch  140/1344 | Loss: 0.9444
+2026-06-09 16:51:15 | DEBUG    |   Batch  150/1344 | Loss: 0.9363
+2026-06-09 16:51:22 | DEBUG    |   Batch  160/1344 | Loss: 0.9824
+2026-06-09 16:51:30 | DEBUG    |   Batch  170/1344 | Loss: 0.9372
+2026-06-09 16:51:38 | DEBUG    |   Batch  180/1344 | Loss: 0.9037
+2026-06-09 16:51:45 | DEBUG    |   Batch  190/1344 | Loss: 0.9627
+2026-06-09 16:51:53 | DEBUG    |   Batch  200/1344 | Loss: 0.9188
+2026-06-09 16:52:01 | DEBUG    |   Batch  210/1344 | Loss: 0.9173
+2026-06-09 16:52:09 | DEBUG    |   Batch  220/1344 | Loss: 0.9164
+2026-06-09 16:52:16 | DEBUG    |   Batch  230/1344 | Loss: 0.8774
+2026-06-09 16:52:24 | DEBUG    |   Batch  240/1344 | Loss: 0.9332
+2026-06-09 16:52:32 | DEBUG    |   Batch  250/1344 | Loss: 0.9191
+2026-06-09 16:52:39 | DEBUG    |   Batch  260/1344 | Loss: 0.9522
+2026-06-09 16:52:47 | DEBUG    |   Batch  270/1344 | Loss: 0.8959
+2026-06-09 16:52:55 | DEBUG    |   Batch  280/1344 | Loss: 0.9338
+2026-06-09 16:53:03 | DEBUG    |   Batch  290/1344 | Loss: 0.9388
+2026-06-09 16:53:10 | DEBUG    |   Batch  300/1344 | Loss: 0.9863
+2026-06-09 16:53:18 | DEBUG    |   Batch  310/1344 | Loss: 0.8825
+2026-06-09 16:53:26 | DEBUG    |   Batch  320/1344 | Loss: 0.9115
+2026-06-09 16:53:33 | DEBUG    |   Batch  330/1344 | Loss: 0.8730
+2026-06-09 16:53:41 | DEBUG    |   Batch  340/1344 | Loss: 0.9476
+2026-06-09 16:53:49 | DEBUG    |   Batch  350/1344 | Loss: 0.9331
+2026-06-09 16:53:56 | DEBUG    |   Batch  360/1344 | Loss: 0.9447
+2026-06-09 16:54:04 | DEBUG    |   Batch  370/1344 | Loss: 0.8868
+2026-06-09 16:54:12 | DEBUG    |   Batch  380/1344 | Loss: 0.9436
+2026-06-09 16:54:20 | DEBUG    |   Batch  390/1344 | Loss: 0.9351
+2026-06-09 16:54:27 | DEBUG    |   Batch  400/1344 | Loss: 0.9468
+2026-06-09 16:54:35 | DEBUG    |   Batch  410/1344 | Loss: 0.9330
+2026-06-09 16:54:43 | DEBUG    |   Batch  420/1344 | Loss: 0.9359
+2026-06-09 16:54:50 | DEBUG    |   Batch  430/1344 | Loss: 0.9413
+2026-06-09 16:54:58 | DEBUG    |   Batch  440/1344 | Loss: 0.8511
+2026-06-09 16:55:06 | DEBUG    |   Batch  450/1344 | Loss: 0.9675
+2026-06-09 16:55:14 | DEBUG    |   Batch  460/1344 | Loss: 0.9738
+2026-06-09 16:55:21 | DEBUG    |   Batch  470/1344 | Loss: 0.9395
+2026-06-09 16:55:29 | DEBUG    |   Batch  480/1344 | Loss: 0.9021
+2026-06-09 16:55:37 | DEBUG    |   Batch  490/1344 | Loss: 0.8178
+2026-06-09 16:55:44 | DEBUG    |   Batch  500/1344 | Loss: 0.9157
+2026-06-09 16:55:52 | DEBUG    |   Batch  510/1344 | Loss: 0.8778
+2026-06-09 16:56:00 | DEBUG    |   Batch  520/1344 | Loss: 0.9645
+2026-06-09 16:56:07 | DEBUG    |   Batch  530/1344 | Loss: 0.8996
+2026-06-09 16:56:15 | DEBUG    |   Batch  540/1344 | Loss: 0.9750
+2026-06-09 16:56:23 | DEBUG    |   Batch  550/1344 | Loss: 0.9438
+2026-06-09 16:56:31 | DEBUG    |   Batch  560/1344 | Loss: 0.9987
+2026-06-09 16:56:38 | DEBUG    |   Batch  570/1344 | Loss: 0.9081
+2026-06-09 16:56:46 | DEBUG    |   Batch  580/1344 | Loss: 0.8094
+2026-06-09 16:56:54 | DEBUG    |   Batch  590/1344 | Loss: 0.9247
+2026-06-09 16:57:01 | DEBUG    |   Batch  600/1344 | Loss: 0.9709
+2026-06-09 16:57:09 | DEBUG    |   Batch  610/1344 | Loss: 0.9628
+2026-06-09 16:57:17 | DEBUG    |   Batch  620/1344 | Loss: 0.9376
+2026-06-09 16:57:24 | DEBUG    |   Batch  630/1344 | Loss: 0.9433
+2026-06-09 16:57:32 | DEBUG    |   Batch  640/1344 | Loss: 0.9348
+2026-06-09 16:57:40 | DEBUG    |   Batch  650/1344 | Loss: 0.9286
+2026-06-09 16:57:48 | DEBUG    |   Batch  660/1344 | Loss: 0.8688
+2026-06-09 16:57:55 | DEBUG    |   Batch  670/1344 | Loss: 0.9161
+2026-06-09 16:58:03 | DEBUG    |   Batch  680/1344 | Loss: 0.9545
+2026-06-09 16:58:11 | DEBUG    |   Batch  690/1344 | Loss: 0.9620
+2026-06-09 16:58:18 | DEBUG    |   Batch  700/1344 | Loss: 0.9709
+2026-06-09 16:58:26 | DEBUG    |   Batch  710/1344 | Loss: 0.9258
+2026-06-09 16:58:34 | DEBUG    |   Batch  720/1344 | Loss: 0.9542
+2026-06-09 17:05:37 | INFO     | Log file: results/ablation1_sk_tversky/train.log
+2026-06-09 17:05:38 | INFO     | VRAM cap      : 20 GB / 51 GB total (fraction=0.394)
+2026-06-09 17:05:38 | INFO     | Using device : cuda:0
+2026-06-09 17:05:38 | INFO     | Model        : SK-3D U-Net (plain Selective Kernel)
+2026-06-09 17:05:38 | INFO     | Loss         : Tversky (α=0.3, β=0.7)  [Ablation 1]
+2026-06-09 17:05:38 | INFO     | Output dir   : results/ablation1_sk_tversky
+2026-06-09 17:05:38 | INFO     | Labels       : BraTS 2024 — 0=BG,1=NCR,2=ED,3=NET,4=ET
+2026-06-09 17:05:38 | INFO     | Total parameters: 11,837,095
+2026-06-09 17:05:38 | INFO     | AMP (mixed precision): ON
+2026-06-09 17:05:38 | INFO     | Preparing datasets...
+2026-06-09 17:05:38 | INFO     | [Validation] Scanning 1344 .npz files...
+2026-06-09 17:05:38 | DEBUG    |   [1/1344] OK: BraTS-GLI-00005-100.npz
+2026-06-09 17:05:48 | DEBUG    |   [101/1344] OK: BraTS-GLI-02066-101.npz
+2026-06-09 17:05:58 | DEBUG    |   [201/1344] OK: BraTS-GLI-02103-100.npz
+2026-06-09 17:06:07 | DEBUG    |   [301/1344] OK: BraTS-GLI-02145-100.npz
+2026-06-09 17:06:17 | DEBUG    |   [401/1344] OK: BraTS-GLI-02194-100.npz
+2026-06-09 17:06:27 | DEBUG    |   [501/1344] OK: BraTS-GLI-02236-101.npz
+2026-06-09 17:06:37 | DEBUG    |   [601/1344] OK: BraTS-GLI-02315-100.npz
+2026-06-09 17:06:47 | DEBUG    |   [701/1344] OK: BraTS-GLI-02549-100.npz
+2026-06-09 17:06:57 | DEBUG    |   [801/1344] OK: BraTS-GLI-02736-101.npz
+2026-06-09 17:07:07 | DEBUG    |   [901/1344] OK: BraTS-GLI-02793-100.npz
+2026-06-09 17:07:17 | DEBUG    |   [1001/1344] OK: BraTS-GLI-02851-100.npz
+2026-06-09 17:07:27 | DEBUG    |   [1101/1344] OK: BraTS-GLI-02902-100.npz
+2026-06-09 17:07:37 | DEBUG    |   [1201/1344] OK: BraTS-GLI-02961-100.npz
+2026-06-09 17:07:48 | DEBUG    |   [1301/1344] OK: BraTS-GLI-03026-100.npz
+2026-06-09 17:07:52 | INFO     | [Validation] Done. 1344 healthy, 0 dropped.
+2026-06-09 17:07:52 | INFO     | [Validation] Scanning 269 .npz files...
+2026-06-09 17:07:52 | DEBUG    |   [1/269] OK: BraTS-GLI-02405-100.npz
+2026-06-09 17:08:00 | WARNING  | [CORRUPT] BraTS-GLI-02494-103.npz → Bad CRC-32 for file 'images.npy'
+2026-06-09 17:08:02 | DEBUG    |   [101/269] OK: BraTS-GLI-02507-101.npz
+2026-06-09 17:08:12 | DEBUG    |   [201/269] OK: BraTS-GLI-02584-101.npz
+2026-06-09 17:08:18 | INFO     | [Validation] Done. 268 healthy, 1 dropped.
+2026-06-09 17:08:18 | WARNING  | [Validation] Corrupt/invalid files:
+2026-06-09 17:08:18 | WARNING  |   ✗ /home/mci/arsyadl/braTS/preprocessed_test/BraTS-GLI-02494-103.npz  (Bad CRC-32 for file 'images.npy')
+2026-06-09 17:08:18 | INFO     | Attempting batch_size=2, accum_steps=2 (effective batch=4) ...
+2026-06-09 17:08:19 | WARNING  | CUDA OOM at batch_size=2 (VRAM cap active) — fallback: batch_size=1 + accum_steps=4 (effective batch=4)
+2026-06-09 17:08:19 | INFO     | Train batches : 1344 (batch_size=1)
+2026-06-09 17:08:19 | INFO     | Val batches   : 268
+2026-06-09 17:08:19 | INFO     | Accum steps   : 4 (effective batch = 4)
+2026-06-09 17:08:19 | INFO     | Starting training for 300 epochs
+2026-06-09 17:08:19 | INFO     | ============================================================
+2026-06-09 17:08:19 | INFO     | Epoch 1/300
+2026-06-09 17:08:20 | DEBUG    |   Batch    0/1344 | Loss: 0.9949
+2026-06-09 17:08:25 | DEBUG    |   Batch   10/1344 | Loss: 0.9721
+2026-06-09 17:08:31 | DEBUG    |   Batch   20/1344 | Loss: 0.9342
+2026-06-09 17:08:36 | DEBUG    |   Batch   30/1344 | Loss: 0.9373
+2026-06-09 17:08:41 | DEBUG    |   Batch   40/1344 | Loss: 0.9355
+2026-06-09 17:08:46 | DEBUG    |   Batch   50/1344 | Loss: 0.9421
+2026-06-09 17:08:51 | DEBUG    |   Batch   60/1344 | Loss: 0.9813
+2026-06-09 17:08:56 | DEBUG    |   Batch   70/1344 | Loss: 0.9440
+2026-06-09 17:09:02 | DEBUG    |   Batch   80/1344 | Loss: 0.9269
+2026-06-09 17:09:07 | DEBUG    |   Batch   90/1344 | Loss: 0.8533
+2026-06-09 17:09:12 | DEBUG    |   Batch  100/1344 | Loss: 0.8796
+2026-06-09 17:09:17 | DEBUG    |   Batch  110/1344 | Loss: 0.9615
+2026-06-09 17:09:22 | DEBUG    |   Batch  120/1344 | Loss: 0.9494
+2026-06-09 17:09:27 | DEBUG    |   Batch  130/1344 | Loss: 0.8928
+2026-06-09 17:09:33 | DEBUG    |   Batch  140/1344 | Loss: 0.9199
+2026-06-09 17:09:38 | DEBUG    |   Batch  150/1344 | Loss: 0.9665
+2026-06-09 17:09:43 | DEBUG    |   Batch  160/1344 | Loss: 0.8653
+2026-06-09 17:09:48 | DEBUG    |   Batch  170/1344 | Loss: 0.8615
+2026-06-09 17:09:53 | DEBUG    |   Batch  180/1344 | Loss: 0.9791
+2026-06-09 17:09:58 | DEBUG    |   Batch  190/1344 | Loss: 0.8781
+2026-06-09 17:10:03 | DEBUG    |   Batch  200/1344 | Loss: 0.9577
+2026-06-09 17:10:09 | DEBUG    |   Batch  210/1344 | Loss: 0.9684
+2026-06-09 17:10:14 | DEBUG    |   Batch  220/1344 | Loss: 0.8701
+2026-06-09 17:10:19 | DEBUG    |   Batch  230/1344 | Loss: 0.9197
+2026-06-09 17:10:24 | DEBUG    |   Batch  240/1344 | Loss: 0.8974
+2026-06-09 17:10:29 | DEBUG    |   Batch  250/1344 | Loss: 0.9343
+2026-06-09 17:10:34 | DEBUG    |   Batch  260/1344 | Loss: 0.9697
+2026-06-09 17:10:39 | DEBUG    |   Batch  270/1344 | Loss: 0.9646
+2026-06-09 17:10:45 | DEBUG    |   Batch  280/1344 | Loss: 0.8721
+2026-06-09 17:10:50 | DEBUG    |   Batch  290/1344 | Loss: 0.9034
+2026-06-09 17:10:55 | DEBUG    |   Batch  300/1344 | Loss: 0.8615
+2026-06-09 17:11:00 | DEBUG    |   Batch  310/1344 | Loss: 0.9791
+2026-06-09 17:11:05 | DEBUG    |   Batch  320/1344 | Loss: 0.9548
+2026-06-09 17:11:10 | DEBUG    |   Batch  330/1344 | Loss: 0.9337
+2026-06-09 17:11:15 | DEBUG    |   Batch  340/1344 | Loss: 0.9116
+2026-06-09 17:11:21 | DEBUG    |   Batch  350/1344 | Loss: 0.8343
+2026-06-09 17:11:26 | DEBUG    |   Batch  360/1344 | Loss: 0.9713
+2026-06-09 17:11:31 | DEBUG    |   Batch  370/1344 | Loss: 0.9375
+2026-06-09 17:11:36 | DEBUG    |   Batch  380/1344 | Loss: 0.9336
+2026-06-09 17:11:41 | DEBUG    |   Batch  390/1344 | Loss: 0.9501
+2026-06-09 17:11:46 | DEBUG    |   Batch  400/1344 | Loss: 0.8525
+2026-06-09 17:11:51 | DEBUG    |   Batch  410/1344 | Loss: 0.9658
+2026-06-09 17:11:57 | DEBUG    |   Batch  420/1344 | Loss: 0.8256
+2026-06-09 17:12:02 | DEBUG    |   Batch  430/1344 | Loss: 0.9040
+2026-06-09 17:12:07 | DEBUG    |   Batch  440/1344 | Loss: 0.9443
+2026-06-09 17:12:12 | DEBUG    |   Batch  450/1344 | Loss: 0.9137
+2026-06-09 17:12:17 | DEBUG    |   Batch  460/1344 | Loss: 0.9499
+2026-06-09 17:12:22 | DEBUG    |   Batch  470/1344 | Loss: 0.9952
+2026-06-09 17:12:27 | DEBUG    |   Batch  480/1344 | Loss: 0.9497
+2026-06-09 17:12:33 | DEBUG    |   Batch  490/1344 | Loss: 0.9546
+2026-06-09 17:12:38 | DEBUG    |   Batch  500/1344 | Loss: 0.9521
+2026-06-09 17:12:43 | DEBUG    |   Batch  510/1344 | Loss: 0.9675
+2026-06-09 17:12:48 | DEBUG    |   Batch  520/1344 | Loss: 0.9778
+2026-06-09 17:12:53 | DEBUG    |   Batch  530/1344 | Loss: 0.9395
+2026-06-09 17:12:58 | DEBUG    |   Batch  540/1344 | Loss: 0.8896
+2026-06-09 17:13:04 | DEBUG    |   Batch  550/1344 | Loss: 0.9544
+2026-06-09 17:13:09 | DEBUG    |   Batch  560/1344 | Loss: 0.8827
+2026-06-09 17:13:14 | DEBUG    |   Batch  570/1344 | Loss: 0.9748
+2026-06-09 17:13:19 | DEBUG    |   Batch  580/1344 | Loss: 0.8706
+2026-06-09 17:13:24 | DEBUG    |   Batch  590/1344 | Loss: 0.8966
+2026-06-09 17:13:29 | DEBUG    |   Batch  600/1344 | Loss: 0.9735
+2026-06-09 17:13:34 | DEBUG    |   Batch  610/1344 | Loss: 0.9098
+2026-06-09 17:13:40 | DEBUG    |   Batch  620/1344 | Loss: 0.9654
+2026-06-09 17:13:45 | DEBUG    |   Batch  630/1344 | Loss: 0.8899
+2026-06-09 17:13:50 | DEBUG    |   Batch  640/1344 | Loss: 0.8760
+2026-06-09 17:13:55 | DEBUG    |   Batch  650/1344 | Loss: 0.8895
+2026-06-09 17:14:00 | DEBUG    |   Batch  660/1344 | Loss: 0.8906
+2026-06-09 17:14:06 | DEBUG    |   Batch  670/1344 | Loss: 0.9483
+2026-06-09 17:14:12 | DEBUG    |   Batch  680/1344 | Loss: 0.9723
+2026-06-09 17:14:17 | DEBUG    |   Batch  690/1344 | Loss: 0.9652
+2026-06-09 17:14:22 | DEBUG    |   Batch  700/1344 | Loss: 0.9426
+2026-06-09 17:14:27 | DEBUG    |   Batch  710/1344 | Loss: 0.9576
+2026-06-09 17:14:32 | DEBUG    |   Batch  720/1344 | Loss: 0.9457
+2026-06-09 17:14:37 | DEBUG    |   Batch  730/1344 | Loss: 0.9321
+2026-06-09 17:14:42 | DEBUG    |   Batch  740/1344 | Loss: 0.9195
+2026-06-09 17:14:48 | DEBUG    |   Batch  750/1344 | Loss: 0.9565
+2026-06-09 17:14:53 | DEBUG    |   Batch  760/1344 | Loss: 0.9568
+2026-06-09 17:14:58 | DEBUG    |   Batch  770/1344 | Loss: 0.9223
+2026-06-09 17:15:03 | DEBUG    |   Batch  780/1344 | Loss: 0.9474
+2026-06-09 17:15:08 | DEBUG    |   Batch  790/1344 | Loss: 0.9170
+2026-06-09 17:15:13 | DEBUG    |   Batch  800/1344 | Loss: 0.9563
+2026-06-09 17:15:18 | DEBUG    |   Batch  810/1344 | Loss: 0.9643
+2026-06-09 17:15:24 | DEBUG    |   Batch  820/1344 | Loss: 0.9606
+2026-06-09 17:15:29 | DEBUG    |   Batch  830/1344 | Loss: 0.9172
+2026-06-09 17:15:34 | DEBUG    |   Batch  840/1344 | Loss: 0.9264
+2026-06-09 17:15:39 | DEBUG    |   Batch  850/1344 | Loss: 0.9163
+2026-06-09 17:15:44 | DEBUG    |   Batch  860/1344 | Loss: 0.8983
+2026-06-09 17:15:49 | DEBUG    |   Batch  870/1344 | Loss: 0.9053
+2026-06-09 17:15:54 | DEBUG    |   Batch  880/1344 | Loss: 0.9433
+2026-06-09 17:16:00 | DEBUG    |   Batch  890/1344 | Loss: 0.8901
+2026-06-09 17:16:05 | DEBUG    |   Batch  900/1344 | Loss: 0.9599
+2026-06-09 17:16:10 | DEBUG    |   Batch  910/1344 | Loss: 0.8498
+2026-06-09 17:16:15 | DEBUG    |   Batch  920/1344 | Loss: 0.8507
+2026-06-09 17:16:20 | DEBUG    |   Batch  930/1344 | Loss: 0.8841
+2026-06-09 17:16:25 | DEBUG    |   Batch  940/1344 | Loss: 0.9133
+2026-06-09 17:16:30 | DEBUG    |   Batch  950/1344 | Loss: 0.9683
+2026-06-09 17:16:36 | DEBUG    |   Batch  960/1344 | Loss: 0.8782
+2026-06-09 17:16:41 | DEBUG    |   Batch  970/1344 | Loss: 0.8372
+2026-06-09 17:16:46 | DEBUG    |   Batch  980/1344 | Loss: 0.9998
+2026-06-09 17:16:51 | DEBUG    |   Batch  990/1344 | Loss: 0.8504
+2026-06-09 17:16:56 | DEBUG    |   Batch 1000/1344 | Loss: 0.8636
+2026-06-09 17:17:01 | DEBUG    |   Batch 1010/1344 | Loss: 0.9011
+2026-06-09 17:17:06 | DEBUG    |   Batch 1020/1344 | Loss: 0.8487
+2026-06-09 17:17:12 | DEBUG    |   Batch 1030/1344 | Loss: 0.9438
+2026-06-09 17:17:17 | DEBUG    |   Batch 1040/1344 | Loss: 0.9405
+2026-06-09 17:17:22 | DEBUG    |   Batch 1050/1344 | Loss: 0.8919
+2026-06-09 17:17:27 | DEBUG    |   Batch 1060/1344 | Loss: 0.9193

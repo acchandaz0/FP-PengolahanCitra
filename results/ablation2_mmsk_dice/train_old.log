@@ -1,0 +1,769 @@
+2026-06-04 10:34:48 | INFO     | Log file: /home/mci/arsyadl/mmsk/results/ablation2_mmsk_dice/train.log
+2026-06-04 10:34:48 | INFO     | Using device : cuda:0
+2026-06-04 10:34:48 | INFO     | Model        : MMSK-3D U-Net (cross-modal gating)
+2026-06-04 10:34:48 | INFO     | Loss         : Dice  [Ablation 2]
+2026-06-04 10:34:48 | INFO     | Output dir   : /home/mci/arsyadl/mmsk/results/ablation2_mmsk_dice
+2026-06-04 10:34:48 | INFO     | Total parameters: 11,839,653
+2026-06-04 10:34:48 | INFO     | Preparing datasets...
+2026-06-04 10:34:48 | INFO     | [Validation] Scanning 1344 .npz files...
+2026-06-04 10:34:48 | DEBUG    |   [1/1344] OK: BraTS-GLI-00005-100.npz
+2026-06-04 10:34:57 | DEBUG    |   [101/1344] OK: BraTS-GLI-02066-101.npz
+2026-06-04 10:35:07 | DEBUG    |   [201/1344] OK: BraTS-GLI-02103-100.npz
+2026-06-04 10:35:16 | DEBUG    |   [301/1344] OK: BraTS-GLI-02145-100.npz
+2026-06-04 10:35:25 | DEBUG    |   [401/1344] OK: BraTS-GLI-02194-100.npz
+2026-06-04 10:35:34 | DEBUG    |   [501/1344] OK: BraTS-GLI-02236-101.npz
+2026-06-04 10:35:44 | DEBUG    |   [601/1344] OK: BraTS-GLI-02315-100.npz
+2026-06-04 10:35:53 | WARNING  | [CORRUPT] BraTS-GLI-02546-100.npz → Error -3 while decompressing data: invalid literal/lengths set
+2026-06-04 10:35:53 | DEBUG    |   [701/1344] OK: BraTS-GLI-02549-100.npz
+2026-06-04 10:36:03 | DEBUG    |   [801/1344] OK: BraTS-GLI-02736-101.npz
+2026-06-04 10:36:12 | DEBUG    |   [901/1344] OK: BraTS-GLI-02793-100.npz
+2026-06-04 10:36:22 | DEBUG    |   [1001/1344] OK: BraTS-GLI-02851-100.npz
+2026-06-04 10:36:32 | DEBUG    |   [1101/1344] OK: BraTS-GLI-02902-100.npz
+2026-06-04 10:36:41 | DEBUG    |   [1201/1344] OK: BraTS-GLI-02961-100.npz
+2026-06-04 10:36:51 | DEBUG    |   [1301/1344] OK: BraTS-GLI-03026-100.npz
+2026-06-04 10:36:55 | INFO     | [Validation] Done. 1343 healthy, 1 dropped.
+2026-06-04 10:36:55 | WARNING  | [Validation] Corrupt files:
+2026-06-04 10:36:55 | WARNING  |   ✗ /home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-02546-100.npz  (Error -3 while decompressing data: invalid literal/lengths set)
+2026-06-04 10:36:55 | INFO     | [Validation] Scanning 269 .npz files...
+2026-06-04 10:36:55 | DEBUG    |   [1/269] OK: BraTS-GLI-02405-100.npz
+2026-06-04 10:37:04 | DEBUG    |   [101/269] OK: BraTS-GLI-02507-101.npz
+2026-06-04 10:37:14 | DEBUG    |   [201/269] OK: BraTS-GLI-02584-101.npz
+2026-06-04 10:37:20 | INFO     | [Validation] Done. 269 healthy, 0 dropped.
+2026-06-04 10:37:20 | INFO     | Train batches : 672
+2026-06-04 10:37:20 | INFO     | Val batches   : 269
+2026-06-04 10:37:20 | INFO     | Starting training for 300 epochs
+2026-06-04 10:37:20 | INFO     | ============================================================
+2026-06-04 10:37:20 | INFO     | Epoch 1/300
+2026-06-04 10:37:25 | DEBUG    |   Batch    0/672 | Loss: 0.9784
+2026-06-04 10:38:01 | DEBUG    |   Batch   10/672 | Loss: 0.9933
+2026-06-04 10:38:36 | DEBUG    |   Batch   20/672 | Loss: 0.9909
+2026-06-04 10:39:12 | DEBUG    |   Batch   30/672 | Loss: 0.9822
+2026-06-04 10:39:48 | DEBUG    |   Batch   40/672 | Loss: 0.9849
+2026-06-04 10:40:24 | DEBUG    |   Batch   50/672 | Loss: 0.9864
+2026-06-04 10:40:59 | DEBUG    |   Batch   60/672 | Loss: 0.9791
+2026-06-04 10:41:35 | DEBUG    |   Batch   70/672 | Loss: 0.9778
+2026-06-04 10:42:11 | DEBUG    |   Batch   80/672 | Loss: 0.9633
+2026-06-04 10:42:47 | DEBUG    |   Batch   90/672 | Loss: 0.9399
+2026-06-04 10:43:22 | DEBUG    |   Batch  100/672 | Loss: 0.9913
+2026-06-04 10:43:58 | DEBUG    |   Batch  110/672 | Loss: 0.9437
+2026-06-04 10:44:34 | DEBUG    |   Batch  120/672 | Loss: 0.9633
+2026-06-04 10:45:10 | DEBUG    |   Batch  130/672 | Loss: 0.9659
+2026-06-04 10:45:46 | DEBUG    |   Batch  140/672 | Loss: 0.9655
+2026-06-04 10:46:22 | DEBUG    |   Batch  150/672 | Loss: 0.9849
+2026-06-04 10:46:57 | DEBUG    |   Batch  160/672 | Loss: 0.9786
+2026-06-04 10:47:33 | DEBUG    |   Batch  170/672 | Loss: 0.9711
+2026-06-04 10:48:09 | DEBUG    |   Batch  180/672 | Loss: 0.9634
+2026-06-04 10:48:45 | DEBUG    |   Batch  190/672 | Loss: 0.9662
+2026-06-04 10:49:20 | DEBUG    |   Batch  200/672 | Loss: 0.9668
+2026-06-04 10:49:56 | DEBUG    |   Batch  210/672 | Loss: 0.9819
+2026-06-04 10:50:32 | DEBUG    |   Batch  220/672 | Loss: 0.9529
+2026-06-04 10:51:08 | DEBUG    |   Batch  230/672 | Loss: 0.9696
+2026-06-04 10:51:44 | DEBUG    |   Batch  240/672 | Loss: 0.9573
+2026-06-04 10:52:19 | DEBUG    |   Batch  250/672 | Loss: 0.9802
+2026-06-04 10:52:55 | DEBUG    |   Batch  260/672 | Loss: 0.9789
+2026-06-04 10:53:31 | DEBUG    |   Batch  270/672 | Loss: 0.9872
+2026-06-04 10:54:07 | DEBUG    |   Batch  280/672 | Loss: 0.9742
+2026-06-04 10:54:42 | DEBUG    |   Batch  290/672 | Loss: 0.9884
+2026-06-04 10:55:18 | DEBUG    |   Batch  300/672 | Loss: 0.9625
+2026-06-04 10:55:54 | DEBUG    |   Batch  310/672 | Loss: 0.9799
+2026-06-04 10:56:30 | DEBUG    |   Batch  320/672 | Loss: 0.9650
+2026-06-04 10:57:05 | DEBUG    |   Batch  330/672 | Loss: 0.9187
+2026-06-04 10:57:41 | DEBUG    |   Batch  340/672 | Loss: 0.9661
+2026-06-04 10:58:17 | DEBUG    |   Batch  350/672 | Loss: 0.9733
+2026-06-04 10:58:53 | DEBUG    |   Batch  360/672 | Loss: 0.9585
+2026-06-04 10:59:28 | DEBUG    |   Batch  370/672 | Loss: 0.9818
+2026-06-04 11:00:37 | INFO     | Log file: /home/mci/arsyadl/mmsk/results/ablation2_mmsk_dice/train.log
+2026-06-04 11:00:37 | INFO     | Using device : cuda:0
+2026-06-04 11:00:37 | INFO     | Model        : MMSK-3D U-Net (cross-modal gating)
+2026-06-04 11:00:37 | INFO     | Loss         : Dice  [Ablation 2]
+2026-06-04 11:00:37 | INFO     | Output dir   : /home/mci/arsyadl/mmsk/results/ablation2_mmsk_dice
+2026-06-04 11:00:37 | INFO     | Total parameters: 11,839,653
+2026-06-04 11:00:37 | INFO     | AMP (mixed precision): ON
+2026-06-04 11:00:37 | INFO     | Preparing datasets...
+2026-06-04 11:00:37 | INFO     | [Validation] Scanning 1344 .npz files...
+2026-06-04 11:00:37 | DEBUG    |   [1/1344] OK: BraTS-GLI-00005-100.npz
+2026-06-04 11:00:46 | DEBUG    |   [101/1344] OK: BraTS-GLI-02066-101.npz
+2026-06-04 11:00:55 | DEBUG    |   [201/1344] OK: BraTS-GLI-02103-100.npz
+2026-06-04 11:01:03 | DEBUG    |   [301/1344] OK: BraTS-GLI-02145-100.npz
+2026-06-04 11:01:12 | DEBUG    |   [401/1344] OK: BraTS-GLI-02194-100.npz
+2026-06-04 11:01:21 | DEBUG    |   [501/1344] OK: BraTS-GLI-02236-101.npz
+2026-06-04 11:01:30 | DEBUG    |   [601/1344] OK: BraTS-GLI-02315-100.npz
+2026-06-04 11:01:38 | WARNING  | [CORRUPT] BraTS-GLI-02546-100.npz → Error -3 while decompressing data: invalid literal/lengths set
+2026-06-04 11:01:39 | DEBUG    |   [701/1344] OK: BraTS-GLI-02549-100.npz
+2026-06-04 11:01:48 | DEBUG    |   [801/1344] OK: BraTS-GLI-02736-101.npz
+2026-06-04 11:01:57 | DEBUG    |   [901/1344] OK: BraTS-GLI-02793-100.npz
+2026-06-04 11:02:06 | DEBUG    |   [1001/1344] OK: BraTS-GLI-02851-100.npz
+2026-06-04 11:02:15 | DEBUG    |   [1101/1344] OK: BraTS-GLI-02902-100.npz
+2026-06-04 11:02:24 | DEBUG    |   [1201/1344] OK: BraTS-GLI-02961-100.npz
+2026-06-04 11:02:33 | DEBUG    |   [1301/1344] OK: BraTS-GLI-03026-100.npz
+2026-06-04 11:02:37 | INFO     | [Validation] Done. 1343 healthy, 1 dropped.
+2026-06-04 11:02:37 | WARNING  | [Validation] Corrupt files:
+2026-06-04 11:02:37 | WARNING  |   ✗ /home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-02546-100.npz  (Error -3 while decompressing data: invalid literal/lengths set)
+2026-06-04 11:02:37 | INFO     | [Validation] Scanning 269 .npz files...
+2026-06-04 11:02:37 | DEBUG    |   [1/269] OK: BraTS-GLI-02405-100.npz
+2026-06-04 11:02:46 | DEBUG    |   [101/269] OK: BraTS-GLI-02507-101.npz
+2026-06-04 11:02:55 | DEBUG    |   [201/269] OK: BraTS-GLI-02584-101.npz
+2026-06-04 11:03:01 | INFO     | [Validation] Done. 269 healthy, 0 dropped.
+2026-06-04 11:03:01 | INFO     | Train batches : 672
+2026-06-04 11:03:01 | INFO     | Val batches   : 269
+2026-06-04 11:03:01 | INFO     | Starting training for 300 epochs
+2026-06-04 11:03:01 | INFO     | ============================================================
+2026-06-04 11:03:01 | INFO     | Epoch 1/300
+2026-06-04 11:03:02 | DEBUG    |   Batch    0/672 | Loss: 0.9868
+2026-06-04 11:03:11 | DEBUG    |   Batch   10/672 | Loss: 0.9775
+2026-06-04 11:03:19 | DEBUG    |   Batch   20/672 | Loss: 0.9795
+2026-06-04 11:03:27 | DEBUG    |   Batch   30/672 | Loss: 0.9845
+2026-06-04 11:03:35 | DEBUG    |   Batch   40/672 | Loss: 0.9757
+2026-06-04 11:03:43 | DEBUG    |   Batch   50/672 | Loss: 0.9895
+2026-06-04 11:03:52 | DEBUG    |   Batch   60/672 | Loss: 0.9805
+2026-06-04 11:04:00 | DEBUG    |   Batch   70/672 | Loss: 0.9546
+2026-06-04 11:04:08 | DEBUG    |   Batch   80/672 | Loss: 0.9439
+2026-06-04 11:04:16 | DEBUG    |   Batch   90/672 | Loss: 0.9242
+2026-06-04 11:04:24 | DEBUG    |   Batch  100/672 | Loss: 0.9719
+2026-06-04 11:04:33 | DEBUG    |   Batch  110/672 | Loss: 0.9785
+2026-06-04 11:04:41 | DEBUG    |   Batch  120/672 | Loss: 0.9776
+2026-06-04 11:04:49 | DEBUG    |   Batch  130/672 | Loss: 0.9465
+2026-06-04 11:04:57 | DEBUG    |   Batch  140/672 | Loss: 0.9587
+2026-06-04 11:05:05 | DEBUG    |   Batch  150/672 | Loss: 0.9842
+2026-06-04 11:05:14 | DEBUG    |   Batch  160/672 | Loss: 0.9651
+2026-06-04 11:05:22 | DEBUG    |   Batch  170/672 | Loss: 0.9797
+2026-06-04 11:05:30 | DEBUG    |   Batch  180/672 | Loss: 0.9731
+2026-06-04 11:05:38 | DEBUG    |   Batch  190/672 | Loss: 0.9810
+2026-06-04 11:05:46 | DEBUG    |   Batch  200/672 | Loss: 0.9767
+2026-06-04 11:05:55 | DEBUG    |   Batch  210/672 | Loss: 0.9594
+2026-06-04 11:06:03 | DEBUG    |   Batch  220/672 | Loss: 0.9856
+2026-06-04 11:06:11 | DEBUG    |   Batch  230/672 | Loss: 0.9411
+2026-06-04 11:06:19 | DEBUG    |   Batch  240/672 | Loss: 0.9593
+2026-06-04 11:06:28 | DEBUG    |   Batch  250/672 | Loss: 0.9706
+2026-06-04 11:06:36 | DEBUG    |   Batch  260/672 | Loss: 0.9330
+2026-06-04 11:06:44 | DEBUG    |   Batch  270/672 | Loss: 0.9361
+2026-06-04 11:06:52 | DEBUG    |   Batch  280/672 | Loss: 0.9951
+2026-06-04 11:07:00 | DEBUG    |   Batch  290/672 | Loss: 0.9292
+2026-06-04 11:07:09 | DEBUG    |   Batch  300/672 | Loss: 0.9821
+2026-06-04 11:07:17 | DEBUG    |   Batch  310/672 | Loss: 0.9583
+2026-06-04 11:07:25 | DEBUG    |   Batch  320/672 | Loss: 0.9628
+2026-06-04 11:07:33 | DEBUG    |   Batch  330/672 | Loss: 0.9631
+2026-06-04 11:07:41 | DEBUG    |   Batch  340/672 | Loss: 0.9766
+2026-06-04 11:07:50 | DEBUG    |   Batch  350/672 | Loss: 0.9324
+2026-06-04 11:07:58 | DEBUG    |   Batch  360/672 | Loss: 0.9328
+2026-06-04 11:08:06 | DEBUG    |   Batch  370/672 | Loss: 0.9677
+2026-06-04 11:08:14 | DEBUG    |   Batch  380/672 | Loss: 0.9478
+2026-06-04 11:08:22 | DEBUG    |   Batch  390/672 | Loss: 0.9141
+2026-06-04 11:08:31 | DEBUG    |   Batch  400/672 | Loss: 0.9165
+2026-06-04 11:08:39 | DEBUG    |   Batch  410/672 | Loss: 0.9748
+2026-06-04 11:08:47 | DEBUG    |   Batch  420/672 | Loss: 0.9300
+2026-06-04 11:08:55 | DEBUG    |   Batch  430/672 | Loss: 0.9474
+2026-06-04 11:09:03 | DEBUG    |   Batch  440/672 | Loss: 0.9247
+2026-06-04 11:09:12 | DEBUG    |   Batch  450/672 | Loss: 0.9031
+2026-06-04 11:09:20 | DEBUG    |   Batch  460/672 | Loss: 0.9262
+2026-06-04 11:09:28 | DEBUG    |   Batch  470/672 | Loss: 0.9622
+2026-06-04 11:09:36 | DEBUG    |   Batch  480/672 | Loss: 0.9280
+2026-06-04 11:09:45 | DEBUG    |   Batch  490/672 | Loss: 0.9295
+2026-06-04 11:09:53 | DEBUG    |   Batch  500/672 | Loss: 0.9161
+2026-06-04 11:10:01 | DEBUG    |   Batch  510/672 | Loss: 0.9816
+2026-06-04 11:10:09 | DEBUG    |   Batch  520/672 | Loss: 0.9667
+2026-06-04 11:10:17 | DEBUG    |   Batch  530/672 | Loss: 0.9356
+2026-06-04 11:10:26 | DEBUG    |   Batch  540/672 | Loss: 0.9299
+2026-06-04 11:10:34 | DEBUG    |   Batch  550/672 | Loss: 0.9371
+2026-06-04 11:10:42 | DEBUG    |   Batch  560/672 | Loss: 0.9176
+2026-06-04 11:10:50 | DEBUG    |   Batch  570/672 | Loss: 0.8579
+2026-06-04 11:10:58 | DEBUG    |   Batch  580/672 | Loss: 0.8933
+2026-06-04 11:11:07 | DEBUG    |   Batch  590/672 | Loss: 0.9099
+2026-06-04 11:11:15 | DEBUG    |   Batch  600/672 | Loss: 0.9652
+2026-06-04 11:11:23 | DEBUG    |   Batch  610/672 | Loss: 0.9418
+2026-06-04 11:11:31 | DEBUG    |   Batch  620/672 | Loss: 0.9201
+2026-06-04 11:11:39 | DEBUG    |   Batch  630/672 | Loss: 0.9324
+2026-06-04 11:11:48 | DEBUG    |   Batch  640/672 | Loss: 0.9405
+2026-06-04 11:11:56 | DEBUG    |   Batch  650/672 | Loss: 0.9402
+2026-06-04 11:12:04 | DEBUG    |   Batch  660/672 | Loss: 0.8794
+2026-06-04 11:12:12 | DEBUG    |   Batch  670/672 | Loss: 0.8641
+2026-06-04 11:16:44 | INFO     | Log file: /home/mci/arsyadl/mmsk/results/ablation2_mmsk_dice/train.log
+2026-06-04 11:16:44 | INFO     | Using device : cuda:0
+2026-06-04 11:16:44 | INFO     | Model        : MMSK-3D U-Net (cross-modal gating)
+2026-06-04 11:16:44 | INFO     | Loss         : Dice  [Ablation 2]
+2026-06-04 11:16:44 | INFO     | Output dir   : /home/mci/arsyadl/mmsk/results/ablation2_mmsk_dice
+2026-06-04 11:16:44 | INFO     | Total parameters: 11,839,653
+2026-06-04 11:16:44 | INFO     | AMP (mixed precision): ON
+2026-06-04 11:16:44 | INFO     | Preparing datasets...
+2026-06-04 11:16:44 | INFO     | [Validation] Scanning 1344 .npz files...
+2026-06-04 11:16:44 | DEBUG    |   [1/1344] OK: BraTS-GLI-00005-100.npz
+2026-06-04 11:16:53 | DEBUG    |   [101/1344] OK: BraTS-GLI-02066-101.npz
+2026-06-04 11:17:02 | DEBUG    |   [201/1344] OK: BraTS-GLI-02103-100.npz
+2026-06-04 11:17:11 | DEBUG    |   [301/1344] OK: BraTS-GLI-02145-100.npz
+2026-06-04 11:17:20 | DEBUG    |   [401/1344] OK: BraTS-GLI-02194-100.npz
+2026-06-04 11:17:28 | DEBUG    |   [501/1344] OK: BraTS-GLI-02236-101.npz
+2026-06-04 11:17:37 | DEBUG    |   [601/1344] OK: BraTS-GLI-02315-100.npz
+2026-06-04 11:17:46 | WARNING  | [CORRUPT] BraTS-GLI-02546-100.npz → Error -3 while decompressing data: invalid literal/lengths set
+2026-06-04 11:17:46 | DEBUG    |   [701/1344] OK: BraTS-GLI-02549-100.npz
+2026-06-04 11:17:55 | DEBUG    |   [801/1344] OK: BraTS-GLI-02736-101.npz
+2026-06-04 11:18:04 | DEBUG    |   [901/1344] OK: BraTS-GLI-02793-100.npz
+2026-06-04 11:18:13 | DEBUG    |   [1001/1344] OK: BraTS-GLI-02851-100.npz
+2026-06-04 11:18:23 | DEBUG    |   [1101/1344] OK: BraTS-GLI-02902-100.npz
+2026-06-04 11:18:32 | DEBUG    |   [1201/1344] OK: BraTS-GLI-02961-100.npz
+2026-06-04 11:18:41 | DEBUG    |   [1301/1344] OK: BraTS-GLI-03026-100.npz
+2026-06-04 11:18:45 | INFO     | [Validation] Done. 1343 healthy, 1 dropped.
+2026-06-04 11:18:45 | WARNING  | [Validation] Corrupt files:
+2026-06-04 11:18:45 | WARNING  |   ✗ /home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-02546-100.npz  (Error -3 while decompressing data: invalid literal/lengths set)
+2026-06-04 11:18:45 | INFO     | [Validation] Scanning 269 .npz files...
+2026-06-04 11:18:45 | DEBUG    |   [1/269] OK: BraTS-GLI-02405-100.npz
+2026-06-04 11:18:54 | DEBUG    |   [101/269] OK: BraTS-GLI-02507-101.npz
+2026-06-04 11:19:03 | DEBUG    |   [201/269] OK: BraTS-GLI-02584-101.npz
+2026-06-04 11:19:09 | INFO     | [Validation] Done. 269 healthy, 0 dropped.
+2026-06-04 11:19:09 | INFO     | Train batches : 671
+2026-06-04 11:19:09 | INFO     | Val batches   : 269
+2026-06-04 11:19:09 | INFO     | Starting training for 300 epochs
+2026-06-04 11:19:09 | INFO     | ============================================================
+2026-06-04 11:19:09 | INFO     | Epoch 1/300
+2026-06-04 11:19:10 | DEBUG    |   Batch    0/671 | Loss: 0.9955
+2026-06-04 11:19:19 | DEBUG    |   Batch   10/671 | Loss: 0.9876
+2026-06-04 11:19:27 | DEBUG    |   Batch   20/671 | Loss: 0.9727
+2026-06-04 11:19:35 | DEBUG    |   Batch   30/671 | Loss: 0.9873
+2026-06-04 11:19:43 | DEBUG    |   Batch   40/671 | Loss: 0.9765
+2026-06-04 11:19:52 | DEBUG    |   Batch   50/671 | Loss: 0.9708
+2026-06-04 11:20:00 | DEBUG    |   Batch   60/671 | Loss: 0.9580
+2026-06-04 11:20:08 | DEBUG    |   Batch   70/671 | Loss: 0.9427
+2026-06-04 11:20:16 | DEBUG    |   Batch   80/671 | Loss: 0.9650
+2026-06-04 11:20:24 | DEBUG    |   Batch   90/671 | Loss: 0.9513
+2026-06-04 11:20:33 | DEBUG    |   Batch  100/671 | Loss: 0.9821
+2026-06-04 11:20:41 | DEBUG    |   Batch  110/671 | Loss: 0.9851
+2026-06-04 11:20:49 | DEBUG    |   Batch  120/671 | Loss: 0.9674
+2026-06-04 11:20:57 | DEBUG    |   Batch  130/671 | Loss: 0.9746
+2026-06-04 11:21:06 | DEBUG    |   Batch  140/671 | Loss: 0.9811
+2026-06-04 11:21:14 | DEBUG    |   Batch  150/671 | Loss: 0.9521
+2026-06-04 11:21:22 | DEBUG    |   Batch  160/671 | Loss: 0.9830
+2026-06-04 11:21:30 | DEBUG    |   Batch  170/671 | Loss: 0.9577
+2026-06-04 11:21:38 | DEBUG    |   Batch  180/671 | Loss: 0.9838
+2026-06-04 11:21:46 | DEBUG    |   Batch  190/671 | Loss: 0.9714
+2026-06-04 11:21:55 | DEBUG    |   Batch  200/671 | Loss: 0.9799
+2026-06-04 11:22:03 | DEBUG    |   Batch  210/671 | Loss: 0.9537
+2026-06-04 11:22:11 | DEBUG    |   Batch  220/671 | Loss: 0.9760
+2026-06-04 11:22:19 | DEBUG    |   Batch  230/671 | Loss: 0.9546
+2026-06-04 11:22:27 | DEBUG    |   Batch  240/671 | Loss: 0.9805
+2026-06-04 11:22:36 | DEBUG    |   Batch  250/671 | Loss: 0.9532
+2026-06-04 11:22:44 | DEBUG    |   Batch  260/671 | Loss: 0.9684
+2026-06-04 11:22:52 | DEBUG    |   Batch  270/671 | Loss: 0.9501
+2026-06-04 11:23:00 | DEBUG    |   Batch  280/671 | Loss: 0.9669
+2026-06-04 11:23:08 | DEBUG    |   Batch  290/671 | Loss: 0.9487
+2026-06-04 11:23:17 | DEBUG    |   Batch  300/671 | Loss: 0.9577
+2026-06-04 11:23:25 | DEBUG    |   Batch  310/671 | Loss: 0.9552
+2026-06-04 11:23:33 | DEBUG    |   Batch  320/671 | Loss: 0.9329
+2026-06-04 11:23:41 | DEBUG    |   Batch  330/671 | Loss: 0.9409
+2026-06-04 11:23:49 | DEBUG    |   Batch  340/671 | Loss: 0.9850
+2026-06-04 11:23:58 | DEBUG    |   Batch  350/671 | Loss: 0.9480
+2026-06-04 11:24:06 | DEBUG    |   Batch  360/671 | Loss: 0.9876
+2026-06-04 11:24:14 | DEBUG    |   Batch  370/671 | Loss: 0.9426
+2026-06-04 11:24:22 | DEBUG    |   Batch  380/671 | Loss: 0.9770
+2026-06-04 11:24:30 | DEBUG    |   Batch  390/671 | Loss: 0.9348
+2026-06-04 11:24:39 | DEBUG    |   Batch  400/671 | Loss: 0.9699
+2026-06-04 11:24:47 | DEBUG    |   Batch  410/671 | Loss: 0.9681
+2026-06-04 11:24:55 | DEBUG    |   Batch  420/671 | Loss: 0.9673
+2026-06-04 11:25:03 | DEBUG    |   Batch  430/671 | Loss: 0.9438
+2026-06-04 11:25:11 | DEBUG    |   Batch  440/671 | Loss: 0.9749
+2026-06-04 11:25:19 | DEBUG    |   Batch  450/671 | Loss: 0.9467
+2026-06-04 11:25:28 | DEBUG    |   Batch  460/671 | Loss: 0.9595
+2026-06-04 11:25:36 | DEBUG    |   Batch  470/671 | Loss: 0.9187
+2026-06-04 11:25:44 | DEBUG    |   Batch  480/671 | Loss: 0.9595
+2026-06-04 11:25:52 | DEBUG    |   Batch  490/671 | Loss: 0.9255
+2026-06-04 11:26:00 | DEBUG    |   Batch  500/671 | Loss: 0.9385
+2026-06-04 11:26:09 | DEBUG    |   Batch  510/671 | Loss: 0.9398
+2026-06-04 11:26:17 | DEBUG    |   Batch  520/671 | Loss: 0.9212
+2026-06-04 11:26:25 | DEBUG    |   Batch  530/671 | Loss: 0.9142
+2026-06-04 11:26:33 | DEBUG    |   Batch  540/671 | Loss: 0.9388
+2026-06-04 11:26:41 | DEBUG    |   Batch  550/671 | Loss: 0.9609
+2026-06-04 11:26:50 | DEBUG    |   Batch  560/671 | Loss: 0.9148
+2026-06-04 11:26:58 | DEBUG    |   Batch  570/671 | Loss: 0.9315
+2026-06-04 11:27:06 | DEBUG    |   Batch  580/671 | Loss: 0.9333
+2026-06-04 11:27:14 | DEBUG    |   Batch  590/671 | Loss: 0.9567
+2026-06-04 11:27:22 | DEBUG    |   Batch  600/671 | Loss: 0.8886
+2026-06-04 11:27:31 | DEBUG    |   Batch  610/671 | Loss: 0.9179
+2026-06-04 11:27:39 | DEBUG    |   Batch  620/671 | Loss: 0.8532
+2026-06-04 11:27:47 | DEBUG    |   Batch  630/671 | Loss: 0.9609
+2026-06-04 11:27:55 | DEBUG    |   Batch  640/671 | Loss: 0.8846
+2026-06-04 11:28:03 | DEBUG    |   Batch  650/671 | Loss: 0.9723
+2026-06-04 11:28:11 | DEBUG    |   Batch  660/671 | Loss: 0.9377
+2026-06-04 11:28:20 | DEBUG    |   Batch  670/671 | Loss: 0.9618
+2026-06-04 11:28:59 | INFO     |   Train Loss: 0.9548 | Val Loss: 0.9432 | Mean Dice: 0.0103
+2026-06-04 11:28:59 | INFO     |   Dice NCR/ED/ET: 0.0020 / 0.0274 / 0.0067
+2026-06-04 11:28:59 | INFO     |   Time: 590.4s | LR: 1.00e-04
+2026-06-04 11:28:59 | INFO     |   ✓ New best model saved (Dice: 0.0103)
+2026-06-04 11:28:59 | INFO     | ------------------------------------------------------------
+2026-06-04 11:28:59 | INFO     | Epoch 2/300
+2026-06-04 11:29:01 | DEBUG    |   Batch    0/671 | Loss: 0.8983
+2026-06-04 11:29:09 | DEBUG    |   Batch   10/671 | Loss: 0.9189
+2026-06-04 11:29:17 | DEBUG    |   Batch   20/671 | Loss: 0.9312
+2026-06-04 11:29:25 | DEBUG    |   Batch   30/671 | Loss: 0.9201
+2026-06-04 11:29:33 | DEBUG    |   Batch   40/671 | Loss: 0.8601
+2026-06-04 11:29:42 | DEBUG    |   Batch   50/671 | Loss: 0.8437
+2026-06-04 11:29:50 | DEBUG    |   Batch   60/671 | Loss: 0.9046
+2026-06-04 11:29:58 | DEBUG    |   Batch   70/671 | Loss: 0.9518
+2026-06-04 11:30:06 | DEBUG    |   Batch   80/671 | Loss: 0.9002
+2026-06-04 11:30:14 | DEBUG    |   Batch   90/671 | Loss: 0.8690
+2026-06-04 11:30:22 | DEBUG    |   Batch  100/671 | Loss: 0.9305
+2026-06-04 11:30:31 | DEBUG    |   Batch  110/671 | Loss: 0.9030
+2026-06-04 11:30:39 | DEBUG    |   Batch  120/671 | Loss: 0.8859
+2026-06-04 11:30:47 | DEBUG    |   Batch  130/671 | Loss: 0.9285
+2026-06-04 11:30:55 | DEBUG    |   Batch  140/671 | Loss: 0.9116
+2026-06-04 11:31:03 | DEBUG    |   Batch  150/671 | Loss: 0.9070
+2026-06-04 11:31:12 | DEBUG    |   Batch  160/671 | Loss: 0.8490
+2026-06-04 11:31:20 | DEBUG    |   Batch  170/671 | Loss: 0.8653
+2026-06-04 11:31:28 | DEBUG    |   Batch  180/671 | Loss: 0.9232
+2026-06-04 11:31:36 | DEBUG    |   Batch  190/671 | Loss: 0.9518
+2026-06-04 11:31:44 | DEBUG    |   Batch  200/671 | Loss: 0.8996
+2026-06-04 11:31:53 | DEBUG    |   Batch  210/671 | Loss: 0.9038
+2026-06-04 11:32:01 | DEBUG    |   Batch  220/671 | Loss: 0.8565
+2026-06-04 11:32:09 | DEBUG    |   Batch  230/671 | Loss: 0.8421
+2026-06-04 11:32:17 | DEBUG    |   Batch  240/671 | Loss: 0.8606
+2026-06-04 11:32:25 | DEBUG    |   Batch  250/671 | Loss: 0.8289
+2026-06-04 11:32:34 | DEBUG    |   Batch  260/671 | Loss: 0.9258
+2026-06-04 11:32:42 | DEBUG    |   Batch  270/671 | Loss: 0.8660
+2026-06-04 11:32:50 | DEBUG    |   Batch  280/671 | Loss: 0.8986
+2026-06-04 11:32:58 | DEBUG    |   Batch  290/671 | Loss: 0.8098
+2026-06-04 11:33:06 | DEBUG    |   Batch  300/671 | Loss: 0.8511
+2026-06-04 11:33:14 | DEBUG    |   Batch  310/671 | Loss: 0.7926
+2026-06-04 11:33:23 | DEBUG    |   Batch  320/671 | Loss: 0.8567
+2026-06-04 11:33:31 | DEBUG    |   Batch  330/671 | Loss: 0.8006
+2026-06-04 11:33:39 | DEBUG    |   Batch  340/671 | Loss: 0.8229
+2026-06-04 11:33:47 | DEBUG    |   Batch  350/671 | Loss: 0.8106
+2026-06-04 11:33:55 | DEBUG    |   Batch  360/671 | Loss: 0.8978
+2026-06-04 11:34:04 | DEBUG    |   Batch  370/671 | Loss: 0.8224
+2026-06-04 11:34:12 | DEBUG    |   Batch  380/671 | Loss: 0.8678
+2026-06-04 11:34:20 | DEBUG    |   Batch  390/671 | Loss: 0.8481
+2026-06-04 11:34:28 | DEBUG    |   Batch  400/671 | Loss: 0.7926
+2026-06-04 11:34:36 | DEBUG    |   Batch  410/671 | Loss: 0.8494
+2026-06-04 11:34:45 | DEBUG    |   Batch  420/671 | Loss: 0.8150
+2026-06-04 11:34:53 | DEBUG    |   Batch  430/671 | Loss: 0.8146
+2026-06-04 11:35:01 | DEBUG    |   Batch  440/671 | Loss: 0.9111
+2026-06-04 11:35:09 | DEBUG    |   Batch  450/671 | Loss: 0.7596
+2026-06-04 11:35:17 | DEBUG    |   Batch  460/671 | Loss: 0.9006
+2026-06-04 11:35:26 | DEBUG    |   Batch  470/671 | Loss: 0.8107
+2026-06-04 11:35:34 | DEBUG    |   Batch  480/671 | Loss: 0.8433
+2026-06-04 11:35:42 | DEBUG    |   Batch  490/671 | Loss: 0.8113
+2026-06-04 11:35:50 | DEBUG    |   Batch  500/671 | Loss: 0.8626
+2026-06-04 11:35:58 | DEBUG    |   Batch  510/671 | Loss: 0.8514
+2026-06-04 11:36:06 | DEBUG    |   Batch  520/671 | Loss: 0.7681
+2026-06-04 11:36:15 | DEBUG    |   Batch  530/671 | Loss: 0.8359
+2026-06-04 11:36:23 | DEBUG    |   Batch  540/671 | Loss: 0.8156
+2026-06-04 11:36:31 | DEBUG    |   Batch  550/671 | Loss: 0.8379
+2026-06-04 11:36:39 | DEBUG    |   Batch  560/671 | Loss: 0.8233
+2026-06-04 11:36:47 | DEBUG    |   Batch  570/671 | Loss: 0.8991
+2026-06-04 11:36:56 | DEBUG    |   Batch  580/671 | Loss: 0.7661
+2026-06-04 11:37:04 | DEBUG    |   Batch  590/671 | Loss: 0.7912
+2026-06-04 11:37:12 | DEBUG    |   Batch  600/671 | Loss: 0.7930
+2026-06-04 11:37:20 | DEBUG    |   Batch  610/671 | Loss: 0.8333
+2026-06-04 11:37:28 | DEBUG    |   Batch  620/671 | Loss: 0.8344
+2026-06-04 11:37:37 | DEBUG    |   Batch  630/671 | Loss: 0.7770
+2026-06-04 11:37:45 | DEBUG    |   Batch  640/671 | Loss: 0.7777
+2026-06-04 11:37:53 | DEBUG    |   Batch  650/671 | Loss: 0.8304
+2026-06-04 11:38:01 | DEBUG    |   Batch  660/671 | Loss: 0.8717
+2026-06-04 11:38:09 | DEBUG    |   Batch  670/671 | Loss: 0.7912
+2026-06-04 11:38:49 | INFO     |   Train Loss: 0.8594 | Val Loss: 0.9013 | Mean Dice: 0.0103
+2026-06-04 11:38:49 | INFO     |   Dice NCR/ED/ET: 0.0020 / 0.0274 / 0.0067
+2026-06-04 11:38:49 | INFO     |   Time: 589.5s | LR: 1.00e-04
+2026-06-04 11:38:49 | INFO     | ------------------------------------------------------------
+2026-06-04 11:38:49 | INFO     | Epoch 3/300
+2026-06-04 11:38:50 | DEBUG    |   Batch    0/671 | Loss: 0.8357
+2026-06-04 11:38:58 | DEBUG    |   Batch   10/671 | Loss: 0.7922
+2026-06-04 11:39:06 | DEBUG    |   Batch   20/671 | Loss: 0.8331
+2026-06-04 11:39:15 | DEBUG    |   Batch   30/671 | Loss: 0.8060
+2026-06-04 11:39:23 | DEBUG    |   Batch   40/671 | Loss: 0.8029
+2026-06-04 11:39:31 | DEBUG    |   Batch   50/671 | Loss: 0.8143
+2026-06-04 11:39:39 | DEBUG    |   Batch   60/671 | Loss: 0.7932
+2026-06-04 11:39:47 | DEBUG    |   Batch   70/671 | Loss: 0.8187
+2026-06-04 11:39:56 | DEBUG    |   Batch   80/671 | Loss: 0.8274
+2026-06-04 11:40:04 | DEBUG    |   Batch   90/671 | Loss: 0.6945
+2026-06-04 11:40:12 | DEBUG    |   Batch  100/671 | Loss: 0.7854
+2026-06-04 11:40:20 | DEBUG    |   Batch  110/671 | Loss: 0.7911
+2026-06-04 11:40:28 | DEBUG    |   Batch  120/671 | Loss: 0.8498
+2026-06-04 11:40:37 | DEBUG    |   Batch  130/671 | Loss: 0.7143
+2026-06-04 11:40:45 | DEBUG    |   Batch  140/671 | Loss: 0.7601
+2026-06-04 11:40:53 | DEBUG    |   Batch  150/671 | Loss: 0.7749
+2026-06-04 11:41:01 | DEBUG    |   Batch  160/671 | Loss: 0.7153
+2026-06-04 11:41:09 | DEBUG    |   Batch  170/671 | Loss: 0.6584
+2026-06-04 11:41:18 | DEBUG    |   Batch  180/671 | Loss: 0.7746
+2026-06-04 11:41:26 | DEBUG    |   Batch  190/671 | Loss: 0.7321
+2026-06-04 11:41:34 | DEBUG    |   Batch  200/671 | Loss: 0.7541
+2026-06-04 11:41:42 | DEBUG    |   Batch  210/671 | Loss: 0.7710
+2026-06-04 11:41:50 | DEBUG    |   Batch  220/671 | Loss: 0.7285
+2026-06-04 11:41:58 | DEBUG    |   Batch  230/671 | Loss: 0.8591
+2026-06-04 11:42:07 | DEBUG    |   Batch  240/671 | Loss: 0.6735
+2026-06-04 11:42:15 | DEBUG    |   Batch  250/671 | Loss: 0.7064
+2026-06-04 11:42:23 | DEBUG    |   Batch  260/671 | Loss: 0.6891
+2026-06-04 11:42:31 | DEBUG    |   Batch  270/671 | Loss: 0.6900
+2026-06-04 11:42:39 | DEBUG    |   Batch  280/671 | Loss: 0.7142
+2026-06-04 11:42:48 | DEBUG    |   Batch  290/671 | Loss: 0.8330
+2026-06-04 11:42:56 | DEBUG    |   Batch  300/671 | Loss: 0.6777
+2026-06-04 11:43:04 | DEBUG    |   Batch  310/671 | Loss: 0.6650
+2026-06-04 11:43:12 | DEBUG    |   Batch  320/671 | Loss: 0.6841
+2026-06-04 11:43:20 | DEBUG    |   Batch  330/671 | Loss: 0.8013
+2026-06-04 11:43:29 | DEBUG    |   Batch  340/671 | Loss: 0.7361
+2026-06-04 11:43:37 | DEBUG    |   Batch  350/671 | Loss: 0.7374
+2026-06-04 11:43:45 | DEBUG    |   Batch  360/671 | Loss: 0.8893
+2026-06-04 11:43:53 | DEBUG    |   Batch  370/671 | Loss: 0.7592
+2026-06-04 11:44:01 | DEBUG    |   Batch  380/671 | Loss: 0.7662
+2026-06-04 11:44:10 | DEBUG    |   Batch  390/671 | Loss: 0.7942
+2026-06-04 11:44:18 | DEBUG    |   Batch  400/671 | Loss: 0.7874
+2026-06-04 11:44:26 | DEBUG    |   Batch  410/671 | Loss: 0.7890
+2026-06-04 11:44:34 | DEBUG    |   Batch  420/671 | Loss: 0.7633
+2026-06-04 11:44:42 | DEBUG    |   Batch  430/671 | Loss: 0.8611
+2026-06-04 11:44:50 | DEBUG    |   Batch  440/671 | Loss: 0.7532
+2026-06-04 11:44:59 | DEBUG    |   Batch  450/671 | Loss: 0.7712
+2026-06-04 11:45:07 | DEBUG    |   Batch  460/671 | Loss: 0.7809
+2026-06-04 11:45:15 | DEBUG    |   Batch  470/671 | Loss: 0.7340
+2026-06-04 11:45:23 | DEBUG    |   Batch  480/671 | Loss: 0.7136
+2026-06-04 11:45:31 | DEBUG    |   Batch  490/671 | Loss: 0.7195
+2026-06-04 11:45:40 | DEBUG    |   Batch  500/671 | Loss: 0.6697
+2026-06-04 11:45:48 | DEBUG    |   Batch  510/671 | Loss: 0.6852
+2026-06-04 11:45:56 | DEBUG    |   Batch  520/671 | Loss: 0.7343
+2026-06-04 11:46:04 | DEBUG    |   Batch  530/671 | Loss: 0.6801
+2026-06-04 11:46:12 | DEBUG    |   Batch  540/671 | Loss: 0.7308
+2026-06-04 11:46:21 | DEBUG    |   Batch  550/671 | Loss: 0.7149
+2026-06-04 11:46:29 | DEBUG    |   Batch  560/671 | Loss: 0.6640
+2026-06-04 11:46:37 | DEBUG    |   Batch  570/671 | Loss: 0.5929
+2026-06-04 11:46:45 | DEBUG    |   Batch  580/671 | Loss: 0.7549
+2026-06-04 11:46:53 | DEBUG    |   Batch  590/671 | Loss: 0.6696
+2026-06-04 11:47:01 | DEBUG    |   Batch  600/671 | Loss: 0.7480
+2026-06-04 11:47:10 | DEBUG    |   Batch  610/671 | Loss: 0.5731
+2026-06-04 11:47:18 | DEBUG    |   Batch  620/671 | Loss: 0.8074
+2026-06-04 11:47:26 | DEBUG    |   Batch  630/671 | Loss: 0.6037
+2026-06-04 11:47:34 | DEBUG    |   Batch  640/671 | Loss: 0.6678
+2026-06-04 11:47:42 | DEBUG    |   Batch  650/671 | Loss: 0.6432
+2026-06-04 11:47:51 | DEBUG    |   Batch  660/671 | Loss: 0.5987
+2026-06-04 11:47:59 | DEBUG    |   Batch  670/671 | Loss: 0.5949
+2026-06-04 11:48:38 | INFO     |   Train Loss: 0.7362 | Val Loss: 0.7642 | Mean Dice: 0.0103
+2026-06-04 11:48:38 | INFO     |   Dice NCR/ED/ET: 0.0020 / 0.0274 / 0.0067
+2026-06-04 11:48:38 | INFO     |   Time: 589.5s | LR: 1.00e-04
+2026-06-04 11:48:38 | INFO     | ------------------------------------------------------------
+2026-06-04 11:48:38 | INFO     | Epoch 4/300
+2026-06-04 11:48:40 | DEBUG    |   Batch    0/671 | Loss: 0.8693
+2026-06-04 11:48:48 | DEBUG    |   Batch   10/671 | Loss: 0.5450
+2026-06-04 11:48:56 | DEBUG    |   Batch   20/671 | Loss: 0.6831
+2026-06-04 11:49:04 | DEBUG    |   Batch   30/671 | Loss: 0.6876
+2026-06-04 11:49:12 | DEBUG    |   Batch   40/671 | Loss: 0.7996
+2026-06-04 11:49:21 | DEBUG    |   Batch   50/671 | Loss: 0.6705
+2026-06-04 11:49:29 | DEBUG    |   Batch   60/671 | Loss: 0.7026
+2026-06-04 11:49:37 | DEBUG    |   Batch   70/671 | Loss: 0.7711
+2026-06-04 11:49:45 | DEBUG    |   Batch   80/671 | Loss: 0.5616
+2026-06-04 11:49:53 | DEBUG    |   Batch   90/671 | Loss: 0.7858
+2026-06-04 11:50:02 | DEBUG    |   Batch  100/671 | Loss: 0.5978
+2026-06-04 11:50:10 | DEBUG    |   Batch  110/671 | Loss: 0.6474
+2026-06-04 11:50:18 | DEBUG    |   Batch  120/671 | Loss: 0.7039
+2026-06-04 11:50:26 | DEBUG    |   Batch  130/671 | Loss: 0.7498
+2026-06-04 11:50:34 | DEBUG    |   Batch  140/671 | Loss: 0.7001
+2026-06-04 11:50:42 | DEBUG    |   Batch  150/671 | Loss: 0.6137
+2026-06-04 11:50:51 | DEBUG    |   Batch  160/671 | Loss: 0.7331
+2026-06-04 11:50:59 | DEBUG    |   Batch  170/671 | Loss: 0.6815
+2026-06-04 11:51:07 | DEBUG    |   Batch  180/671 | Loss: 0.6862
+2026-06-04 11:51:15 | DEBUG    |   Batch  190/671 | Loss: 0.5476
+2026-06-04 11:51:23 | DEBUG    |   Batch  200/671 | Loss: 0.7093
+2026-06-04 11:51:32 | DEBUG    |   Batch  210/671 | Loss: 0.8053
+2026-06-04 11:51:40 | DEBUG    |   Batch  220/671 | Loss: 0.8173
+2026-06-04 11:51:48 | DEBUG    |   Batch  230/671 | Loss: 0.6362
+2026-06-04 11:51:56 | DEBUG    |   Batch  240/671 | Loss: 0.5534
+2026-06-04 11:52:04 | DEBUG    |   Batch  250/671 | Loss: 0.5648
+2026-06-04 11:52:13 | DEBUG    |   Batch  260/671 | Loss: 0.6846
+2026-06-04 11:52:21 | DEBUG    |   Batch  270/671 | Loss: 0.6138
+2026-06-04 11:52:29 | DEBUG    |   Batch  280/671 | Loss: 0.5987
+2026-06-04 11:52:37 | DEBUG    |   Batch  290/671 | Loss: 0.6448
+2026-06-04 11:52:45 | DEBUG    |   Batch  300/671 | Loss: 0.6997
+2026-06-04 11:52:54 | DEBUG    |   Batch  310/671 | Loss: 0.5390
+2026-06-04 11:53:02 | DEBUG    |   Batch  320/671 | Loss: 0.6667
+2026-06-04 11:53:10 | DEBUG    |   Batch  330/671 | Loss: 0.5927
+2026-06-04 11:53:18 | DEBUG    |   Batch  340/671 | Loss: 0.5028
+2026-06-04 11:53:26 | DEBUG    |   Batch  350/671 | Loss: 0.5644
+2026-06-04 11:53:34 | DEBUG    |   Batch  360/671 | Loss: 0.6661
+2026-06-04 11:53:43 | DEBUG    |   Batch  370/671 | Loss: 0.6029
+2026-06-04 11:53:51 | DEBUG    |   Batch  380/671 | Loss: 0.7074
+2026-06-04 11:53:59 | DEBUG    |   Batch  390/671 | Loss: 0.6733
+2026-06-04 11:54:07 | DEBUG    |   Batch  400/671 | Loss: 0.6835
+2026-06-04 11:54:15 | DEBUG    |   Batch  410/671 | Loss: 0.6289
+2026-06-04 11:54:24 | DEBUG    |   Batch  420/671 | Loss: 0.5916
+2026-06-04 11:54:32 | DEBUG    |   Batch  430/671 | Loss: 0.5945
+2026-06-04 11:54:40 | DEBUG    |   Batch  440/671 | Loss: 0.6304
+2026-06-04 11:54:48 | DEBUG    |   Batch  450/671 | Loss: 0.6536
+2026-06-04 11:54:56 | DEBUG    |   Batch  460/671 | Loss: 0.7105
+2026-06-04 11:55:05 | DEBUG    |   Batch  470/671 | Loss: 0.6695
+2026-06-04 11:55:13 | DEBUG    |   Batch  480/671 | Loss: 0.5767
+2026-06-04 11:55:21 | DEBUG    |   Batch  490/671 | Loss: 0.4280
+2026-06-04 11:55:29 | DEBUG    |   Batch  500/671 | Loss: 0.7971
+2026-06-04 11:55:37 | DEBUG    |   Batch  510/671 | Loss: 0.6763
+2026-06-04 11:55:45 | DEBUG    |   Batch  520/671 | Loss: 0.6841
+2026-06-04 11:55:54 | DEBUG    |   Batch  530/671 | Loss: 0.5879
+2026-06-04 11:56:02 | DEBUG    |   Batch  540/671 | Loss: 0.6219
+2026-06-04 11:56:10 | DEBUG    |   Batch  550/671 | Loss: 0.5999
+2026-06-04 11:56:18 | DEBUG    |   Batch  560/671 | Loss: 0.7763
+2026-06-04 11:56:26 | DEBUG    |   Batch  570/671 | Loss: 0.5070
+2026-06-04 11:56:35 | DEBUG    |   Batch  580/671 | Loss: 0.6785
+2026-06-04 11:56:43 | DEBUG    |   Batch  590/671 | Loss: 0.6245
+2026-06-04 11:56:51 | DEBUG    |   Batch  600/671 | Loss: 0.7146
+2026-06-04 11:56:59 | DEBUG    |   Batch  610/671 | Loss: 0.7721
+2026-06-04 11:57:07 | DEBUG    |   Batch  620/671 | Loss: 0.7871
+2026-06-04 11:57:16 | DEBUG    |   Batch  630/671 | Loss: 0.6672
+2026-06-04 11:57:24 | DEBUG    |   Batch  640/671 | Loss: 0.6293
+2026-06-04 11:57:32 | DEBUG    |   Batch  650/671 | Loss: 0.6193
+2026-06-04 11:57:40 | DEBUG    |   Batch  660/671 | Loss: 0.8003
+2026-06-04 11:57:48 | DEBUG    |   Batch  670/671 | Loss: 0.6505
+2026-06-04 11:58:28 | INFO     |   Train Loss: 0.6539 | Val Loss: 0.6922 | Mean Dice: 0.0103
+2026-06-04 11:58:28 | INFO     |   Dice NCR/ED/ET: 0.0020 / 0.0274 / 0.0067
+2026-06-04 11:58:28 | INFO     |   Time: 589.5s | LR: 1.00e-04
+2026-06-04 11:58:28 | INFO     | ------------------------------------------------------------
+2026-06-04 11:58:28 | INFO     | Epoch 5/300
+2026-06-04 11:58:29 | DEBUG    |   Batch    0/671 | Loss: 0.5783
+2026-06-04 11:58:37 | DEBUG    |   Batch   10/671 | Loss: 0.6602
+2026-06-04 11:58:46 | DEBUG    |   Batch   20/671 | Loss: 0.6792
+2026-06-04 11:58:54 | DEBUG    |   Batch   30/671 | Loss: 0.6347
+2026-06-04 11:59:02 | DEBUG    |   Batch   40/671 | Loss: 0.7436
+2026-06-04 11:59:10 | DEBUG    |   Batch   50/671 | Loss: 0.6531
+2026-06-04 11:59:18 | DEBUG    |   Batch   60/671 | Loss: 0.4724
+2026-06-04 11:59:27 | DEBUG    |   Batch   70/671 | Loss: 0.5769
+2026-06-04 11:59:35 | DEBUG    |   Batch   80/671 | Loss: 0.5478
+2026-06-04 11:59:43 | DEBUG    |   Batch   90/671 | Loss: 0.6583
+2026-06-04 11:59:51 | DEBUG    |   Batch  100/671 | Loss: 0.5793
+2026-06-04 11:59:59 | DEBUG    |   Batch  110/671 | Loss: 0.7170
+2026-06-04 12:00:07 | DEBUG    |   Batch  120/671 | Loss: 0.6230
+2026-06-04 12:00:16 | DEBUG    |   Batch  130/671 | Loss: 0.6018
+2026-06-04 12:00:24 | DEBUG    |   Batch  140/671 | Loss: 0.5711
+2026-06-04 12:00:32 | DEBUG    |   Batch  150/671 | Loss: 0.6710
+2026-06-04 12:00:40 | DEBUG    |   Batch  160/671 | Loss: 0.6224
+2026-06-04 12:00:48 | DEBUG    |   Batch  170/671 | Loss: 0.6161
+2026-06-04 12:00:57 | DEBUG    |   Batch  180/671 | Loss: 0.5605
+2026-06-04 12:01:05 | DEBUG    |   Batch  190/671 | Loss: 0.6383
+2026-06-04 12:01:13 | DEBUG    |   Batch  200/671 | Loss: 0.7215
+2026-06-04 12:01:21 | DEBUG    |   Batch  210/671 | Loss: 0.6616
+2026-06-04 12:01:29 | DEBUG    |   Batch  220/671 | Loss: 0.5221
+2026-06-04 12:01:38 | DEBUG    |   Batch  230/671 | Loss: 0.5423
+2026-06-04 12:01:46 | DEBUG    |   Batch  240/671 | Loss: 0.5006
+2026-06-04 12:01:54 | DEBUG    |   Batch  250/671 | Loss: 0.5937
+2026-06-04 12:02:02 | DEBUG    |   Batch  260/671 | Loss: 0.6476
+2026-06-04 12:02:10 | DEBUG    |   Batch  270/671 | Loss: 0.6697
+2026-06-04 12:02:18 | DEBUG    |   Batch  280/671 | Loss: 0.7314
+2026-06-04 12:02:27 | DEBUG    |   Batch  290/671 | Loss: 0.6026
+2026-06-04 12:02:35 | DEBUG    |   Batch  300/671 | Loss: 0.6907
+2026-06-04 12:02:43 | DEBUG    |   Batch  310/671 | Loss: 0.6232
+2026-06-04 12:02:51 | DEBUG    |   Batch  320/671 | Loss: 0.6574
+2026-06-04 12:02:59 | DEBUG    |   Batch  330/671 | Loss: 0.6001
+2026-06-04 12:03:08 | DEBUG    |   Batch  340/671 | Loss: 0.6200
+2026-06-04 12:03:16 | DEBUG    |   Batch  350/671 | Loss: 0.6809
+2026-06-04 12:03:24 | DEBUG    |   Batch  360/671 | Loss: 0.7705
+2026-06-04 12:03:32 | DEBUG    |   Batch  370/671 | Loss: 0.7300
+2026-06-04 12:03:40 | DEBUG    |   Batch  380/671 | Loss: 0.7319
+2026-06-04 12:03:49 | DEBUG    |   Batch  390/671 | Loss: 0.6520
+2026-06-04 12:03:57 | DEBUG    |   Batch  400/671 | Loss: 0.6174
+2026-06-04 12:04:05 | DEBUG    |   Batch  410/671 | Loss: 0.4963
+2026-06-04 12:04:13 | DEBUG    |   Batch  420/671 | Loss: 0.7043
+2026-06-04 12:04:21 | DEBUG    |   Batch  430/671 | Loss: 0.6780
+2026-06-04 12:04:30 | DEBUG    |   Batch  440/671 | Loss: 0.7207
+2026-06-04 12:04:38 | DEBUG    |   Batch  450/671 | Loss: 0.7075
+2026-06-04 12:04:46 | DEBUG    |   Batch  460/671 | Loss: 0.5041
+2026-06-04 12:04:54 | DEBUG    |   Batch  470/671 | Loss: 0.5504
+2026-06-04 12:05:02 | DEBUG    |   Batch  480/671 | Loss: 0.5259
+2026-06-04 12:05:10 | DEBUG    |   Batch  490/671 | Loss: 0.5964
+2026-06-04 12:05:19 | DEBUG    |   Batch  500/671 | Loss: 0.7134
+2026-06-04 12:05:27 | DEBUG    |   Batch  510/671 | Loss: 0.5566
+2026-06-04 12:05:35 | DEBUG    |   Batch  520/671 | Loss: 0.5816
+2026-06-04 12:05:43 | DEBUG    |   Batch  530/671 | Loss: 0.5860
+2026-06-04 12:05:51 | DEBUG    |   Batch  540/671 | Loss: 0.7352
+2026-06-04 12:06:00 | DEBUG    |   Batch  550/671 | Loss: 0.5140
+2026-06-04 12:06:08 | DEBUG    |   Batch  560/671 | Loss: 0.5230
+2026-06-04 12:06:16 | DEBUG    |   Batch  570/671 | Loss: 0.5455
+2026-06-04 12:06:24 | DEBUG    |   Batch  580/671 | Loss: 0.6721
+2026-06-04 12:06:32 | DEBUG    |   Batch  590/671 | Loss: 0.6833
+2026-06-04 12:06:41 | DEBUG    |   Batch  600/671 | Loss: 0.5632
+2026-06-04 12:06:49 | DEBUG    |   Batch  610/671 | Loss: 0.5364
+2026-06-04 12:06:57 | DEBUG    |   Batch  620/671 | Loss: 0.6173
+2026-06-04 12:07:05 | DEBUG    |   Batch  630/671 | Loss: 0.6141
+2026-06-04 12:07:13 | DEBUG    |   Batch  640/671 | Loss: 0.5978
+2026-06-04 12:07:21 | DEBUG    |   Batch  650/671 | Loss: 0.6141
+2026-06-04 12:07:30 | DEBUG    |   Batch  660/671 | Loss: 0.5452
+2026-06-04 12:07:38 | DEBUG    |   Batch  670/671 | Loss: 0.6763
+2026-06-04 12:08:17 | INFO     |   Train Loss: 0.6255 | Val Loss: 0.6727 | Mean Dice: 0.0103
+2026-06-04 12:08:17 | INFO     |   Dice NCR/ED/ET: 0.0020 / 0.0274 / 0.0067
+2026-06-04 12:08:17 | INFO     |   Time: 589.5s | LR: 9.99e-05
+2026-06-04 12:08:17 | INFO     | ------------------------------------------------------------
+2026-06-04 12:08:17 | INFO     | Epoch 6/300
+2026-06-04 12:08:19 | DEBUG    |   Batch    0/671 | Loss: 0.6232
+2026-06-04 12:08:27 | DEBUG    |   Batch   10/671 | Loss: 0.5659
+2026-06-04 12:08:35 | DEBUG    |   Batch   20/671 | Loss: 0.5981
+2026-06-04 12:08:43 | DEBUG    |   Batch   30/671 | Loss: 0.4908
+2026-06-04 12:08:51 | DEBUG    |   Batch   40/671 | Loss: 0.5812
+2026-06-04 12:09:00 | DEBUG    |   Batch   50/671 | Loss: 0.5678
+2026-06-04 12:09:08 | DEBUG    |   Batch   60/671 | Loss: 0.6850
+2026-06-04 12:09:16 | DEBUG    |   Batch   70/671 | Loss: 0.7176
+2026-06-04 12:09:24 | DEBUG    |   Batch   80/671 | Loss: 0.6868
+2026-06-04 12:09:32 | DEBUG    |   Batch   90/671 | Loss: 0.4466
+2026-06-04 12:09:41 | DEBUG    |   Batch  100/671 | Loss: 0.6035
+2026-06-04 12:09:49 | DEBUG    |   Batch  110/671 | Loss: 0.5506
+2026-06-04 12:09:57 | DEBUG    |   Batch  120/671 | Loss: 0.6424
+2026-06-04 12:10:05 | DEBUG    |   Batch  130/671 | Loss: 0.6021
+2026-06-04 12:10:13 | DEBUG    |   Batch  140/671 | Loss: 0.6461
+2026-06-04 12:10:21 | DEBUG    |   Batch  150/671 | Loss: 0.6610
+2026-06-04 12:10:30 | DEBUG    |   Batch  160/671 | Loss: 0.6028
+2026-06-04 12:10:38 | DEBUG    |   Batch  170/671 | Loss: 0.6620
+2026-06-04 12:10:46 | DEBUG    |   Batch  180/671 | Loss: 0.5952
+2026-06-04 12:10:54 | DEBUG    |   Batch  190/671 | Loss: 0.5684
+2026-06-04 12:11:02 | DEBUG    |   Batch  200/671 | Loss: 0.6189
+2026-06-04 12:11:11 | DEBUG    |   Batch  210/671 | Loss: 0.6330
+2026-06-04 12:11:19 | DEBUG    |   Batch  220/671 | Loss: 0.5118
+2026-06-04 12:11:27 | DEBUG    |   Batch  230/671 | Loss: 0.6598
+2026-06-04 12:11:35 | DEBUG    |   Batch  240/671 | Loss: 0.5728
+2026-06-04 12:11:43 | DEBUG    |   Batch  250/671 | Loss: 0.5259
+2026-06-04 12:11:52 | DEBUG    |   Batch  260/671 | Loss: 0.4561
+2026-06-04 12:12:00 | DEBUG    |   Batch  270/671 | Loss: 0.5845
+2026-06-04 12:12:08 | DEBUG    |   Batch  280/671 | Loss: 0.5283
+2026-06-04 12:12:16 | DEBUG    |   Batch  290/671 | Loss: 0.5514
+2026-06-04 12:12:24 | DEBUG    |   Batch  300/671 | Loss: 0.6957
+2026-06-04 12:12:32 | DEBUG    |   Batch  310/671 | Loss: 0.5993
+2026-06-04 12:12:41 | DEBUG    |   Batch  320/671 | Loss: 0.5578
+2026-06-04 12:12:49 | DEBUG    |   Batch  330/671 | Loss: 0.5714
+2026-06-04 12:12:57 | DEBUG    |   Batch  340/671 | Loss: 0.6416
+2026-06-04 12:13:05 | DEBUG    |   Batch  350/671 | Loss: 0.6156
+2026-06-04 12:13:13 | DEBUG    |   Batch  360/671 | Loss: 0.7467
+2026-06-04 12:13:22 | DEBUG    |   Batch  370/671 | Loss: 0.8527
+2026-06-04 12:13:30 | DEBUG    |   Batch  380/671 | Loss: 0.5465
+2026-06-04 12:13:38 | DEBUG    |   Batch  390/671 | Loss: 0.5968
+2026-06-04 12:13:46 | DEBUG    |   Batch  400/671 | Loss: 0.7916
+2026-06-04 12:13:54 | DEBUG    |   Batch  410/671 | Loss: 0.6803
+2026-06-04 12:14:03 | DEBUG    |   Batch  420/671 | Loss: 0.7029
+2026-06-04 12:14:11 | DEBUG    |   Batch  430/671 | Loss: 0.8434
+2026-06-04 12:14:19 | DEBUG    |   Batch  440/671 | Loss: 0.6509
+2026-06-04 12:14:27 | DEBUG    |   Batch  450/671 | Loss: 0.6797
+2026-06-04 12:14:35 | DEBUG    |   Batch  460/671 | Loss: 0.7268
+2026-06-04 12:14:43 | DEBUG    |   Batch  470/671 | Loss: 0.5016
+2026-06-04 12:14:52 | DEBUG    |   Batch  480/671 | Loss: 0.7956
+2026-06-04 12:15:00 | DEBUG    |   Batch  490/671 | Loss: 0.7694
+2026-06-04 12:15:08 | DEBUG    |   Batch  500/671 | Loss: 0.5719
+2026-06-04 12:15:16 | DEBUG    |   Batch  510/671 | Loss: 0.5352
+2026-06-04 12:15:24 | DEBUG    |   Batch  520/671 | Loss: 0.6545
+2026-06-04 12:15:33 | DEBUG    |   Batch  530/671 | Loss: 0.7104
+2026-06-04 12:15:41 | DEBUG    |   Batch  540/671 | Loss: 0.6570
+2026-06-04 12:15:49 | DEBUG    |   Batch  550/671 | Loss: 0.5988
+2026-06-04 12:15:57 | DEBUG    |   Batch  560/671 | Loss: 0.7152
+2026-06-04 12:16:05 | DEBUG    |   Batch  570/671 | Loss: 0.6630
+2026-06-04 12:16:14 | DEBUG    |   Batch  580/671 | Loss: 0.5708
+2026-06-04 12:16:22 | DEBUG    |   Batch  590/671 | Loss: 0.6827
+2026-06-04 12:16:30 | DEBUG    |   Batch  600/671 | Loss: 0.7686
+2026-06-04 12:16:38 | DEBUG    |   Batch  610/671 | Loss: 0.6198
+2026-06-04 12:16:46 | DEBUG    |   Batch  620/671 | Loss: 0.6134
+2026-06-04 12:16:55 | DEBUG    |   Batch  630/671 | Loss: 0.6335
+2026-06-04 12:17:03 | DEBUG    |   Batch  640/671 | Loss: 0.6019
+2026-06-04 12:17:11 | DEBUG    |   Batch  650/671 | Loss: 0.5295
+2026-06-04 12:17:19 | DEBUG    |   Batch  660/671 | Loss: 0.7583
+2026-06-04 12:17:27 | DEBUG    |   Batch  670/671 | Loss: 0.6529
+2026-06-04 12:18:07 | INFO     |   Train Loss: 0.6305 | Val Loss: 0.7615 | Mean Dice: 0.0103
+2026-06-04 12:18:07 | INFO     |   Dice NCR/ED/ET: 0.0020 / 0.0274 / 0.0067
+2026-06-04 12:18:07 | INFO     |   Time: 589.4s | LR: 9.99e-05
+2026-06-04 12:18:07 | INFO     | ------------------------------------------------------------
+2026-06-04 12:18:07 | INFO     | Epoch 7/300
+2026-06-04 12:18:08 | DEBUG    |   Batch    0/671 | Loss: 0.5732
+2026-06-04 12:18:16 | DEBUG    |   Batch   10/671 | Loss: 0.6937
+2026-06-04 12:18:24 | DEBUG    |   Batch   20/671 | Loss: 0.7765
+2026-06-04 12:18:33 | DEBUG    |   Batch   30/671 | Loss: 0.4905
+2026-06-04 12:18:41 | DEBUG    |   Batch   40/671 | Loss: 0.6472
+2026-06-04 12:18:49 | DEBUG    |   Batch   50/671 | Loss: 0.7511
+2026-06-04 12:18:57 | DEBUG    |   Batch   60/671 | Loss: 0.6887
+2026-06-04 12:19:05 | DEBUG    |   Batch   70/671 | Loss: 0.6420
+2026-06-04 12:19:14 | DEBUG    |   Batch   80/671 | Loss: 0.5885
+2026-06-04 12:19:22 | DEBUG    |   Batch   90/671 | Loss: 0.7682
+2026-06-04 12:19:30 | DEBUG    |   Batch  100/671 | Loss: 0.6373
+2026-06-04 12:19:38 | DEBUG    |   Batch  110/671 | Loss: 0.6846
+2026-06-04 12:19:46 | DEBUG    |   Batch  120/671 | Loss: 0.5012
+2026-06-04 12:19:54 | DEBUG    |   Batch  130/671 | Loss: 0.7264
+2026-06-04 12:20:03 | DEBUG    |   Batch  140/671 | Loss: 0.5657
+2026-06-04 12:20:11 | DEBUG    |   Batch  150/671 | Loss: 0.7963
+2026-06-04 12:20:19 | DEBUG    |   Batch  160/671 | Loss: 0.5972
+2026-06-04 12:20:27 | DEBUG    |   Batch  170/671 | Loss: 0.5347
+2026-06-04 12:20:35 | DEBUG    |   Batch  180/671 | Loss: 0.5090
+2026-06-04 12:20:44 | DEBUG    |   Batch  190/671 | Loss: 0.6742
+2026-06-04 12:20:52 | DEBUG    |   Batch  200/671 | Loss: 0.5871
+2026-06-04 12:21:00 | DEBUG    |   Batch  210/671 | Loss: 0.7810
+2026-06-04 12:21:08 | DEBUG    |   Batch  220/671 | Loss: 0.6503
+2026-06-04 12:21:16 | DEBUG    |   Batch  230/671 | Loss: 0.7112
+2026-06-04 12:21:25 | DEBUG    |   Batch  240/671 | Loss: 0.6394
+2026-06-04 12:21:33 | DEBUG    |   Batch  250/671 | Loss: 0.7334
+2026-06-04 12:21:41 | DEBUG    |   Batch  260/671 | Loss: 0.6539
+2026-06-04 12:21:49 | DEBUG    |   Batch  270/671 | Loss: 0.6097
+2026-06-04 12:21:57 | DEBUG    |   Batch  280/671 | Loss: 0.6224
+2026-06-04 12:22:06 | DEBUG    |   Batch  290/671 | Loss: 0.7316
+2026-06-04 12:22:14 | DEBUG    |   Batch  300/671 | Loss: 0.5845
+2026-06-04 12:22:22 | DEBUG    |   Batch  310/671 | Loss: 0.6821
+2026-06-04 12:22:30 | DEBUG    |   Batch  320/671 | Loss: 0.4536
+2026-06-04 12:22:38 | DEBUG    |   Batch  330/671 | Loss: 0.6843
+2026-06-04 12:22:46 | DEBUG    |   Batch  340/671 | Loss: 0.5979
+2026-06-04 12:22:55 | DEBUG    |   Batch  350/671 | Loss: 0.5175
+2026-06-04 12:23:03 | DEBUG    |   Batch  360/671 | Loss: 0.5998
+2026-06-04 12:23:11 | DEBUG    |   Batch  370/671 | Loss: 0.5793
+2026-06-04 12:23:19 | DEBUG    |   Batch  380/671 | Loss: 0.6527
+2026-06-04 12:23:27 | DEBUG    |   Batch  390/671 | Loss: 0.7033
+2026-06-04 12:23:36 | DEBUG    |   Batch  400/671 | Loss: 0.7288
+2026-06-04 12:23:44 | DEBUG    |   Batch  410/671 | Loss: 0.6261
+2026-06-04 12:23:52 | DEBUG    |   Batch  420/671 | Loss: 0.5911
+2026-06-04 12:24:00 | DEBUG    |   Batch  430/671 | Loss: 0.6743
+2026-06-04 12:24:08 | DEBUG    |   Batch  440/671 | Loss: 0.7792
+2026-06-04 12:24:17 | DEBUG    |   Batch  450/671 | Loss: 0.7298
+2026-06-04 12:24:25 | DEBUG    |   Batch  460/671 | Loss: 0.5863
+2026-06-04 12:24:33 | DEBUG    |   Batch  470/671 | Loss: 0.6435
+2026-06-04 12:24:41 | DEBUG    |   Batch  480/671 | Loss: 0.8083
+2026-06-04 12:24:49 | DEBUG    |   Batch  490/671 | Loss: 0.6306
+2026-06-04 12:24:57 | DEBUG    |   Batch  500/671 | Loss: 0.6115
+2026-06-04 12:25:06 | DEBUG    |   Batch  510/671 | Loss: 0.6157
+2026-06-04 12:25:14 | DEBUG    |   Batch  520/671 | Loss: 0.5501
+2026-06-04 12:25:22 | DEBUG    |   Batch  530/671 | Loss: 0.4634
+2026-06-04 12:25:30 | DEBUG    |   Batch  540/671 | Loss: 0.5475
+2026-06-04 12:25:38 | DEBUG    |   Batch  550/671 | Loss: 0.7705
+2026-06-04 12:25:47 | DEBUG    |   Batch  560/671 | Loss: 0.4290
+2026-06-04 12:25:55 | DEBUG    |   Batch  570/671 | Loss: 0.6253
+2026-06-04 12:26:03 | DEBUG    |   Batch  580/671 | Loss: 0.6648
+2026-06-04 12:26:11 | DEBUG    |   Batch  590/671 | Loss: 0.7840
+2026-06-04 12:26:19 | DEBUG    |   Batch  600/671 | Loss: 0.7318
+2026-06-04 12:26:28 | DEBUG    |   Batch  610/671 | Loss: 0.7258
+2026-06-04 12:26:36 | DEBUG    |   Batch  620/671 | Loss: 0.6022
+2026-06-04 12:26:44 | DEBUG    |   Batch  630/671 | Loss: 0.6551
+2026-06-04 12:26:52 | DEBUG    |   Batch  640/671 | Loss: 0.7615
+2026-06-04 12:27:00 | DEBUG    |   Batch  650/671 | Loss: 0.5209
+2026-06-04 12:27:08 | DEBUG    |   Batch  660/671 | Loss: 0.5577
+2026-06-04 12:27:17 | DEBUG    |   Batch  670/671 | Loss: 0.6187
+2026-06-04 12:27:56 | INFO     |   Train Loss: 0.6363 | Val Loss: 0.6948 | Mean Dice: 0.0103
+2026-06-04 12:27:56 | INFO     |   Dice NCR/ED/ET: 0.0020 / 0.0274 / 0.0067
+2026-06-04 12:27:56 | INFO     |   Time: 589.4s | LR: 9.99e-05
+2026-06-04 12:27:56 | INFO     | ------------------------------------------------------------
+2026-06-04 12:27:56 | INFO     | Epoch 8/300
+2026-06-04 12:27:57 | DEBUG    |   Batch    0/671 | Loss: 0.5823
+2026-06-04 12:28:06 | DEBUG    |   Batch   10/671 | Loss: 0.6950
+2026-06-04 12:28:14 | DEBUG    |   Batch   20/671 | Loss: 0.5792
+2026-06-04 12:28:22 | DEBUG    |   Batch   30/671 | Loss: 0.5936
+2026-06-04 12:28:30 | DEBUG    |   Batch   40/671 | Loss: 0.6942
+2026-06-04 12:28:38 | DEBUG    |   Batch   50/671 | Loss: 0.6644
+2026-06-04 12:28:47 | DEBUG    |   Batch   60/671 | Loss: 0.8179
+2026-06-04 12:28:55 | DEBUG    |   Batch   70/671 | Loss: 0.5911
+2026-06-04 12:29:03 | DEBUG    |   Batch   80/671 | Loss: 0.7303
+2026-06-04 12:29:11 | DEBUG    |   Batch   90/671 | Loss: 0.5927
+2026-06-04 12:29:19 | DEBUG    |   Batch  100/671 | Loss: 0.5733
+2026-06-04 12:29:28 | DEBUG    |   Batch  110/671 | Loss: 0.5686
+2026-06-04 12:29:36 | DEBUG    |   Batch  120/671 | Loss: 0.6222
+2026-06-04 12:29:44 | DEBUG    |   Batch  130/671 | Loss: 0.6992
+2026-06-04 12:29:52 | DEBUG    |   Batch  140/671 | Loss: 0.5012
+2026-06-04 12:30:00 | DEBUG    |   Batch  150/671 | Loss: 0.5569
+2026-06-04 12:30:08 | DEBUG    |   Batch  160/671 | Loss: 0.6055
+2026-06-04 12:30:17 | DEBUG    |   Batch  170/671 | Loss: 0.5677
+2026-06-04 12:30:25 | DEBUG    |   Batch  180/671 | Loss: 0.5817
+2026-06-04 12:30:33 | DEBUG    |   Batch  190/671 | Loss: 0.5640
+2026-06-04 12:30:41 | DEBUG    |   Batch  200/671 | Loss: 0.7715
+2026-06-04 12:30:49 | DEBUG    |   Batch  210/671 | Loss: 0.7965
+2026-06-04 12:30:58 | DEBUG    |   Batch  220/671 | Loss: 0.4835
+2026-06-04 12:31:06 | DEBUG    |   Batch  230/671 | Loss: 0.5927
+2026-06-04 12:31:14 | DEBUG    |   Batch  240/671 | Loss: 0.5791
+2026-06-04 12:31:22 | DEBUG    |   Batch  250/671 | Loss: 0.6552
+2026-06-04 12:31:30 | DEBUG    |   Batch  260/671 | Loss: 0.6894
+2026-06-04 12:31:39 | DEBUG    |   Batch  270/671 | Loss: 0.6242
+2026-06-04 12:31:47 | DEBUG    |   Batch  280/671 | Loss: 0.7296
+2026-06-04 12:31:55 | DEBUG    |   Batch  290/671 | Loss: 0.4062
+2026-06-04 12:32:03 | DEBUG    |   Batch  300/671 | Loss: 0.5531
+2026-06-04 12:32:11 | DEBUG    |   Batch  310/671 | Loss: 0.5518
+2026-06-04 12:32:19 | DEBUG    |   Batch  320/671 | Loss: 0.5781
+2026-06-04 12:32:28 | DEBUG    |   Batch  330/671 | Loss: 0.7502
+2026-06-04 12:32:36 | DEBUG    |   Batch  340/671 | Loss: 0.5347
+2026-06-04 12:32:44 | DEBUG    |   Batch  350/671 | Loss: 0.4472
+2026-06-04 12:32:52 | DEBUG    |   Batch  360/671 | Loss: 0.5788
+2026-06-04 12:33:00 | DEBUG    |   Batch  370/671 | Loss: 0.6121
+2026-06-04 12:33:09 | DEBUG    |   Batch  380/671 | Loss: 0.6620
+2026-06-04 12:33:17 | DEBUG    |   Batch  390/671 | Loss: 0.6333
+2026-06-04 12:33:25 | DEBUG    |   Batch  400/671 | Loss: 0.7351
