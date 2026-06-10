@@ -159,12 +159,11 @@ class Trainer:
             - Validation loss
             - Inference timing (on first call, warm-up then 5 timed passes)
         """
+        from brats_utils import StreamingMetrics   # already implemented, just unused
+
         self.model.eval()
         val_loss = 0.0
-
-        # Accumulate all predictions and labels for metric computation
-        all_logits = []
-        all_labels = []
+        sm = StreamingMetrics(num_classes=OUT_CHANNELS)
 
         with torch.no_grad():
             for batch in loader:
@@ -176,38 +175,29 @@ class Trainer:
                     loss   = self.loss_fn(logits, labels)
 
                 val_loss += loss.item()
-                all_logits.append(logits.cpu())
-                all_labels.append(labels.cpu())
+                sm.add_batch(logits.cpu(), labels.cpu())
 
-        # ── Compute comprehensive metrics on CPU ────────────────────────────
-        logits_cat = torch.cat(all_logits, dim=0)
-        labels_cat = torch.cat(all_labels, dim=0)
-        m = compute_metrics(logits_cat, labels_cat)
+        m = sm.compute()
 
-        # ── Inference timing (first epoch only) ────────────────────────────
         if self.inference_time_s is None:
-            self.model.eval()
+            torch.cuda.empty_cache()   # flush training residuals first
             dummy = torch.zeros(1, 4, 128, 128, 128, device=self.device)
-
-            # Warm-up pass
-            for _ in range(10):
-                with torch.no_grad():
+            with torch.no_grad():
+                for _ in range(3):             # 3 warm-up passes is enough
                     _ = self.model(dummy)
-
-            # Timed passes
-            torch.cuda.synchronize()
-            n_timed  = 50
-            t_start  = time.time()
-            for _ in range(n_timed):
-                with torch.no_grad():
+                torch.cuda.synchronize()
+                n_timed = 10                   # 10 is statistically sufficient
+                t0 = time.time()
+                for _ in range(n_timed):
                     _ = self.model(dummy)
-            torch.cuda.synchronize()
-            elapsed  = time.time() - t_start
-            self.inference_time_s = elapsed / n_timed
+                torch.cuda.synchronize()
+            self.inference_time_s = (time.time() - t0) / n_timed
             self.logger.info(
-                f"Inference time: {self.inference_time_s*1000:.1f} ms/volume "
+                f"Inference time: {self.inference_time_s * 1000:.1f} ms/volume "
                 f"(avg over {n_timed} passes)"
             )
+            del dummy
+            torch.cuda.empty_cache()
 
         return val_loss / len(loader), m
 
@@ -289,6 +279,8 @@ class Trainer:
             self.logger.info(f"Epoch {epoch+1}/{epochs}")
 
             train_loss       = self.train_epoch(train_loader)
+            
+            torch.cuda.empty_cache()
             val_loss, m      = self.validate(val_loader)
             self.scheduler.step()
 

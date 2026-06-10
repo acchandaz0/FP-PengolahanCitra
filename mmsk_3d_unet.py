@@ -81,7 +81,6 @@ class MMSKConv3D(nn.Module):
         # ── Standard SK: channel-wise attention from fused features ──────
         self.gap = nn.AdaptiveAvgPool3d(1)
         self.sk_fc1 = nn.Linear(out_ch, d, bias=False)
-        self.sk_bn  = nn.BatchNorm1d(d)
         self.sk_fc2 = nn.ModuleList([nn.Linear(d, out_ch, bias=False) for _ in range(M)])
 
         # ── Cross-modal gating module ─────────────────────────────────────
@@ -120,7 +119,7 @@ class MMSKConv3D(nn.Module):
 
         # 2. Standard SK: GAP → FC1 → FC2 per branch
         s = self.gap(U_fuse).view(B, -1)                  # [B, out_ch]
-        z = F.relu(self.sk_bn(self.sk_fc1(s)))            # [B, d]
+        z = F.relu(self.sk_fc1(s))            # [B, d]
         attn_logits = torch.stack(
             [fc(z) for fc in self.sk_fc2], dim=1
         )                                                  # [B, M, out_ch]

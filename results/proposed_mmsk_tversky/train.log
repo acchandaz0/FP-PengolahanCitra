@@ -1,0 +1,397 @@
+2026-06-10 17:25:53 | INFO     | Log file: results/proposed_mmsk_tversky/train.log
+2026-06-10 17:25:53 | INFO     | VRAM cap       : 20 GB / 51 GB (fraction=0.394)
+2026-06-10 17:25:53 | INFO     | Device         : cuda:0
+2026-06-10 17:25:53 | INFO     | cuDNN benchmark : ON (autotune for fixed 128x128x128)
+2026-06-10 17:25:53 | INFO     | Model          : MMSK-3D U-Net (cross-modal gating)
+2026-06-10 17:25:53 | INFO     | Loss           : Tversky (α=0.3, β=0.7)   [PROPOSED]
+2026-06-10 17:25:53 | INFO     | out_channels   : 5
+2026-06-10 17:25:53 | INFO     | Label space    : BraTS 2024 raw {0,1,2,3,4}
+2026-06-10 17:25:53 | INFO     | Output dir     : results/proposed_mmsk_tversky
+2026-06-10 17:25:54 | INFO     | torch.compile : ON (mode=max-autotune, Turing fused)
+2026-06-10 17:25:54 | WARNING  | FLOPs: skipped — fvcore/thop unavailable or incompatible (compiled model?). Set to -1.0.
+2026-06-10 17:25:54 | INFO     | Total parameters: 11,838,757
+2026-06-10 17:25:54 | INFO     | AMP             : ON
+2026-06-10 17:25:54 | INFO     | Pre-flight: validating .npz files ...
+2026-06-10 17:25:54 | INFO     | [Validation] Scanning 1344 .npz files ...
+2026-06-10 17:25:54 | DEBUG    |   [1/1344] OK: BraTS-GLI-00005-100.npz
+2026-06-10 17:26:04 | DEBUG    |   [101/1344] OK: BraTS-GLI-02066-101.npz
+2026-06-10 17:26:14 | DEBUG    |   [201/1344] OK: BraTS-GLI-02103-100.npz
+2026-06-10 17:26:24 | DEBUG    |   [301/1344] OK: BraTS-GLI-02145-100.npz
+2026-06-10 17:26:34 | DEBUG    |   [401/1344] OK: BraTS-GLI-02194-100.npz
+2026-06-10 17:26:44 | DEBUG    |   [501/1344] OK: BraTS-GLI-02236-101.npz
+2026-06-10 17:26:54 | DEBUG    |   [601/1344] OK: BraTS-GLI-02315-100.npz
+2026-06-10 17:27:04 | DEBUG    |   [701/1344] OK: BraTS-GLI-02549-100.npz
+2026-06-10 17:27:14 | DEBUG    |   [801/1344] OK: BraTS-GLI-02736-101.npz
+2026-06-10 17:27:25 | DEBUG    |   [901/1344] OK: BraTS-GLI-02793-100.npz
+2026-06-10 17:27:35 | DEBUG    |   [1001/1344] OK: BraTS-GLI-02851-100.npz
+2026-06-10 17:27:45 | DEBUG    |   [1101/1344] OK: BraTS-GLI-02902-100.npz
+2026-06-10 17:27:56 | DEBUG    |   [1201/1344] OK: BraTS-GLI-02961-100.npz
+2026-06-10 17:28:06 | DEBUG    |   [1301/1344] OK: BraTS-GLI-03026-100.npz
+2026-06-10 17:28:11 | INFO     | [Validation] 1344 healthy, 0 dropped.
+2026-06-10 17:28:11 | INFO     | [Validation] Scanning 269 .npz files ...
+2026-06-10 17:28:11 | DEBUG    |   [1/269] OK: BraTS-GLI-02405-100.npz
+2026-06-10 17:41:51 | INFO     | Log file: results/proposed_mmsk_tversky/train.log
+2026-06-10 17:41:51 | INFO     | VRAM cap       : 20 GB / 51 GB (fraction=0.394)
+2026-06-10 17:41:51 | INFO     | Device         : cuda:0
+2026-06-10 17:41:51 | INFO     | cuDNN benchmark : ON (autotune for fixed 128x128x128)
+2026-06-10 17:41:51 | INFO     | Model          : MMSK-3D U-Net (cross-modal gating)
+2026-06-10 17:41:51 | INFO     | Loss           : Tversky (α=0.3, β=0.7)   [PROPOSED]
+2026-06-10 17:41:51 | INFO     | out_channels   : 5
+2026-06-10 17:41:51 | INFO     | Label space    : BraTS 2024 raw {0,1,2,3,4}
+2026-06-10 17:41:51 | INFO     | Output dir     : results/proposed_mmsk_tversky
+2026-06-10 17:41:53 | INFO     | torch.compile : ON (mode=max-autotune, Turing fused)
+2026-06-10 17:41:53 | WARNING  | FLOPs: skipped — fvcore/thop unavailable or incompatible (compiled model?). Set to -1.0.
+2026-06-10 17:41:53 | INFO     | Total parameters: 11,838,757
+2026-06-10 17:41:53 | INFO     | AMP             : ON
+2026-06-10 17:41:53 | INFO     | Pre-flight: validating .npz files ...
+2026-06-10 17:41:53 | INFO     | [Validation] Scanning 1344 .npz files ...
+2026-06-10 17:41:53 | DEBUG    |   [1/1344] OK: BraTS-GLI-00005-100.npz
+2026-06-10 17:42:03 | DEBUG    |   [101/1344] OK: BraTS-GLI-02066-101.npz
+2026-06-10 17:42:12 | DEBUG    |   [201/1344] OK: BraTS-GLI-02103-100.npz
+2026-06-10 17:42:23 | DEBUG    |   [301/1344] OK: BraTS-GLI-02145-100.npz
+2026-06-10 17:42:34 | DEBUG    |   [401/1344] OK: BraTS-GLI-02194-100.npz
+2026-06-10 17:42:44 | DEBUG    |   [501/1344] OK: BraTS-GLI-02236-101.npz
+2026-06-10 17:42:54 | DEBUG    |   [601/1344] OK: BraTS-GLI-02315-100.npz
+2026-06-10 17:43:05 | DEBUG    |   [701/1344] OK: BraTS-GLI-02549-100.npz
+2026-06-10 17:43:15 | DEBUG    |   [801/1344] OK: BraTS-GLI-02736-101.npz
+2026-06-10 17:43:25 | DEBUG    |   [901/1344] OK: BraTS-GLI-02793-100.npz
+2026-06-10 17:43:29 | WARNING  | [CORRUPT] BraTS-GLI-02817-100.npz -> Bad CRC-32 for file 'images.npy'
+2026-06-10 17:43:35 | DEBUG    |   [1001/1344] OK: BraTS-GLI-02851-100.npz
+2026-06-10 17:43:46 | DEBUG    |   [1101/1344] OK: BraTS-GLI-02902-100.npz
+2026-06-10 17:43:56 | DEBUG    |   [1201/1344] OK: BraTS-GLI-02961-100.npz
+2026-06-10 17:44:06 | DEBUG    |   [1301/1344] OK: BraTS-GLI-03026-100.npz
+2026-06-10 17:44:10 | INFO     | [Validation] 1343 healthy, 1 dropped.
+2026-06-10 17:44:10 | WARNING  |   x /home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-02817-100.npz  (Bad CRC-32 for file 'images.npy')
+2026-06-10 17:44:10 | INFO     | [Validation] Scanning 269 .npz files ...
+2026-06-10 17:44:11 | DEBUG    |   [1/269] OK: BraTS-GLI-02405-100.npz
+2026-06-10 17:44:21 | DEBUG    |   [101/269] OK: BraTS-GLI-02507-101.npz
+2026-06-10 17:44:32 | DEBUG    |   [201/269] OK: BraTS-GLI-02584-101.npz
+2026-06-10 17:44:38 | INFO     | [Validation] 269 healthy, 0 dropped.
+2026-06-10 17:44:38 | INFO     | Probing batch_size=2, accum_steps=2 ...
+2026-06-10 17:56:33 | INFO     | Probe OK — bs=2, accum=2, effective_batch=4
+2026-06-10 17:56:33 | INFO     | Train batches  : 671 (bs=2)
+2026-06-10 17:56:33 | INFO     | Val batches    : 269
+2026-06-10 17:56:33 | INFO     | Accum steps    : 2 (effective batch=4)
+2026-06-10 17:56:33 | INFO     | Starting training for 50 epochs
+2026-06-10 17:56:33 | INFO     | ============================================================
+2026-06-10 17:56:33 | INFO     | Epoch 1/50
+2026-06-10 17:56:35 | DEBUG    |   Batch    0/671 | Loss: 0.9858
+2026-06-10 18:41:56 | INFO     | Log file: results/proposed_mmsk_tversky/train.log
+2026-06-10 18:41:56 | INFO     | VRAM cap       : 20 GB / 51 GB (fraction=0.394)
+2026-06-10 18:41:56 | INFO     | Device         : cuda:0
+2026-06-10 18:41:56 | INFO     | Model          : MMSK-3D U-Net (cross-modal gating)
+2026-06-10 18:41:56 | INFO     | Loss           : Tversky (α=0.3, β=0.7)   [PROPOSED]
+2026-06-10 18:41:56 | INFO     | out_channels   : 5
+2026-06-10 18:41:56 | INFO     | Label space    : BraTS 2024 raw {0,1,2,3,4}
+2026-06-10 18:41:56 | INFO     | Output dir     : results/proposed_mmsk_tversky
+2026-06-10 18:41:57 | INFO     | Total parameters: 11,838,757
+2026-06-10 18:41:57 | INFO     | AMP             : ON
+2026-06-10 18:41:57 | INFO     | FLOPs (fvcore) : 1096.16 GFLOPs
+2026-06-10 18:41:57 | INFO     | Pre-flight: validating .npz files ...
+2026-06-10 18:41:57 | INFO     | [Validation] Scanning 1344 .npz files ...
+2026-06-10 18:41:57 | DEBUG    |   [1/1344] OK: BraTS-GLI-00005-100.npz
+2026-06-10 18:42:07 | DEBUG    |   [101/1344] OK: BraTS-GLI-02066-101.npz
+2026-06-10 18:42:17 | DEBUG    |   [201/1344] OK: BraTS-GLI-02103-100.npz
+2026-06-10 18:42:27 | DEBUG    |   [301/1344] OK: BraTS-GLI-02145-100.npz
+2026-06-10 18:42:38 | DEBUG    |   [401/1344] OK: BraTS-GLI-02194-100.npz
+2026-06-10 18:42:48 | DEBUG    |   [501/1344] OK: BraTS-GLI-02236-101.npz
+2026-06-10 18:42:58 | DEBUG    |   [601/1344] OK: BraTS-GLI-02315-100.npz
+2026-06-10 18:43:08 | DEBUG    |   [701/1344] OK: BraTS-GLI-02549-100.npz
+2026-06-10 18:43:19 | DEBUG    |   [801/1344] OK: BraTS-GLI-02736-101.npz
+2026-06-10 18:43:29 | DEBUG    |   [901/1344] OK: BraTS-GLI-02793-100.npz
+2026-06-10 18:43:33 | WARNING  | [CORRUPT] BraTS-GLI-02817-100.npz -> Bad CRC-32 for file 'images.npy'
+2026-06-10 18:43:39 | DEBUG    |   [1001/1344] OK: BraTS-GLI-02851-100.npz
+2026-06-10 18:43:50 | DEBUG    |   [1101/1344] OK: BraTS-GLI-02902-100.npz
+2026-06-10 18:44:00 | DEBUG    |   [1201/1344] OK: BraTS-GLI-02961-100.npz
+2026-06-10 18:44:11 | DEBUG    |   [1301/1344] OK: BraTS-GLI-03026-100.npz
+2026-06-10 18:44:15 | INFO     | [Validation] 1343 healthy, 1 dropped.
+2026-06-10 18:44:15 | WARNING  |   x /home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-02817-100.npz  (Bad CRC-32 for file 'images.npy')
+2026-06-10 18:44:15 | INFO     | [Validation] Scanning 269 .npz files ...
+2026-06-10 18:44:15 | DEBUG    |   [1/269] OK: BraTS-GLI-02405-100.npz
+2026-06-10 18:44:26 | DEBUG    |   [101/269] OK: BraTS-GLI-02507-101.npz
+2026-06-10 18:44:37 | DEBUG    |   [201/269] OK: BraTS-GLI-02584-101.npz
+2026-06-10 18:44:39 | WARNING  | [CORRUPT] BraTS-GLI-02597-102.npz -> Bad CRC-32 for file 'images.npy'
+2026-06-10 18:44:44 | INFO     | [Validation] 268 healthy, 1 dropped.
+2026-06-10 18:44:44 | WARNING  |   x /home/mci/arsyadl/braTS/preprocessed_test/BraTS-GLI-02597-102.npz  (Bad CRC-32 for file 'images.npy')
+2026-06-10 18:44:44 | INFO     | Probing batch_size=2, accum_steps=2 ...
+2026-06-10 18:44:46 | INFO     | Probe OK — bs=2, accum=2, effective_batch=4
+2026-06-10 18:44:46 | INFO     | Train batches  : 671 (bs=2)
+2026-06-10 18:44:46 | INFO     | Val batches    : 268
+2026-06-10 18:44:46 | INFO     | Accum steps    : 2 (effective batch=4)
+2026-06-10 18:44:46 | INFO     | Starting training for 50 epochs
+2026-06-10 18:44:46 | INFO     | ============================================================
+2026-06-10 18:44:46 | INFO     | Epoch 1/50
+2026-06-10 18:44:47 | DEBUG    |   Batch    0/671 | Loss: 0.9790
+2026-06-10 18:44:55 | DEBUG    |   Batch   10/671 | Loss: 0.9823
+2026-06-10 18:45:04 | DEBUG    |   Batch   20/671 | Loss: 0.9609
+2026-06-10 18:45:12 | DEBUG    |   Batch   30/671 | Loss: 0.9635
+2026-06-10 18:45:20 | DEBUG    |   Batch   40/671 | Loss: 0.9878
+2026-06-10 18:45:28 | DEBUG    |   Batch   50/671 | Loss: 0.9642
+2026-06-10 18:45:36 | DEBUG    |   Batch   60/671 | Loss: 0.9603
+2026-06-10 18:45:45 | DEBUG    |   Batch   70/671 | Loss: 0.9631
+2026-06-10 18:45:53 | DEBUG    |   Batch   80/671 | Loss: 0.9483
+2026-06-10 18:46:01 | DEBUG    |   Batch   90/671 | Loss: 0.9617
+2026-06-10 18:46:09 | DEBUG    |   Batch  100/671 | Loss: 0.9396
+2026-06-10 18:46:17 | DEBUG    |   Batch  110/671 | Loss: 0.9064
+2026-06-10 18:46:26 | DEBUG    |   Batch  120/671 | Loss: 0.9365
+2026-06-10 18:46:34 | DEBUG    |   Batch  130/671 | Loss: 0.9606
+2026-06-10 18:46:42 | DEBUG    |   Batch  140/671 | Loss: 0.9577
+2026-06-10 18:46:50 | DEBUG    |   Batch  150/671 | Loss: 0.9668
+2026-06-10 18:46:58 | DEBUG    |   Batch  160/671 | Loss: 0.9266
+2026-06-10 18:47:07 | DEBUG    |   Batch  170/671 | Loss: 0.9439
+2026-06-10 18:47:15 | DEBUG    |   Batch  180/671 | Loss: 0.9422
+2026-06-10 18:47:23 | DEBUG    |   Batch  190/671 | Loss: 0.9592
+2026-06-10 18:47:31 | DEBUG    |   Batch  200/671 | Loss: 0.9585
+2026-06-10 18:47:39 | DEBUG    |   Batch  210/671 | Loss: 0.9479
+2026-06-10 18:47:48 | DEBUG    |   Batch  220/671 | Loss: 0.9615
+2026-06-10 18:47:56 | DEBUG    |   Batch  230/671 | Loss: 0.9267
+2026-06-10 18:48:04 | DEBUG    |   Batch  240/671 | Loss: 0.9396
+2026-06-10 18:48:12 | DEBUG    |   Batch  250/671 | Loss: 0.9339
+2026-06-10 18:48:20 | DEBUG    |   Batch  260/671 | Loss: 0.9446
+2026-06-10 18:48:28 | DEBUG    |   Batch  270/671 | Loss: 0.9338
+2026-06-10 18:48:37 | DEBUG    |   Batch  280/671 | Loss: 0.9490
+2026-06-10 18:48:45 | DEBUG    |   Batch  290/671 | Loss: 0.9222
+2026-06-10 18:48:53 | DEBUG    |   Batch  300/671 | Loss: 0.9535
+2026-06-10 18:49:01 | DEBUG    |   Batch  310/671 | Loss: 0.9307
+2026-06-10 18:49:09 | DEBUG    |   Batch  320/671 | Loss: 0.9228
+2026-06-10 18:49:18 | DEBUG    |   Batch  330/671 | Loss: 0.9344
+2026-06-10 18:49:26 | DEBUG    |   Batch  340/671 | Loss: 0.9274
+2026-06-10 18:49:34 | DEBUG    |   Batch  350/671 | Loss: 0.9713
+2026-06-10 18:49:42 | DEBUG    |   Batch  360/671 | Loss: 0.9582
+2026-06-10 18:49:50 | DEBUG    |   Batch  370/671 | Loss: 0.9689
+2026-06-10 18:49:59 | DEBUG    |   Batch  380/671 | Loss: 0.9813
+2026-06-10 18:50:07 | DEBUG    |   Batch  390/671 | Loss: 0.9549
+2026-06-10 18:50:15 | DEBUG    |   Batch  400/671 | Loss: 0.9821
+2026-06-10 18:50:23 | DEBUG    |   Batch  410/671 | Loss: 0.9221
+2026-06-10 18:50:31 | DEBUG    |   Batch  420/671 | Loss: 0.9519
+2026-06-10 18:50:39 | DEBUG    |   Batch  430/671 | Loss: 0.9462
+2026-06-10 18:50:48 | DEBUG    |   Batch  440/671 | Loss: 0.9062
+2026-06-10 18:50:56 | DEBUG    |   Batch  450/671 | Loss: 0.9549
+2026-06-10 18:51:04 | DEBUG    |   Batch  460/671 | Loss: 0.9579
+2026-06-10 18:51:12 | DEBUG    |   Batch  470/671 | Loss: 0.9121
+2026-06-10 18:51:20 | DEBUG    |   Batch  480/671 | Loss: 0.9222
+2026-06-10 18:51:29 | DEBUG    |   Batch  490/671 | Loss: 0.8937
+2026-06-10 18:51:37 | DEBUG    |   Batch  500/671 | Loss: 0.8915
+2026-06-10 18:51:45 | DEBUG    |   Batch  510/671 | Loss: 0.8850
+2026-06-10 18:51:53 | DEBUG    |   Batch  520/671 | Loss: 0.9021
+2026-06-10 18:52:01 | DEBUG    |   Batch  530/671 | Loss: 0.9328
+2026-06-10 18:52:10 | DEBUG    |   Batch  540/671 | Loss: 0.9523
+2026-06-10 18:52:18 | DEBUG    |   Batch  550/671 | Loss: 0.8902
+2026-06-10 18:52:26 | DEBUG    |   Batch  560/671 | Loss: 0.9264
+2026-06-10 18:52:34 | DEBUG    |   Batch  570/671 | Loss: 0.9504
+2026-06-10 18:52:42 | DEBUG    |   Batch  580/671 | Loss: 0.9179
+2026-06-10 18:52:51 | DEBUG    |   Batch  590/671 | Loss: 0.9464
+2026-06-10 18:52:59 | DEBUG    |   Batch  600/671 | Loss: 0.9459
+2026-06-10 18:53:07 | DEBUG    |   Batch  610/671 | Loss: 0.9375
+2026-06-10 18:53:15 | DEBUG    |   Batch  620/671 | Loss: 0.9400
+2026-06-10 18:53:23 | DEBUG    |   Batch  630/671 | Loss: 0.9597
+2026-06-10 18:53:31 | DEBUG    |   Batch  640/671 | Loss: 0.9365
+2026-06-10 18:53:40 | DEBUG    |   Batch  650/671 | Loss: 0.9057
+2026-06-10 18:53:48 | DEBUG    |   Batch  660/671 | Loss: 0.9526
+2026-06-10 18:53:56 | DEBUG    |   Batch  670/671 | Loss: 0.9089
+2026-06-10 23:36:29 | INFO     | Log file: results/proposed_mmsk_tversky/train.log
+2026-06-10 23:36:29 | INFO     | VRAM cap       : 20 GB / 51 GB (fraction=0.394)
+2026-06-10 23:36:29 | INFO     | Device         : cuda:0
+2026-06-10 23:36:29 | INFO     | Model          : MMSK-3D U-Net (cross-modal gating)
+2026-06-10 23:36:29 | INFO     | Loss           : Tversky (α=0.3, β=0.7)   [PROPOSED]
+2026-06-10 23:36:29 | INFO     | out_channels   : 5
+2026-06-10 23:36:29 | INFO     | Label space    : BraTS 2024 raw {0,1,2,3,4}
+2026-06-10 23:36:29 | INFO     | Output dir     : results/proposed_mmsk_tversky
+2026-06-10 23:36:30 | INFO     | Total parameters: 11,838,757
+2026-06-10 23:36:30 | INFO     | AMP             : ON
+2026-06-10 23:36:31 | INFO     | FLOPs (fvcore) : 1096.16 GFLOPs
+2026-06-10 23:36:31 | INFO     | Pre-flight: validating .npz files ...
+2026-06-10 23:36:31 | INFO     | [Validation] Scanning 1344 .npz files ...
+2026-06-10 23:36:31 | DEBUG    |   [1/1344] OK: BraTS-GLI-00005-100.npz
+2026-06-10 23:36:42 | DEBUG    |   [101/1344] OK: BraTS-GLI-02066-101.npz
+2026-06-10 23:36:52 | DEBUG    |   [201/1344] OK: BraTS-GLI-02103-100.npz
+2026-06-10 23:37:02 | DEBUG    |   [301/1344] OK: BraTS-GLI-02145-100.npz
+2026-06-10 23:37:12 | DEBUG    |   [401/1344] OK: BraTS-GLI-02194-100.npz
+2026-06-10 23:37:22 | DEBUG    |   [501/1344] OK: BraTS-GLI-02236-101.npz
+2026-06-10 23:37:36 | DEBUG    |   [601/1344] OK: BraTS-GLI-02315-100.npz
+2026-06-10 23:37:48 | DEBUG    |   [701/1344] OK: BraTS-GLI-02549-100.npz
+2026-06-10 23:37:58 | DEBUG    |   [801/1344] OK: BraTS-GLI-02736-101.npz
+2026-06-10 23:38:09 | DEBUG    |   [901/1344] OK: BraTS-GLI-02793-100.npz
+2026-06-10 23:38:19 | DEBUG    |   [1001/1344] OK: BraTS-GLI-02851-100.npz
+2026-06-10 23:38:29 | DEBUG    |   [1101/1344] OK: BraTS-GLI-02902-100.npz
+2026-06-10 23:38:40 | DEBUG    |   [1201/1344] OK: BraTS-GLI-02961-100.npz
+2026-06-10 23:38:50 | DEBUG    |   [1301/1344] OK: BraTS-GLI-03026-100.npz
+2026-06-10 23:38:55 | INFO     | [Validation] 1344 healthy, 0 dropped.
+2026-06-10 23:38:55 | INFO     | [Validation] Scanning 269 .npz files ...
+2026-06-10 23:38:55 | DEBUG    |   [1/269] OK: BraTS-GLI-02405-100.npz
+2026-06-10 23:39:05 | DEBUG    |   [101/269] OK: BraTS-GLI-02507-101.npz
+2026-06-10 23:39:18 | DEBUG    |   [201/269] OK: BraTS-GLI-02584-101.npz
+2026-06-10 23:39:28 | INFO     | [Validation] 269 healthy, 0 dropped.
+2026-06-10 23:39:28 | INFO     | Probing batch_size=2, accum_steps=2 ...
+2026-06-10 23:39:30 | INFO     | Probe OK — bs=2, accum=2, effective_batch=4
+2026-06-10 23:39:30 | INFO     | Train batches  : 672 (bs=2)
+2026-06-10 23:39:30 | INFO     | Val batches    : 269
+2026-06-10 23:39:30 | INFO     | Accum steps    : 2 (effective batch=4)
+2026-06-10 23:39:30 | INFO     | Starting training for 300 epochs
+2026-06-10 23:39:30 | INFO     | ============================================================
+2026-06-10 23:39:30 | INFO     | Epoch 1/300
+2026-06-10 23:39:31 | DEBUG    |   Batch    0/672 | Loss: 0.9931
+2026-06-10 23:39:40 | DEBUG    |   Batch   10/672 | Loss: 0.9725
+2026-06-10 23:39:48 | DEBUG    |   Batch   20/672 | Loss: 0.9725
+2026-06-10 23:39:56 | DEBUG    |   Batch   30/672 | Loss: 0.9518
+2026-06-10 23:40:04 | DEBUG    |   Batch   40/672 | Loss: 0.9384
+2026-06-10 23:40:12 | DEBUG    |   Batch   50/672 | Loss: 0.9477
+2026-06-10 23:40:21 | DEBUG    |   Batch   60/672 | Loss: 0.9422
+2026-06-10 23:40:29 | DEBUG    |   Batch   70/672 | Loss: 0.9671
+2026-06-10 23:40:37 | DEBUG    |   Batch   80/672 | Loss: 0.9688
+2026-06-10 23:40:45 | DEBUG    |   Batch   90/672 | Loss: 0.9567
+2026-06-10 23:40:53 | DEBUG    |   Batch  100/672 | Loss: 0.9278
+2026-06-10 23:41:02 | DEBUG    |   Batch  110/672 | Loss: 0.9225
+2026-06-10 23:41:10 | DEBUG    |   Batch  120/672 | Loss: 0.9573
+2026-06-10 23:41:18 | DEBUG    |   Batch  130/672 | Loss: 0.9369
+2026-06-10 23:41:26 | DEBUG    |   Batch  140/672 | Loss: 0.9752
+2026-06-10 23:41:34 | DEBUG    |   Batch  150/672 | Loss: 0.9228
+2026-06-10 23:41:43 | DEBUG    |   Batch  160/672 | Loss: 0.9804
+2026-06-10 23:41:51 | DEBUG    |   Batch  170/672 | Loss: 0.9172
+2026-06-10 23:42:00 | DEBUG    |   Batch  180/672 | Loss: 0.9406
+2026-06-10 23:42:08 | DEBUG    |   Batch  190/672 | Loss: 0.9262
+2026-06-10 23:42:16 | DEBUG    |   Batch  200/672 | Loss: 0.9614
+2026-06-10 23:42:24 | DEBUG    |   Batch  210/672 | Loss: 0.9476
+2026-06-10 23:42:33 | DEBUG    |   Batch  220/672 | Loss: 0.8930
+2026-06-10 23:42:41 | DEBUG    |   Batch  230/672 | Loss: 0.9494
+2026-06-10 23:42:49 | DEBUG    |   Batch  240/672 | Loss: 0.9303
+2026-06-10 23:42:57 | DEBUG    |   Batch  250/672 | Loss: 0.9272
+2026-06-10 23:43:05 | DEBUG    |   Batch  260/672 | Loss: 0.9550
+2026-06-10 23:43:14 | DEBUG    |   Batch  270/672 | Loss: 0.9518
+2026-06-10 23:43:22 | DEBUG    |   Batch  280/672 | Loss: 0.9702
+2026-06-10 23:43:30 | DEBUG    |   Batch  290/672 | Loss: 0.9499
+2026-06-10 23:43:38 | DEBUG    |   Batch  300/672 | Loss: 0.9229
+2026-06-10 23:43:46 | DEBUG    |   Batch  310/672 | Loss: 0.9363
+2026-06-10 23:43:55 | DEBUG    |   Batch  320/672 | Loss: 0.9195
+2026-06-10 23:44:03 | DEBUG    |   Batch  330/672 | Loss: 0.9489
+2026-06-10 23:44:11 | DEBUG    |   Batch  340/672 | Loss: 0.9136
+2026-06-10 23:44:19 | DEBUG    |   Batch  350/672 | Loss: 0.8955
+2026-06-10 23:44:27 | DEBUG    |   Batch  360/672 | Loss: 0.9186
+2026-06-10 23:44:36 | DEBUG    |   Batch  370/672 | Loss: 0.9592
+2026-06-10 23:44:44 | DEBUG    |   Batch  380/672 | Loss: 0.9327
+2026-06-10 23:44:52 | DEBUG    |   Batch  390/672 | Loss: 0.9292
+2026-06-10 23:45:00 | DEBUG    |   Batch  400/672 | Loss: 0.9329
+2026-06-10 23:45:08 | DEBUG    |   Batch  410/672 | Loss: 0.9533
+2026-06-10 23:45:17 | DEBUG    |   Batch  420/672 | Loss: 0.9375
+2026-06-10 23:45:25 | DEBUG    |   Batch  430/672 | Loss: 0.9405
+2026-06-10 23:45:33 | DEBUG    |   Batch  440/672 | Loss: 0.8896
+2026-06-10 23:45:41 | DEBUG    |   Batch  450/672 | Loss: 0.9325
+2026-06-10 23:45:49 | DEBUG    |   Batch  460/672 | Loss: 0.9184
+2026-06-10 23:45:58 | DEBUG    |   Batch  470/672 | Loss: 0.9458
+2026-06-10 23:46:06 | DEBUG    |   Batch  480/672 | Loss: 0.9319
+2026-06-10 23:46:14 | DEBUG    |   Batch  490/672 | Loss: 0.9154
+2026-06-10 23:46:22 | DEBUG    |   Batch  500/672 | Loss: 0.9186
+2026-06-10 23:46:30 | DEBUG    |   Batch  510/672 | Loss: 0.9112
+2026-06-10 23:46:39 | DEBUG    |   Batch  520/672 | Loss: 0.8741
+2026-06-10 23:46:47 | DEBUG    |   Batch  530/672 | Loss: 0.9384
+2026-06-10 23:46:55 | DEBUG    |   Batch  540/672 | Loss: 0.9369
+2026-06-10 23:47:03 | DEBUG    |   Batch  550/672 | Loss: 0.9562
+2026-06-10 23:47:11 | DEBUG    |   Batch  560/672 | Loss: 0.9471
+2026-06-10 23:47:20 | DEBUG    |   Batch  570/672 | Loss: 0.9152
+2026-06-10 23:47:28 | DEBUG    |   Batch  580/672 | Loss: 0.9545
+2026-06-10 23:47:36 | DEBUG    |   Batch  590/672 | Loss: 0.9296
+2026-06-10 23:47:44 | DEBUG    |   Batch  600/672 | Loss: 0.8922
+2026-06-10 23:47:52 | DEBUG    |   Batch  610/672 | Loss: 0.9373
+2026-06-10 23:48:00 | DEBUG    |   Batch  620/672 | Loss: 0.9055
+2026-06-10 23:48:09 | DEBUG    |   Batch  630/672 | Loss: 0.8247
+2026-06-10 23:48:17 | DEBUG    |   Batch  640/672 | Loss: 0.9141
+2026-06-10 23:48:25 | DEBUG    |   Batch  650/672 | Loss: 0.8802
+2026-06-10 23:48:33 | DEBUG    |   Batch  660/672 | Loss: 0.9117
+2026-06-10 23:48:41 | DEBUG    |   Batch  670/672 | Loss: 0.9509
+2026-06-10 23:57:20 | INFO     | Inference time: 437.7 ms/volume (avg over 10 passes)
+2026-06-10 23:57:20 | INFO     |   Train Loss: 0.9377 | Val Loss: 0.9227 | Mean DSC: 0.1538
+2026-06-10 23:57:20 | INFO     |   DSC   NCR/ED/NET/ET : 0.0000 / 0.5934 / 0.0145 / 0.0071
+2026-06-10 23:57:20 | INFO     |   HD95  NCR/ED/NET/ET : 72.91 / 29.43 / 69.63 / 85.00  mm
+2026-06-10 23:57:20 | INFO     |   Sens  NCR/ED/NET/ET : 0.0000 / 0.8985 / 0.8171 / 0.6518
+2026-06-10 23:57:20 | INFO     |   Prec  NCR/ED/NET/ET : 0.0000 / 0.4430 / 0.0073 / 0.0036
+2026-06-10 23:57:20 | INFO     |   Time: 1069.6s | Elapsed: 0.30h | ETA: 88h 50m | LR: 1.00e-04
+2026-06-10 23:57:20 | INFO     |   ✓ New best model saved (DSC: 0.1538)
+2026-06-10 23:57:20 | INFO     | ------------------------------------------------------------
+2026-06-10 23:57:20 | INFO     | Epoch 2/300
+2026-06-10 23:57:21 | DEBUG    |   Batch    0/672 | Loss: 0.9469
+2026-06-10 23:57:29 | DEBUG    |   Batch   10/672 | Loss: 0.9700
+2026-06-10 23:57:37 | DEBUG    |   Batch   20/672 | Loss: 0.9595
+2026-06-10 23:57:46 | DEBUG    |   Batch   30/672 | Loss: 0.9707
+2026-06-10 23:57:54 | DEBUG    |   Batch   40/672 | Loss: 0.8828
+2026-06-10 23:58:02 | DEBUG    |   Batch   50/672 | Loss: 0.8948
+2026-06-10 23:58:10 | DEBUG    |   Batch   60/672 | Loss: 0.8869
+2026-06-10 23:58:18 | DEBUG    |   Batch   70/672 | Loss: 0.9158
+2026-06-10 23:58:27 | DEBUG    |   Batch   80/672 | Loss: 0.9463
+2026-06-10 23:58:35 | DEBUG    |   Batch   90/672 | Loss: 0.9188
+2026-06-10 23:58:43 | DEBUG    |   Batch  100/672 | Loss: 0.8998
+2026-06-10 23:58:51 | DEBUG    |   Batch  110/672 | Loss: 0.9059
+2026-06-10 23:58:59 | DEBUG    |   Batch  120/672 | Loss: 0.9472
+2026-06-10 23:59:08 | DEBUG    |   Batch  130/672 | Loss: 0.9320
+2026-06-10 23:59:16 | DEBUG    |   Batch  140/672 | Loss: 0.9203
+2026-06-10 23:59:24 | DEBUG    |   Batch  150/672 | Loss: 0.8891
+2026-06-10 23:59:32 | DEBUG    |   Batch  160/672 | Loss: 0.8744
+2026-06-10 23:59:40 | DEBUG    |   Batch  170/672 | Loss: 0.8508
+2026-06-10 23:59:49 | DEBUG    |   Batch  180/672 | Loss: 0.9133
+2026-06-10 23:59:57 | DEBUG    |   Batch  190/672 | Loss: 0.8983
+2026-06-11 00:00:05 | DEBUG    |   Batch  200/672 | Loss: 0.9228
+2026-06-11 00:00:13 | DEBUG    |   Batch  210/672 | Loss: 0.9423
+2026-06-11 00:00:21 | DEBUG    |   Batch  220/672 | Loss: 0.8830
+2026-06-11 00:00:30 | DEBUG    |   Batch  230/672 | Loss: 0.9066
+2026-06-11 00:00:38 | DEBUG    |   Batch  240/672 | Loss: 0.8938
+2026-06-11 00:00:46 | DEBUG    |   Batch  250/672 | Loss: 0.8835
+2026-06-11 00:00:54 | DEBUG    |   Batch  260/672 | Loss: 0.8939
+2026-06-11 00:01:02 | DEBUG    |   Batch  270/672 | Loss: 0.8851
+2026-06-11 00:01:10 | DEBUG    |   Batch  280/672 | Loss: 0.8904
+2026-06-11 00:01:19 | DEBUG    |   Batch  290/672 | Loss: 0.8949
+2026-06-11 00:01:27 | DEBUG    |   Batch  300/672 | Loss: 0.8502
+2026-06-11 00:01:35 | DEBUG    |   Batch  310/672 | Loss: 0.8508
+2026-06-11 00:01:43 | DEBUG    |   Batch  320/672 | Loss: 0.9163
+2026-06-11 00:01:51 | DEBUG    |   Batch  330/672 | Loss: 0.8480
+2026-06-11 00:02:00 | DEBUG    |   Batch  340/672 | Loss: 0.9165
+2026-06-11 00:02:08 | DEBUG    |   Batch  350/672 | Loss: 0.8859
+2026-06-11 00:02:16 | DEBUG    |   Batch  360/672 | Loss: 0.8728
+2026-06-11 00:02:24 | DEBUG    |   Batch  370/672 | Loss: 0.9582
+2026-06-11 00:02:32 | DEBUG    |   Batch  380/672 | Loss: 0.8835
+2026-06-11 00:02:41 | DEBUG    |   Batch  390/672 | Loss: 0.8715
+2026-06-11 00:02:49 | DEBUG    |   Batch  400/672 | Loss: 0.8640
+2026-06-11 00:02:57 | DEBUG    |   Batch  410/672 | Loss: 0.8379
+2026-06-11 00:03:05 | DEBUG    |   Batch  420/672 | Loss: 0.9289
+2026-06-11 00:03:13 | DEBUG    |   Batch  430/672 | Loss: 0.8762
+2026-06-11 00:03:22 | DEBUG    |   Batch  440/672 | Loss: 0.8674
+2026-06-11 00:03:30 | DEBUG    |   Batch  450/672 | Loss: 0.8929
+2026-06-11 00:03:38 | DEBUG    |   Batch  460/672 | Loss: 0.8495
+2026-06-11 00:03:46 | DEBUG    |   Batch  470/672 | Loss: 0.8946
+2026-06-11 00:03:54 | DEBUG    |   Batch  480/672 | Loss: 0.8243
+2026-06-11 00:04:03 | DEBUG    |   Batch  490/672 | Loss: 0.9131
+2026-06-11 00:04:11 | DEBUG    |   Batch  500/672 | Loss: 0.9448
+2026-06-11 00:04:19 | DEBUG    |   Batch  510/672 | Loss: 0.9212
+2026-06-11 00:04:27 | DEBUG    |   Batch  520/672 | Loss: 0.8910
+2026-06-11 00:04:35 | DEBUG    |   Batch  530/672 | Loss: 0.9061
+2026-06-11 00:04:44 | DEBUG    |   Batch  540/672 | Loss: 0.9500
+2026-06-11 00:04:52 | DEBUG    |   Batch  550/672 | Loss: 0.8297
+2026-06-11 00:05:00 | DEBUG    |   Batch  560/672 | Loss: 0.8569
+2026-06-11 00:05:08 | DEBUG    |   Batch  570/672 | Loss: 0.8566
+2026-06-11 00:05:16 | DEBUG    |   Batch  580/672 | Loss: 0.8429
+2026-06-11 00:05:24 | DEBUG    |   Batch  590/672 | Loss: 0.8791
+2026-06-11 00:05:33 | DEBUG    |   Batch  600/672 | Loss: 0.8254
+2026-06-11 00:05:41 | DEBUG    |   Batch  610/672 | Loss: 0.9345
+2026-06-11 00:05:49 | DEBUG    |   Batch  620/672 | Loss: 0.8520
+2026-06-11 00:05:57 | DEBUG    |   Batch  630/672 | Loss: 0.8834
+2026-06-11 00:06:05 | DEBUG    |   Batch  640/672 | Loss: 0.8570
+2026-06-11 00:06:14 | DEBUG    |   Batch  650/672 | Loss: 0.8458
+2026-06-11 00:06:22 | DEBUG    |   Batch  660/672 | Loss: 0.8647
+2026-06-11 00:06:30 | DEBUG    |   Batch  670/672 | Loss: 0.8083
+2026-06-11 00:09:27 | INFO     |   Train Loss: 0.8979 | Val Loss: 0.8705 | Mean DSC: 0.1960
+2026-06-11 00:09:27 | INFO     |   DSC   NCR/ED/NET/ET : 0.0000 / 0.6016 / 0.0870 / 0.0954
+2026-06-11 00:09:27 | INFO     |   HD95  NCR/ED/NET/ET : 67.91 / 30.12 / 56.97 / 62.74  mm
+2026-06-11 00:09:27 | INFO     |   Sens  NCR/ED/NET/ET : 0.0002 / 0.9492 / 0.7846 / 0.6680
+2026-06-11 00:09:27 | INFO     |   Prec  NCR/ED/NET/ET : 0.0000 / 0.4404 / 0.0461 / 0.0513
+2026-06-11 00:09:27 | INFO     |   Time: 727.8s | Elapsed: 0.50h | ETA: 74h 23m | LR: 1.00e-04
+2026-06-11 00:09:28 | INFO     |   ✓ New best model saved (DSC: 0.1960)
+2026-06-11 00:09:28 | INFO     | ------------------------------------------------------------
+2026-06-11 00:09:28 | INFO     | Epoch 3/300
+2026-06-11 00:09:29 | DEBUG    |   Batch    0/672 | Loss: 0.9340
+2026-06-11 00:09:37 | DEBUG    |   Batch   10/672 | Loss: 0.9022
+2026-06-11 00:09:45 | DEBUG    |   Batch   20/672 | Loss: 0.8840
+2026-06-11 00:09:53 | DEBUG    |   Batch   30/672 | Loss: 0.8514
+2026-06-11 00:10:02 | DEBUG    |   Batch   40/672 | Loss: 0.8875
+2026-06-11 00:10:10 | DEBUG    |   Batch   50/672 | Loss: 0.8814
+2026-06-11 00:10:18 | DEBUG    |   Batch   60/672 | Loss: 0.8872
+2026-06-11 00:10:26 | DEBUG    |   Batch   70/672 | Loss: 0.8028
+2026-06-11 00:10:34 | DEBUG    |   Batch   80/672 | Loss: 0.9043
+2026-06-11 00:10:43 | DEBUG    |   Batch   90/672 | Loss: 0.8191

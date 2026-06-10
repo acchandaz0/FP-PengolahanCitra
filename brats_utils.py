@@ -30,6 +30,7 @@ import torch.nn.functional as F
 import numpy as np
 import warnings
 import zlib
+import zipfile
 import logging
 import sys
 from pathlib import Path
@@ -90,12 +91,12 @@ def validate_npz_files(
             clean.append(fp)
             if verbose and i % 100 == 0:
                 logger.debug(f"  [{i+1}/{len(file_list)}] OK: {Path(fp).name}")
-        except (zlib.error, EOFError, OSError, KeyError, ValueError) as e:
+        except (zlib.error, EOFError, OSError, KeyError, ValueError, zipfile.BadZipFile) as e:
             bad.append((fp, str(e)))
-            logger.warning(f"[CORRUPT] {Path(fp).name} → {e}")
+            logger.warning(f"[CORRUPT] {Path(fp).name} -> {e}")
     logger.info(f"[Validation] {len(clean)} healthy, {len(bad)} dropped.")
     for fp, reason in bad:
-        logger.warning(f"  ✗ {fp}  ({reason})")
+        logger.warning(f"  x {fp}  ({reason})")
     return clean
 
 
@@ -103,7 +104,7 @@ def validate_npz_files(
 class BraTSNpzDataset(Dataset):
     """
     Raw BraTS 2024 .npz loader. No label remap — labels {0..4} used directly.
-    seg shape on disk: (D,H,W) uint8 → loaded as LongTensor (1,D,H,W).
+    seg shape on disk: (D,H,W) uint8 -> loaded as LongTensor (1,D,H,W).
     """
     _fallback_img = (4, 128, 128, 128)
     _fallback_seg = (1, 128, 128, 128)
@@ -172,7 +173,7 @@ def _hd95_single(pred_bin: np.ndarray, gt_bin: np.ndarray,
     if len(pred_pts) == 0 or len(gt_pts) == 0:
         return float("nan")
 
-    # Vectorised distances (works for 3D, reasonable for 128³ patches)
+    # Vectorised distances (works for 3D, reasonable for 128^3 patches)
     from scipy.spatial import cKDTree
     tree_gt   = cKDTree(gt_pts   * spacing_mm)
     tree_pred = cKDTree(pred_pts * spacing_mm)
@@ -254,6 +255,51 @@ def compute_metrics(
     }
 
 
+# ── Streaming metrics (avoids OOM from stacking all logits) ────────────────────
+class StreamingMetrics:
+    """Accumulates TP/FP/FN per-batch instead of stacking all logits on CPU."""
+    def __init__(self, num_classes: int = OUT_CHANNELS):
+        self.num_classes = num_classes
+        self.eps = 1e-8
+        self.tp_sum = [0.0] * (num_classes - 1)
+        self.fp_sum = [0.0] * (num_classes - 1)
+        self.fn_sum = [0.0] * (num_classes - 1)
+        self.hd95_samples = [[] for _ in range(num_classes - 1)]
+
+    def add_batch(self, logits, labels):
+        probs = torch.softmax(logits, dim=1)
+        preds = probs.argmax(dim=1, keepdim=True)
+        B = logits.shape[0]
+        pred_np = preds.cpu().numpy()
+        gt_np = labels.cpu().numpy()
+        for c_idx, c in enumerate(range(1, self.num_classes)):
+            pred_bin = (preds == c).float()
+            gt_bin = (labels == c).float()
+            self.tp_sum[c_idx] += (pred_bin * gt_bin).sum().item()
+            self.fp_sum[c_idx] += (pred_bin * (1 - gt_bin)).sum().item()
+            self.fn_sum[c_idx] += ((1 - pred_bin) * gt_bin).sum().item()
+            for b in range(B):
+                self.hd95_samples[c_idx].append(
+                    _hd95_single(pred_np[b, 0] == c, gt_np[b, 0] == c)
+                )
+
+    def compute(self):
+        dsc_list, hd95_list, sens_list, prec_list = [], [], [], []
+        for c_idx in range(self.num_classes - 1):
+            tp, fp, fn = self.tp_sum[c_idx], self.fp_sum[c_idx], self.fn_sum[c_idx]
+            dsc_list.append((2 * tp + self.eps) / (2 * tp + fp + fn + self.eps))
+            sens_list.append((tp + self.eps) / (tp + fn + self.eps))
+            prec_list.append((tp + self.eps) / (tp + fp + self.eps))
+            valid_hd = [v for v in self.hd95_samples[c_idx] if not np.isnan(v)]
+            hd95_list.append(float(np.mean(valid_hd)) if valid_hd else float('nan'))
+        valid_dsc = [v for v in dsc_list if not np.isnan(v)]
+        dsc_mean = float(np.mean(valid_dsc)) if valid_dsc else float('nan')
+        return {
+            'dsc': dsc_list, 'hd95': hd95_list,
+            'sensitivity': sens_list, 'precision': prec_list, 'dsc_mean': dsc_mean,
+        }
+
+
 # ── FLOPs ─────────────────────────────────────────────────────────────────────
 def count_flops(model: torch.nn.Module,
                 input_shape: tuple = (1, 4, 128, 128, 128),
@@ -261,11 +307,13 @@ def count_flops(model: torch.nn.Module,
                 logger: logging.Logger = None) -> float:
     """
     Count GFLOPs for one forward pass.
-    Tries fvcore first, falls back to thop, then returns -1.0 if neither available.
+    Catches ALL exceptions so it never crashes regardless of model state
+    (e.g. torch.compile breaks JIT tracing used by fvcore).
+    Returns -1.0 if counting fails.
     """
     dummy = torch.zeros(input_shape, device=device)
 
-    # ── fvcore ───────────────────────────────────────────────────────────
+    # fvcore
     try:
         from fvcore.nn import FlopCountAnalysis
         model.eval()
@@ -277,26 +325,26 @@ def count_flops(model: torch.nn.Module,
         if logger:
             logger.info(f"FLOPs (fvcore) : {gflops:.2f} GFLOPs")
         return gflops
-    except ImportError:
+    except Exception:
         pass
 
-    # ── thop ─────────────────────────────────────────────────────────────
+    # thop
     try:
         from thop import profile
         model.eval()
         with torch.no_grad():
             macs, _ = profile(model, inputs=(dummy,), verbose=False)
-        gflops = macs * 2 / 1e9   # MACs → FLOPs (×2)
+        gflops = macs * 2 / 1e9
         if logger:
             logger.info(f"FLOPs (thop)   : {gflops:.2f} GFLOPs")
         return gflops
-    except ImportError:
+    except Exception:
         pass
 
     if logger:
         logger.warning(
-            "FLOPs: neither fvcore nor thop available. "
-            "Install with: pip install fvcore  OR  pip install thop"
+            "FLOPs: skipped — fvcore/thop unavailable or incompatible"
+            " (compiled model?). Set to -1.0."
         )
     return -1.0
 
