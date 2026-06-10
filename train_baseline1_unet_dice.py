@@ -1,8 +1,24 @@
 """
 Baseline 1: Standard 3D U-Net + Dice Loss
 
-Metrics per epoch: DSC, HD95, Sensitivity, Precision  (per class: NCR/ED/NET/ET)
-FLOPs: computed once at startup.
+Ablation Study Role:
+    Baseline 1 (3D U-Net + Dice)  vs  Baseline 2 (3D U-Net + Tversky)
+    → Isolates loss function contribution; architecture unchanged.
+
+    Baseline 1 (3D U-Net + Dice)  vs  Ablation 1 (SK + Tversky)
+    → Isolates SK architecture contribution against plain U-Net floor.
+
+    Baseline 1 vs Proposed (MMSK + Tversky)
+    → Full system gain (architecture + loss combined).
+
+Metrics recorded per epoch:
+    DSC        — Dice Similarity Coefficient per class (NCR/ED/NET/ET)
+    HD95       — 95th-percentile Hausdorff Distance per class (mm)
+    Sensitivity— Recall per class
+    Precision  — Positive predictive value per class
+
+Also recorded in results.json:
+    FLOPs (GFLOPs), parameter count, inference time, training time
 """
 
 import torch
@@ -15,155 +31,373 @@ from monai.networks.nets import UNet
 from monai.losses import DiceLoss
 
 from brats_utils import (
-    BraTSNpzDataset, validate_npz_files, setup_logger,
-    compute_metrics, count_flops, log_epoch, make_epoch_record,
-    OUT_CHANNELS, FG_CLASS_NAMES,
+    BraTSNpzDataset,
+    validate_npz_files,
+    setup_logger,
+    compute_metrics,
+    count_flops,
+    OUT_CHANNELS,
+    FG_CLASS_NAMES,
 )
 
 
 class Trainer:
-    def __init__(self, gpu_id: int, output_dir: str):
+    def __init__(self, gpu_id: int, output_dir: str, vram_gb: float = 20.0):
         self.output_dir = Path(output_dir)
         self.logger     = setup_logger("baseline1", self.output_dir)
         self.device     = torch.device(
             f"cuda:{gpu_id}" if torch.cuda.is_available() else "cpu"
         )
+
+        # ── VRAM cap ──────────────────────────────────────────────────────
+        if self.device.type == "cuda":
+            total_vram = torch.cuda.get_device_properties(gpu_id).total_memory / 1e9
+            fraction   = min(vram_gb / total_vram, 1.0)
+            torch.cuda.set_per_process_memory_fraction(fraction, device=gpu_id)
+            self.logger.info(
+                f"VRAM cap       : {vram_gb:.0f} GB / {total_vram:.0f} GB "
+                f"(fraction={fraction:.3f})"
+            )
+
         self.logger.info(f"Device       : {self.device}")
         self.logger.info(f"Model        : Standard 3D U-Net (MONAI)")
         self.logger.info(f"Loss         : Dice  [Baseline 1]")
         self.logger.info(f"out_channels : {OUT_CHANNELS}  labels {{0,1,2,3,4}}")
 
+        # ── Model ──────────────────────────────────────────────────────────
         self.model = UNet(
             spatial_dims=3, in_channels=4, out_channels=OUT_CHANNELS,
             channels=(32, 64, 128, 256), strides=(2, 2, 2), num_res_units=2,
         ).to(self.device)
 
-        self.loss_fn   = DiceLoss(to_onehot_y=True, softmax=True, include_background=False)
-        self.optimizer = torch.optim.AdamW(self.model.parameters(), lr=1e-4, weight_decay=1e-5)
-        self.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self.optimizer, T_max=300)
+        # ── Loss ───────────────────────────────────────────────────────────
+        self.loss_fn = DiceLoss(
+            to_onehot_y=True, softmax=True, include_background=False,
+        )
+
+        # ── Optimizer / Scheduler ──────────────────────────────────────────
+        self.optimizer = torch.optim.AdamW(
+            self.model.parameters(), lr=1e-4, weight_decay=1e-5,
+        )
+        self.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+            self.optimizer, T_max=300,
+        )
+
+        # ── AMP ────────────────────────────────────────────────────────────
+        self.use_amp     = self.device.type == "cuda"
+        self.scaler      = torch.amp.GradScaler(device="cuda", enabled=self.use_amp)
+        self.accum_steps = 1   # set properly in run() after OOM probe
 
         total = sum(p.numel() for p in self.model.parameters())
         self.logger.info(f"Parameters   : {total:,}")
-        self.flops_g = count_flops(self.model, device=self.device, logger=self.logger)
+        self.logger.info(f"AMP          : {'ON' if self.use_amp else 'OFF (CPU)'}")
+
+        # ── FLOPs (computed once at startup) ───────────────────────────────
+        self.flops_giga = count_flops(
+            self.model, device=self.device, logger=self.logger,
+        )
+
+        # ── Inference timing (populated after first validate call) ─────────
+        self.inference_time_s = None
 
     # ──────────────────────────────────────────────────────────────────────────
     def train_epoch(self, loader: DataLoader) -> float:
         self.model.train()
-        total_loss = 0.0
+        epoch_loss = 0.0
+        self.optimizer.zero_grad()
+
         for batch_idx, batch in enumerate(loader):
             inputs = batch["image"].to(self.device)
             labels = batch["label"].to(self.device)
-            self.optimizer.zero_grad()
-            loss = self.loss_fn(self.model(inputs), labels)
-            loss.backward()
-            self.optimizer.step()
-            total_loss += loss.item()
+
+            with torch.amp.autocast(device_type="cuda", enabled=self.use_amp):
+                outputs = self.model(inputs)
+                loss    = self.loss_fn(outputs, labels) / self.accum_steps
+
+            self.scaler.scale(loss).backward()
+
+            if (batch_idx + 1) % self.accum_steps == 0 or \
+               (batch_idx + 1) == len(loader):
+                self.scaler.step(self.optimizer)
+                self.scaler.update()
+                self.optimizer.zero_grad()
+
+            epoch_loss += loss.item() * self.accum_steps
             if batch_idx % 10 == 0:
-                self.logger.debug(f"  batch {batch_idx:>4} loss={loss.item():.4f}")
-        return total_loss / len(loader)
+                self.logger.debug(
+                    f"  Batch {batch_idx:>4}/{len(loader)} | "
+                    f"Loss: {loss.item() * self.accum_steps:.4f}"
+                )
+
+        return epoch_loss / len(loader)
 
     # ──────────────────────────────────────────────────────────────────────────
-    def validate(self, loader: DataLoader) -> tuple[float, dict]:
+    def validate(self, loader: DataLoader):
+        """
+        Evaluate on validation set. Computes:
+            - DSC, HD95, Sensitivity, Precision  (via compute_metrics)
+            - Validation loss
+            - Inference timing (on first call, warm-up then timed passes)
+        """
         self.model.eval()
         val_loss = 0.0
-        # Accumulate predictions and labels across batches for metric computation
-        all_logits, all_labels = [], []
+
+        all_logits = []
+        all_labels = []
+
         with torch.no_grad():
             for batch in loader:
-                inputs  = batch["image"].to(self.device)
-                labels  = batch["label"].to(self.device)
-                logits  = self.model(inputs)
-                val_loss += self.loss_fn(logits, labels).item()
+                inputs = batch["image"].to(self.device)
+                labels = batch["label"].to(self.device)
+
+                with torch.amp.autocast(device_type="cuda", enabled=self.use_amp):
+                    logits = self.model(inputs)
+                    loss   = self.loss_fn(logits, labels)
+
+                val_loss += loss.item()
                 all_logits.append(logits.cpu())
                 all_labels.append(labels.cpu())
 
-        # Compute metrics on CPU to save GPU memory
+        # ── Compute comprehensive metrics on CPU ────────────────────────────
         logits_cat = torch.cat(all_logits, dim=0)
         labels_cat = torch.cat(all_labels, dim=0)
         m = compute_metrics(logits_cat, labels_cat)
+
+        # ── Inference timing (first epoch only) ────────────────────────────
+        if self.inference_time_s is None:
+            dummy = torch.zeros(1, 4, 128, 128, 128, device=self.device)
+
+            # Warm-up pass
+            for _ in range(10):
+                with torch.no_grad():
+                    _ = self.model(dummy)
+
+            # Timed passes
+            if self.device.type == "cuda":
+                torch.cuda.synchronize()
+            n_timed  = 50
+            t_start  = time.time()
+            for _ in range(n_timed):
+                with torch.no_grad():
+                    _ = self.model(dummy)
+            if self.device.type == "cuda":
+                torch.cuda.synchronize()
+            elapsed  = time.time() - t_start
+            self.inference_time_s = elapsed / n_timed
+            self.logger.info(
+                f"Inference time: {self.inference_time_s*1000:.1f} ms/volume "
+                f"(avg over {n_timed} passes)"
+            )
+
         return val_loss / len(loader), m
 
     # ──────────────────────────────────────────────────────────────────────────
     def run(self, train_files: list, val_files: list, epochs: int = 300):
+        self.logger.info("Pre-flight: validating .npz files ...")
         train_files = validate_npz_files(train_files, self.logger)
         val_files   = validate_npz_files(val_files,   self.logger)
-        if not train_files or not val_files:
-            raise RuntimeError("No valid files remain after validation scan.")
 
-        train_loader = DataLoader(
-            BraTSNpzDataset(train_files, augment=True),
-            batch_size=2, shuffle=True, num_workers=4, pin_memory=True,
+        if not train_files:
+            raise RuntimeError("No valid training files after validation scan.")
+        if not val_files:
+            raise RuntimeError("No valid validation files after validation scan.")
+
+        train_ds = BraTSNpzDataset(train_files, augment=True)
+        val_ds   = BraTSNpzDataset(val_files,   augment=False)
+
+        _OOM = (torch.OutOfMemoryError, torch.cuda.OutOfMemoryError)
+
+        def make_loaders(bs):
+            tl = DataLoader(
+                train_ds, batch_size=bs, shuffle=True,
+                num_workers=4, pin_memory=True, drop_last=True,
+            )
+            vl = DataLoader(
+                val_ds, batch_size=1, shuffle=False,
+                num_workers=4, pin_memory=True,
+            )
+            return tl, vl
+
+        # OOM probe: try bs=4 first (plain U-Net is light), fall back to bs=2+accum=2
+        batch_size, self.accum_steps = 4, 1
+        self.logger.info(
+            f"Probing batch_size={batch_size}, accum_steps={self.accum_steps} ..."
         )
-        val_loader = DataLoader(
-            BraTSNpzDataset(val_files, augment=False),
-            batch_size=1, shuffle=False, num_workers=4, pin_memory=True,
+        train_loader, val_loader = make_loaders(batch_size)
+
+        self.model.train()
+        try:
+            _b = next(iter(train_loader))
+            with torch.amp.autocast(device_type="cuda", enabled=self.use_amp):
+                _out  = self.model(_b["image"].to(self.device))
+                _loss = self.loss_fn(_out, _b["label"].to(self.device)) / self.accum_steps
+            self.scaler.scale(_loss).backward()
+            self.scaler.step(self.optimizer)
+            self.scaler.update()
+            self.optimizer.zero_grad()
+            torch.cuda.empty_cache()
+            self.logger.info(
+                f"Probe OK — bs={batch_size}, accum={self.accum_steps}, "
+                f"effective_batch={batch_size * self.accum_steps}"
+            )
+        except _OOM:
+            torch.cuda.empty_cache()
+            self.optimizer.zero_grad()
+            batch_size, self.accum_steps = 2, 2
+            train_loader, val_loader = make_loaders(batch_size)
+            self.logger.warning(
+                f"OOM at bs=4 — fallback: bs={batch_size}, "
+                f"accum={self.accum_steps}, "
+                f"effective_batch={batch_size * self.accum_steps}"
+            )
+
+        self.logger.info(f"Train batches  : {len(train_loader)} (bs={batch_size})")
+        self.logger.info(f"Val batches    : {len(val_loader)}")
+        self.logger.info(
+            f"Accum steps    : {self.accum_steps} "
+            f"(effective batch={batch_size * self.accum_steps})"
         )
-        self.logger.info(f"Train batches: {len(train_loader)} | Val batches: {len(val_loader)}")
         self.logger.info("=" * 65)
 
         results, best_dsc = [], 0.0
         start = time.time()
 
         for epoch in range(epochs):
-            t0 = time.time()
+            epoch_start = time.time()
             self.logger.info(f"Epoch {epoch+1}/{epochs}")
-            train_loss          = self.train_epoch(train_loader)
-            val_loss, m         = self.validate(val_loader)
+
+            train_loss       = self.train_epoch(train_loader)
+            val_loss, m      = self.validate(val_loader)
             self.scheduler.step()
 
-            epoch_time = time.time() - t0
+            epoch_time = time.time() - epoch_start
             elapsed    = time.time() - start
             lr         = self.optimizer.param_groups[0]["lr"]
 
-            log_epoch(self.logger, epoch, epochs, train_loss, val_loss, m,
-                      epoch_time, elapsed, lr)
+            # ── ETA estimate ──────────────────────────────────────────────
+            eta_sec  = (elapsed / (epoch + 1)) * (epochs - epoch - 1)
+            eta_h    = int(eta_sec // 3600)
+            eta_m    = int((eta_sec % 3600) // 60)
 
-            rec = make_epoch_record(epoch, train_loss, val_loss, m, lr,
-                                    epoch_time, elapsed)
-            results.append(rec)
+            # ── Log epoch summary ─────────────────────────────────────────
+            dsc  = m["dsc"]
+            hd   = m["hd95"]
+            sens = m["sensitivity"]
+            prec = m["precision"]
 
+            self.logger.info(
+                f"  Train Loss: {train_loss:.4f} | Val Loss: {val_loss:.4f} | "
+                f"Mean DSC: {m['dsc_mean']:.4f}"
+            )
+            self.logger.info(
+                f"  DSC   NCR/ED/NET/ET : "
+                f"{dsc[0]:.4f} / {dsc[1]:.4f} / {dsc[2]:.4f} / {dsc[3]:.4f}"
+            )
+            self.logger.info(
+                f"  HD95  NCR/ED/NET/ET : "
+                f"{hd[0]:.2f} / {hd[1]:.2f} / {hd[2]:.2f} / {hd[3]:.2f}  mm"
+            )
+            self.logger.info(
+                f"  Sens  NCR/ED/NET/ET : "
+                f"{sens[0]:.4f} / {sens[1]:.4f} / {sens[2]:.4f} / {sens[3]:.4f}"
+            )
+            self.logger.info(
+                f"  Prec  NCR/ED/NET/ET : "
+                f"{prec[0]:.4f} / {prec[1]:.4f} / {prec[2]:.4f} / {prec[3]:.4f}"
+            )
+            self.logger.info(
+                f"  Time: {epoch_time:.1f}s | Elapsed: {elapsed/3600:.2f}h | "
+                f"ETA: {eta_h}h {eta_m}m | LR: {lr:.2e}"
+            )
+
+            # ── Record ────────────────────────────────────────────────────
+            results.append({
+                "epoch":           epoch,
+                "train_loss":      train_loss,
+                "val_loss":        val_loss,
+                "dsc_mean":        m["dsc_mean"],
+                "dsc":             dsc,
+                "hd95":            hd,
+                "sensitivity":     sens,
+                "precision":       prec,
+                "lr":              lr,
+                "epoch_time_s":    epoch_time,
+                "elapsed_hours":   elapsed / 3600,
+            })
+
+            # ── Save best model ───────────────────────────────────────────
             if m["dsc_mean"] > best_dsc:
                 best_dsc = m["dsc_mean"]
-                torch.save(self.model.state_dict(), self.output_dir / "best_model.pth")
+                torch.save(
+                    self.model.state_dict(),
+                    self.output_dir / "best_model.pth",
+                )
                 self.logger.info(f"  ✓ Best model saved (DSC={best_dsc:.4f})")
 
+            # ── Periodic checkpoint ───────────────────────────────────────
             if (epoch + 1) % 50 == 0:
                 ckpt = self.output_dir / f"checkpoint_epoch{epoch+1}.pth"
-                torch.save({"epoch": epoch, "model_state_dict": self.model.state_dict(),
-                            "optimizer_state_dict": self.optimizer.state_dict(),
-                            "best_dsc": best_dsc}, ckpt)
+                torch.save({
+                    "epoch":                epoch,
+                    "model_state_dict":     self.model.state_dict(),
+                    "optimizer_state_dict": self.optimizer.state_dict(),
+                    "best_dsc":             best_dsc,
+                }, ckpt)
                 self.logger.info(f"  Checkpoint → {ckpt.name}")
 
             self.logger.info("-" * 65)
 
-        best_r = max(results, key=lambda x: x["dsc_mean"])
+        # ── Final summary ──────────────────────────────────────────────────
+        total_time   = time.time() - start
+        best_epoch_r = max(results, key=lambda x: x["dsc_mean"])
+
         with open(self.output_dir / "results.json", "w") as f:
             json.dump({
-                "model": "Baseline1_3DUNet_Dice",
-                "loss": "Dice", "architecture": "Standard 3D U-Net (MONAI)",
-                "out_channels": OUT_CHANNELS, "fg_class_names": FG_CLASS_NAMES,
-                "flops_giga": self.flops_g,
-                "ablation_role": "Performance floor",
-                "best_dsc": best_dsc, "best_epoch": best_r["epoch"] + 1,
-                "best_dsc_per_class": best_r["dsc"],
-                "best_hd95_per_class": best_r["hd95"],
-                "best_sensitivity_per_class": best_r["sensitivity"],
-                "best_precision_per_class": best_r["precision"],
-                "total_time_hours": (time.time() - start) / 3600,
-                "results": results,
+                "model":                      "Baseline1_3DUNet_Dice",
+                "loss":                       "Dice",
+                "architecture":               "Standard 3D U-Net (MONAI)",
+                "ablation_role":              "Performance floor",
+                "out_channels":               OUT_CHANNELS,
+                "label_space":                "BraTS2024 raw {0,1,2,3,4}",
+                "fg_class_names":             FG_CLASS_NAMES,
+                "total_parameters":           sum(p.numel() for p in self.model.parameters()),
+                "flops_giga":                 self.flops_giga,
+                "inference_time_s":           self.inference_time_s,
+                "batch_size":                 batch_size,
+                "accum_steps":                self.accum_steps,
+                "effective_batch":            batch_size * self.accum_steps,
+                "best_dsc":                   best_dsc,
+                "best_epoch":                 best_epoch_r["epoch"] + 1,
+                "best_dsc_per_class":         best_epoch_r["dsc"],
+                "best_hd95_per_class":        best_epoch_r["hd95"],
+                "best_sensitivity_per_class": best_epoch_r["sensitivity"],
+                "best_precision_per_class":   best_epoch_r["precision"],
+                "total_time_hours":           total_time / 3600,
+                "results":                    results,
             }, f, indent=2)
 
         self.logger.info("=" * 65)
-        self.logger.info(f"Done — Best Mean DSC: {best_dsc:.4f} (epoch {best_r['epoch']+1})")
+        self.logger.info(f"Done — Best Mean DSC: {best_dsc:.4f} (epoch {best_epoch_r['epoch']+1})")
+        if self.inference_time_s is not None:
+            self.logger.info(f"Inference     : {self.inference_time_s*1000:.1f} ms/volume")
+        self.logger.info("=" * 65)
 
 
+# ── Entry point ────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
-    p = argparse.ArgumentParser()
-    p.add_argument("--gpu",          type=int, default=0)
-    p.add_argument("--dataset_json", type=str, required=True)
-    p.add_argument("--output_dir",   type=str, default="./output_baseline1")
-    p.add_argument("--epochs",       type=int, default=300)
+    p = argparse.ArgumentParser(
+        description="Baseline 1: Standard 3D U-Net + Dice Loss"
+    )
+    p.add_argument("--gpu",          type=int,   default=0)
+    p.add_argument("--dataset_json", type=str,   required=True)
+    p.add_argument("--output_dir",   type=str,   default="./output_baseline1")
+    p.add_argument("--epochs",       type=int,   default=300)
+    p.add_argument("--vram_gb",      type=float, default=20.0)
     args = p.parse_args()
+
     with open(args.dataset_json) as f:
         ds = json.load(f)
-    Trainer(args.gpu, args.output_dir).run(ds["train"], ds["val"], args.epochs)
+
+    Trainer(args.gpu, args.output_dir, vram_gb=args.vram_gb).run(
+        ds["train"], ds["val"], args.epochs,
+    )
