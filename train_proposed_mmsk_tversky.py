@@ -202,7 +202,8 @@ class Trainer:
         return val_loss / len(loader), m
 
     # ──────────────────────────────────────────────────────────────────────────
-    def run(self, train_files: list[str], val_files: list[str], epochs: int = 300):
+    def run(self, train_files: list[str], val_files: list[str],
+            epochs: int = 300, resume_path: str | None = None):
         self.logger.info("Pre-flight: validating .npz files ...")
         train_files = validate_npz_files(train_files, self.logger)
         val_files   = validate_npz_files(val_files,   self.logger)
@@ -270,16 +271,44 @@ class Trainer:
         self.logger.info(f"Starting training for {epochs} epochs")
         self.logger.info("=" * 60)
 
-        results   = []
-        best_dsc  = 0.0
+        results    = []
+        best_dsc   = 0.0
         start_time = time.time()
+        start_epoch = 0
 
-        for epoch in range(epochs):
+        # ── Resume from checkpoint ────────────────────────────────────────
+        if resume_path is not None:
+            ckpt_path = Path(resume_path)
+            if not ckpt_path.exists():
+                raise FileNotFoundError(f"Checkpoint not found: {ckpt_path}")
+            ckpt = torch.load(ckpt_path, map_location=self.device, weights_only=False)
+            if "model_state_dict" in ckpt:
+                self.model.load_state_dict(ckpt["model_state_dict"])
+                self.optimizer.load_state_dict(ckpt["optimizer_state_dict"])
+                if "scaler_state_dict" in ckpt:
+                    self.scaler.load_state_dict(ckpt["scaler_state_dict"])
+                if "scheduler_state_dict" in ckpt:
+                    self.scheduler.load_state_dict(ckpt["scheduler_state_dict"])
+                best_dsc    = ckpt["best_dsc"]
+                start_epoch = ckpt["epoch"] + 1
+                results     = ckpt.get("results", [])
+            else:
+                self.model.load_state_dict(ckpt)
+                self.logger.warning(
+                    f"Loaded raw state_dict from {ckpt_path.name} — "
+                    f"optimizer/scaler/scheduler not restored (starting from epoch 0)"
+                )
+            self.logger.info(
+                f"Resumed from {ckpt_path.name} | "
+                f"epoch={start_epoch} | best_dsc={best_dsc:.4f}"
+            )
+
+        for epoch in range(start_epoch, epochs):
             epoch_start = time.time()
             self.logger.info(f"Epoch {epoch+1}/{epochs}")
 
             train_loss       = self.train_epoch(train_loader)
-            
+
             torch.cuda.empty_cache()
             val_loss, m      = self.validate(val_loader)
             self.scheduler.step()
@@ -289,7 +318,8 @@ class Trainer:
             lr         = self.optimizer.param_groups[0]["lr"]
 
             # ── ETA estimate ──────────────────────────────────────────────
-            eta_sec  = (elapsed / (epoch + 1)) * (epochs - epoch - 1)
+            done     = epoch - start_epoch + 1
+            eta_sec  = (elapsed / done) * (epochs - epoch - 1)
             eta_h    = int(eta_sec // 3600)
             eta_m    = int((eta_sec % 3600) // 60)
 
@@ -349,13 +379,16 @@ class Trainer:
                 self.logger.info(f"  ✓ New best model saved (DSC: {best_dsc:.4f})")
 
             # ── Periodic checkpoint ───────────────────────────────────────
-            if (epoch + 1) % 50 == 0:
+            if (epoch + 1) % 10 == 0:
                 ckpt = self.output_dir / f"checkpoint_epoch{epoch+1}.pth"
                 torch.save({
                     "epoch":                epoch,
                     "model_state_dict":     self.model.state_dict(),
                     "optimizer_state_dict": self.optimizer.state_dict(),
+                    "scaler_state_dict":    self.scaler.state_dict(),
+                    "scheduler_state_dict": self.scheduler.state_dict(),
                     "best_dsc":             best_dsc,
+                    "results":              results,
                 }, ckpt)
                 self.logger.info(f"  Checkpoint saved → {ckpt.name}")
 
@@ -410,10 +443,13 @@ if __name__ == "__main__":
                         default="./output_proposed_mmsk_tversky")
     parser.add_argument("--epochs",       type=int,   default=300)
     parser.add_argument("--vram_gb",      type=float, default=20.0)
+    parser.add_argument("--resume",       type=str,   default=None,
+                        help="Path to checkpoint .pth to resume from")
     args = parser.parse_args()
 
     with open(args.dataset_json) as f:
         dataset = json.load(f)
 
     trainer = Trainer(args.gpu, args.output_dir, vram_gb=args.vram_gb)
-    trainer.run(dataset["train"], dataset["val"], args.epochs)
+    trainer.run(dataset["train"], dataset["val"], args.epochs,
+                resume_path=args.resume)
