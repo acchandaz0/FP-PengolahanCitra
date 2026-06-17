@@ -130,6 +130,13 @@ class Trainer:
             inputs = batch["image"].to(self.device)
             labels = batch["label"].to(self.device)
 
+            if labels.min() < 0 or labels.max() > 4:
+                self.logger.warning(
+                    f"Batch {batch_idx}: Out-of-bounds label detected! "
+                    f"Min={labels.min().item()}, Max={labels.max().item()}. Clamping."
+                )
+                labels = torch.clamp(labels, min=0, max=4)
+
             with torch.amp.autocast(device_type="cuda", enabled=self.use_amp):
                 outputs = self.model(inputs)
                 loss    = self.loss_fn(outputs, labels) / self.accum_steps
@@ -372,10 +379,15 @@ class Trainer:
             # ── Save best model ───────────────────────────────────────────
             if m["dsc_mean"] > best_dsc:
                 best_dsc = m["dsc_mean"]
-                torch.save(
-                    self.model.state_dict(),
-                    self.output_dir / "best_model.pth",
-                )
+                torch.save({
+                    "epoch":                epoch,
+                    "model_state_dict":     self.model.state_dict(),
+                    "optimizer_state_dict": self.optimizer.state_dict(),
+                    "scaler_state_dict":    self.scaler.state_dict(),
+                    "scheduler_state_dict": self.scheduler.state_dict(),
+                    "best_dsc":             best_dsc,
+                    "results":              results,
+                }, self.output_dir / "best_model.pth")
                 self.logger.info(f"  ✓ New best model saved (DSC: {best_dsc:.4f})")
 
             # ── Periodic checkpoint ───────────────────────────────────────
