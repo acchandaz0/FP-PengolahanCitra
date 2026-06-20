@@ -1,0 +1,1 @@
+python train_baseline2_unet_tversky.py --dataset_json dataset.json --epochs 300 --output_dir ./results/baseline2_unet_tversky --vram_gb 14

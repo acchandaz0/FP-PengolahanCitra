@@ -15,16 +15,16 @@ import json
 from pathlib import Path
 
 # Paths
-PREPROCESSED_TRAIN = Path("/home/mci/arsyadl/braTS/preprocessed")
-PREPROCESSED_VAL = Path("/home/mci/arsyadl/braTS/preprocessed_test")
-OUTPUT_JSON = Path("/home/mci/arsyadl/mmsk/dataset.json")
+PREPROCESSED_TRAIN = Path("/home/arsya_d_lathifa/braTS/synapse-downloads/preprocessed")
+PREPROCESSED_VAL = Path("/home/arsya_d_lathifa/braTS/preprocessed_test")
+OUTPUT_JSON = Path("/home/arsya_d_lathifa/braTS/dataset.json")
 
 def collect_samples(preprocessed_dir):
     """Collect all .npz files from preprocessed directory"""
     if not preprocessed_dir.exists():
         print(f"⚠️  Directory not found: {preprocessed_dir}")
         return []
-    
+
     samples = sorted([str(f) for f in preprocessed_dir.glob("*.npz")])
     return samples
 
