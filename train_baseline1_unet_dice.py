@@ -11,6 +11,18 @@ Ablation Study Role:
     Baseline 1 vs Proposed (MMSK + Tversky)
     → Full system gain (architecture + loss combined).
 
+Fixes vs original baseline1 script:
+    1. Added --resume flag + full checkpoint saving (model + optimizer +
+       scaler + scheduler + best_dsc + epoch + results), matching Ablation 2.
+    2. Replaced compute_metrics() (stacks all 269 logits on CPU, ~14 GB)
+       with StreamingMetrics (accumulates TP/FP/FN per batch), matching
+       Ablation 2 and preventing CPU OOM during validation.
+    3. Periodic checkpoint frequency changed from every 50 to every 10
+       epochs, matching Ablation 2 and reducing crash recovery loss.
+    4. best_model.pth now saves full checkpoint dict (not bare state_dict),
+       making it compatible with evaluate_wt_tc_et.py --resume and the
+       post-hoc WT/TC/ET evaluation script.
+
 Metrics recorded per epoch:
     DSC        — Dice Similarity Coefficient per class (NCR/ED/NET/ET)
     HD95       — 95th-percentile Hausdorff Distance per class (mm)
@@ -34,8 +46,8 @@ from brats_utils import (
     BraTSNpzDataset,
     validate_npz_files,
     setup_logger,
-    compute_metrics,
     count_flops,
+    StreamingMetrics,
     OUT_CHANNELS,
     FG_CLASS_NAMES,
 )
@@ -59,20 +71,28 @@ class Trainer:
                 f"(fraction={fraction:.3f})"
             )
 
-        self.logger.info(f"Device       : {self.device}")
-        self.logger.info(f"Model        : Standard 3D U-Net (MONAI)")
-        self.logger.info(f"Loss         : Dice  [Baseline 1]")
-        self.logger.info(f"out_channels : {OUT_CHANNELS}  labels {{0,1,2,3,4}}")
+        self.logger.info(f"Device         : {self.device}")
+        self.logger.info(f"Model          : Standard 3D U-Net (MONAI)")
+        self.logger.info(f"Loss           : Dice  [Baseline 1]")
+        self.logger.info(f"out_channels   : {OUT_CHANNELS}")
+        self.logger.info(f"Label space    : BraTS 2024 raw {{0,1,2,3,4}}")
+        self.logger.info(f"Output dir     : {self.output_dir}")
 
         # ── Model ──────────────────────────────────────────────────────────
         self.model = UNet(
-            spatial_dims=3, in_channels=4, out_channels=OUT_CHANNELS,
-            channels=(32, 64, 128, 256), strides=(2, 2, 2), num_res_units=2,
+            spatial_dims=3,
+            in_channels=4,
+            out_channels=OUT_CHANNELS,
+            channels=(32, 64, 128, 256),
+            strides=(2, 2, 2),
+            num_res_units=2,
         ).to(self.device)
 
         # ── Loss ───────────────────────────────────────────────────────────
         self.loss_fn = DiceLoss(
-            to_onehot_y=True, softmax=True, include_background=False,
+            to_onehot_y=True,
+            softmax=True,
+            include_background=False,
         )
 
         # ── Optimizer / Scheduler ──────────────────────────────────────────
@@ -89,8 +109,8 @@ class Trainer:
         self.accum_steps = 1   # set properly in run() after OOM probe
 
         total = sum(p.numel() for p in self.model.parameters())
-        self.logger.info(f"Parameters   : {total:,}")
-        self.logger.info(f"AMP          : {'ON' if self.use_amp else 'OFF (CPU)'}")
+        self.logger.info(f"Total parameters: {total:,}")
+        self.logger.info(f"AMP             : {'ON' if self.use_amp else 'OFF (CPU)'}")
 
         # ── FLOPs (computed once at startup) ───────────────────────────────
         self.flops_giga = count_flops(
@@ -134,16 +154,12 @@ class Trainer:
     # ──────────────────────────────────────────────────────────────────────────
     def validate(self, loader: DataLoader):
         """
-        Evaluate on validation set. Computes:
-            - DSC, HD95, Sensitivity, Precision  (via compute_metrics)
-            - Validation loss
-            - Inference timing (on first call, warm-up then timed passes)
+        Evaluate on validation set using StreamingMetrics (accumulates
+        TP/FP/FN per batch, no CPU memory spike from stacking all logits).
         """
         self.model.eval()
         val_loss = 0.0
-
-        all_logits = []
-        all_labels = []
+        sm = StreamingMetrics(num_classes=OUT_CHANNELS)
 
         with torch.no_grad():
             for batch in loader:
@@ -155,44 +171,37 @@ class Trainer:
                     loss   = self.loss_fn(logits, labels)
 
                 val_loss += loss.item()
-                all_logits.append(logits.cpu())
-                all_labels.append(labels.cpu())
+                sm.add_batch(logits.cpu(), labels.cpu())
 
-        # ── Compute comprehensive metrics on CPU ────────────────────────────
-        logits_cat = torch.cat(all_logits, dim=0)
-        labels_cat = torch.cat(all_labels, dim=0)
-        m = compute_metrics(logits_cat, labels_cat)
+        m = sm.compute()
 
         # ── Inference timing (first epoch only) ────────────────────────────
         if self.inference_time_s is None:
+            torch.cuda.empty_cache()
             dummy = torch.zeros(1, 4, 128, 128, 128, device=self.device)
-
-            # Warm-up pass
-            for _ in range(10):
-                with torch.no_grad():
+            with torch.no_grad():
+                for _ in range(3):
                     _ = self.model(dummy)
-
-            # Timed passes
-            if self.device.type == "cuda":
                 torch.cuda.synchronize()
-            n_timed  = 50
-            t_start  = time.time()
-            for _ in range(n_timed):
-                with torch.no_grad():
+                n_timed = 10
+                t0 = time.time()
+                for _ in range(n_timed):
                     _ = self.model(dummy)
-            if self.device.type == "cuda":
                 torch.cuda.synchronize()
-            elapsed  = time.time() - t_start
-            self.inference_time_s = elapsed / n_timed
+            self.inference_time_s = (time.time() - t0) / n_timed
             self.logger.info(
-                f"Inference time: {self.inference_time_s*1000:.1f} ms/volume "
+                f"Inference time: {self.inference_time_s * 1000:.1f} ms/volume "
                 f"(avg over {n_timed} passes)"
             )
+            del dummy
+            torch.cuda.empty_cache()
 
         return val_loss / len(loader), m
 
     # ──────────────────────────────────────────────────────────────────────────
-    def run(self, train_files: list, val_files: list, epochs: int = 300):
+    def run(self, train_files: list, val_files: list,
+            epochs: int = 300, resume_path: str | None = None):
+
         self.logger.info("Pre-flight: validating .npz files ...")
         train_files = validate_npz_files(train_files, self.logger)
         val_files   = validate_npz_files(val_files,   self.logger)
@@ -218,7 +227,8 @@ class Trainer:
             )
             return tl, vl
 
-        # OOM probe: try bs=4 first (plain U-Net is light), fall back to bs=2+accum=2
+        # OOM probe: try bs=4 first (plain U-Net is lighter than MMSK),
+        # fall back to bs=2+accum=2 if needed
         batch_size, self.accum_steps = 4, 1
         self.logger.info(
             f"Probing batch_size={batch_size}, accum_steps={self.accum_steps} ..."
@@ -257,29 +267,61 @@ class Trainer:
             f"Accum steps    : {self.accum_steps} "
             f"(effective batch={batch_size * self.accum_steps})"
         )
+        self.logger.info(f"Starting training for {epochs} epochs")
         self.logger.info("=" * 65)
 
-        results, best_dsc = [], 0.0
-        start = time.time()
+        results     = []
+        best_dsc    = 0.0
+        start_time  = time.time()
+        start_epoch = 0
 
-        for epoch in range(epochs):
+        # ── Resume from checkpoint ─────────────────────────────────────────
+        if resume_path is not None:
+            ckpt_path = Path(resume_path)
+            if not ckpt_path.exists():
+                raise FileNotFoundError(f"Checkpoint not found: {ckpt_path}")
+            ckpt = torch.load(ckpt_path, map_location=self.device, weights_only=False)
+            if "model_state_dict" in ckpt:
+                self.model.load_state_dict(ckpt["model_state_dict"])
+                self.optimizer.load_state_dict(ckpt["optimizer_state_dict"])
+                if "scaler_state_dict" in ckpt:
+                    self.scaler.load_state_dict(ckpt["scaler_state_dict"])
+                if "scheduler_state_dict" in ckpt:
+                    self.scheduler.load_state_dict(ckpt["scheduler_state_dict"])
+                best_dsc    = ckpt.get("best_dsc", 0.0)
+                start_epoch = ckpt.get("epoch", 0) + 1
+                results     = ckpt.get("results", [])
+            else:
+                # bare state_dict (e.g. old best_model.pth from original script)
+                self.model.load_state_dict(ckpt)
+                self.logger.warning(
+                    f"Loaded raw state_dict from {ckpt_path.name} — "
+                    f"optimizer/scaler/scheduler not restored (epoch resets to 0)"
+                )
+            self.logger.info(
+                f"Resumed from   : {ckpt_path.name} | "
+                f"start_epoch={start_epoch} | best_dsc={best_dsc:.4f}"
+            )
+
+        for epoch in range(start_epoch, epochs):
             epoch_start = time.time()
             self.logger.info(f"Epoch {epoch+1}/{epochs}")
 
-            train_loss       = self.train_epoch(train_loader)
-            val_loss, m      = self.validate(val_loader)
+            train_loss  = self.train_epoch(train_loader)
+
+            torch.cuda.empty_cache()
+            val_loss, m = self.validate(val_loader)
             self.scheduler.step()
 
             epoch_time = time.time() - epoch_start
-            elapsed    = time.time() - start
+            elapsed    = time.time() - start_time
             lr         = self.optimizer.param_groups[0]["lr"]
 
-            # ── ETA estimate ──────────────────────────────────────────────
-            eta_sec  = (elapsed / (epoch + 1)) * (epochs - epoch - 1)
-            eta_h    = int(eta_sec // 3600)
-            eta_m    = int((eta_sec % 3600) // 60)
+            done    = epoch - start_epoch + 1
+            eta_sec = (elapsed / done) * (epochs - epoch - 1)
+            eta_h   = int(eta_sec // 3600)
+            eta_m   = int((eta_sec % 3600) // 60)
 
-            # ── Log epoch summary ─────────────────────────────────────────
             dsc  = m["dsc"]
             hd   = m["hd95"]
             sens = m["sensitivity"]
@@ -310,45 +352,52 @@ class Trainer:
                 f"ETA: {eta_h}h {eta_m}m | LR: {lr:.2e}"
             )
 
-            # ── Record ────────────────────────────────────────────────────
             results.append({
-                "epoch":           epoch,
-                "train_loss":      train_loss,
-                "val_loss":        val_loss,
-                "dsc_mean":        m["dsc_mean"],
-                "dsc":             dsc,
-                "hd95":            hd,
-                "sensitivity":     sens,
-                "precision":       prec,
-                "lr":              lr,
-                "epoch_time_s":    epoch_time,
-                "elapsed_hours":   elapsed / 3600,
+                "epoch":         epoch,
+                "train_loss":    train_loss,
+                "val_loss":      val_loss,
+                "dsc_mean":      m["dsc_mean"],
+                "dsc":           dsc,
+                "hd95":          hd,
+                "sensitivity":   sens,
+                "precision":     prec,
+                "lr":            lr,
+                "epoch_time_s":  epoch_time,
+                "elapsed_hours": elapsed / 3600,
             })
 
-            # ── Save best model ───────────────────────────────────────────
+            # ── Save best model (full checkpoint, resume-compatible) ───────
             if m["dsc_mean"] > best_dsc:
                 best_dsc = m["dsc_mean"]
-                torch.save(
-                    self.model.state_dict(),
-                    self.output_dir / "best_model.pth",
-                )
-                self.logger.info(f"  ✓ Best model saved (DSC={best_dsc:.4f})")
+                torch.save({
+                    "epoch":                epoch,
+                    "model_state_dict":     self.model.state_dict(),
+                    "optimizer_state_dict": self.optimizer.state_dict(),
+                    "scaler_state_dict":    self.scaler.state_dict(),
+                    "scheduler_state_dict": self.scheduler.state_dict(),
+                    "best_dsc":             best_dsc,
+                    "results":              results,
+                }, self.output_dir / "best_model.pth")
+                self.logger.info(f"  ✓ New best model saved (DSC: {best_dsc:.4f})")
 
-            # ── Periodic checkpoint ───────────────────────────────────────
-            if (epoch + 1) % 50 == 0:
+            # ── Periodic checkpoint every 10 epochs ───────────────────────
+            if (epoch + 1) % 10 == 0:
                 ckpt = self.output_dir / f"checkpoint_epoch{epoch+1}.pth"
                 torch.save({
                     "epoch":                epoch,
                     "model_state_dict":     self.model.state_dict(),
                     "optimizer_state_dict": self.optimizer.state_dict(),
+                    "scaler_state_dict":    self.scaler.state_dict(),
+                    "scheduler_state_dict": self.scheduler.state_dict(),
                     "best_dsc":             best_dsc,
+                    "results":              results,
                 }, ckpt)
-                self.logger.info(f"  Checkpoint → {ckpt.name}")
+                self.logger.info(f"  Checkpoint saved → {ckpt.name}")
 
             self.logger.info("-" * 65)
 
         # ── Final summary ──────────────────────────────────────────────────
-        total_time   = time.time() - start
+        total_time   = time.time() - start_time
         best_epoch_r = max(results, key=lambda x: x["dsc_mean"])
 
         with open(self.output_dir / "results.json", "w") as f:
@@ -377,7 +426,9 @@ class Trainer:
             }, f, indent=2)
 
         self.logger.info("=" * 65)
-        self.logger.info(f"Done — Best Mean DSC: {best_dsc:.4f} (epoch {best_epoch_r['epoch']+1})")
+        self.logger.info("Training complete! [Baseline 1: 3D U-Net + Dice]")
+        self.logger.info(f"Best Mean DSC : {best_dsc:.4f}  (epoch {best_epoch_r['epoch']+1})")
+        self.logger.info(f"Total time    : {total_time/3600:.2f} hours")
         if self.inference_time_s is not None:
             self.logger.info(f"Inference     : {self.inference_time_s*1000:.1f} ms/volume")
         self.logger.info("=" * 65)
@@ -393,6 +444,8 @@ if __name__ == "__main__":
     p.add_argument("--output_dir",   type=str,   default="./output_baseline1")
     p.add_argument("--epochs",       type=int,   default=300)
     p.add_argument("--vram_gb",      type=float, default=20.0)
+    p.add_argument("--resume",       type=str,   default=None,
+                   help="Path to checkpoint .pth to resume from")
     args = p.parse_args()
 
     with open(args.dataset_json) as f:
@@ -400,4 +453,5 @@ if __name__ == "__main__":
 
     Trainer(args.gpu, args.output_dir, vram_gb=args.vram_gb).run(
         ds["train"], ds["val"], args.epochs,
+        resume_path=args.resume,
     )
