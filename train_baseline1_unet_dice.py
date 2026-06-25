@@ -130,6 +130,13 @@ class Trainer:
             inputs = batch["image"].to(self.device)
             labels = batch["label"].to(self.device)
 
+            # guard label: cegah index-out-of-bounds di one_hot/scatter_
+            labels = labels.long().clamp_(0, 4)
+
+            with torch.amp.autocast(device_type="cuda", enabled=self.use_amp):
+                outputs = self.model(inputs)
+                loss    = self.loss_fn(outputs, labels) / self.accum_steps
+
             with torch.amp.autocast(device_type="cuda", enabled=self.use_amp):
                 outputs = self.model(inputs)
                 loss    = self.loss_fn(outputs, labels) / self.accum_steps
@@ -166,6 +173,13 @@ class Trainer:
                 inputs = batch["image"].to(self.device)
                 labels = batch["label"].to(self.device)
 
+                # guard label: cegah index-out-of-bounds di one_hot/scatter_
+                labels = labels.long().clamp_(0, 4)
+
+                with torch.amp.autocast(device_type="cuda", enabled=self.use_amp):
+                    outputs = self.model(inputs)
+                    loss    = self.loss_fn(outputs, labels) / self.accum_steps
+
                 with torch.amp.autocast(device_type="cuda", enabled=self.use_amp):
                     logits = self.model(inputs)
                     loss   = self.loss_fn(logits, labels)
@@ -200,7 +214,8 @@ class Trainer:
 
     # ──────────────────────────────────────────────────────────────────────────
     def run(self, train_files: list, val_files: list,
-            epochs: int = 300, resume_path: str | None = None):
+            epochs: int = 300, resume_path: str | None = None,
+            num_workers: int = 4):
 
         self.logger.info("Pre-flight: validating .npz files ...")
         train_files = validate_npz_files(train_files, self.logger)
@@ -219,11 +234,14 @@ class Trainer:
         def make_loaders(bs):
             tl = DataLoader(
                 train_ds, batch_size=bs, shuffle=True,
-                num_workers=4, pin_memory=True, drop_last=True,
+                num_workers=num_workers, pin_memory=(num_workers > 0),
+                drop_last=True,
+                persistent_workers=(num_workers > 0),
             )
             vl = DataLoader(
                 val_ds, batch_size=1, shuffle=False,
-                num_workers=4, pin_memory=True,
+                num_workers=num_workers, pin_memory=(num_workers > 0),
+                persistent_workers=(num_workers > 0),
             )
             return tl, vl
 
@@ -446,6 +464,10 @@ if __name__ == "__main__":
     p.add_argument("--vram_gb",      type=float, default=20.0)
     p.add_argument("--resume",       type=str,   default=None,
                    help="Path to checkpoint .pth to resume from")
+    p.add_argument("--num_workers",  type=int,   default=4,
+                   help="DataLoader worker processes. Use 0 to disable "
+                        "multiprocessing (safest on shared servers, "
+                        "slower but eliminates segfault from worker crashes)")
     args = p.parse_args()
 
     with open(args.dataset_json) as f:
@@ -454,4 +476,5 @@ if __name__ == "__main__":
     Trainer(args.gpu, args.output_dir, vram_gb=args.vram_gb).run(
         ds["train"], ds["val"], args.epochs,
         resume_path=args.resume,
+        num_workers=args.num_workers,
     )
