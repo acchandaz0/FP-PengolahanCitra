@@ -23,3 +23,14 @@
 2026-06-22 16:16:39 | INFO     |   TC: DSC=0.0140 HD95=95.27mm Sens=0.6192 Prec=0.0072 (n_valid=269/269)
 2026-06-22 16:16:39 | INFO     |   ET: DSC=0.3807 HD95=15.84mm Sens=0.5734 Prec=0.4986 (n_valid=269/269)
 2026-06-22 16:16:39 | INFO     | Saved results -> /home/mci/arsyadl/mmsk/results/wt_tc_et_eval/Baseline1_wt_tc_et.json
+2026-07-01 12:08:28 | INFO     | Log file: results/wt_tc_et_eval/train.log
+2026-07-01 12:08:28 | INFO     | Device: cuda:0
+2026-07-01 12:08:28 | INFO     | Variant: Ablasi1  |  Architecture: sk
+2026-07-01 12:08:28 | ERROR    | Checkpoint not found: FP-PengolahanCitra/results/ablation1_sk_tversky/best_model.pth
+2026-07-01 12:09:39 | INFO     | Log file: results/wt_tc_et_eval/train.log
+2026-07-01 12:09:39 | INFO     | Device: cuda:0
+2026-07-01 12:09:39 | INFO     | Variant: Ablasi1  |  Architecture: sk
+2026-07-01 12:09:39 | ERROR    | Checkpoint not found: FP-PengolahanCitra/results/ablation1_sk_tversky/best_model.pth
+2026-07-01 12:10:59 | INFO     | Log file: results/wt_tc_et_eval/train.log
+2026-07-01 12:10:59 | INFO     | Device: cuda:0
+2026-07-01 12:10:59 | INFO     | Variant: Ablasi1  |  Architecture: sk
