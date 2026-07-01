@@ -11,24 +11,20 @@ Ablation Study Role:
     Baseline 1 vs Proposed (MMSK + Tversky)
     → Full system gain (architecture + loss combined).
 
-Fixes vs original baseline1 script:
-    1. Added --resume flag + full checkpoint saving (model + optimizer +
-       scaler + scheduler + best_dsc + epoch + results), matching Ablation 2.
-    2. Replaced compute_metrics() (stacks all 269 logits on CPU, ~14 GB)
-       with StreamingMetrics (accumulates TP/FP/FN per batch), matching
-       Ablation 2 and preventing CPU OOM during validation.
-    3. Periodic checkpoint frequency changed from every 50 to every 10
-       epochs, matching Ablation 2 and reducing crash recovery loss.
-    4. best_model.pth now saves full checkpoint dict (not bare state_dict),
-       making it compatible with evaluate_wt_tc_et.py --resume and the
-       post-hoc WT/TC/ET evaluation script.
+BUGFIX vs the previous version
+------------------------------
+The previous train_epoch() and validate() each ran the forward pass + loss
+TWICE (two identical `with autocast(...)` blocks back-to-back). That:
+    * doubled compute (slower epochs), and
+    * in train_epoch, built the graph twice while backprop/accounting used a
+      mix of the two — corrupting the gradient step and the logged loss.
+Each now runs the forward pass exactly ONCE. If your existing B1 checkpoint
+was trained with the buggy version, retrain or at least treat its collapse
+with caution (it may be partly an artifact of the double-forward, not purely
+a Dice-loss collapse).
 
 Metrics recorded per epoch:
-    DSC        — Dice Similarity Coefficient per class (NCR/ED/NET/ET)
-    HD95       — 95th-percentile Hausdorff Distance per class (mm)
-    Sensitivity— Recall per class
-    Precision  — Positive predictive value per class
-
+    DSC, HD95, Sensitivity, Precision per class (NCR/ED/NET/ET)
 Also recorded in results.json:
     FLOPs (GFLOPs), parameter count, inference time, training time
 """
@@ -133,10 +129,7 @@ class Trainer:
             # guard label: cegah index-out-of-bounds di one_hot/scatter_
             labels = labels.long().clamp_(0, 4)
 
-            with torch.amp.autocast(device_type="cuda", enabled=self.use_amp):
-                outputs = self.model(inputs)
-                loss    = self.loss_fn(outputs, labels) / self.accum_steps
-
+            # ── single forward + loss (no duplicate block) ──
             with torch.amp.autocast(device_type="cuda", enabled=self.use_amp):
                 outputs = self.model(inputs)
                 loss    = self.loss_fn(outputs, labels) / self.accum_steps
@@ -176,10 +169,7 @@ class Trainer:
                 # guard label: cegah index-out-of-bounds di one_hot/scatter_
                 labels = labels.long().clamp_(0, 4)
 
-                with torch.amp.autocast(device_type="cuda", enabled=self.use_amp):
-                    outputs = self.model(inputs)
-                    loss    = self.loss_fn(outputs, labels) / self.accum_steps
-
+                # ── single forward + loss (no duplicate block) ──
                 with torch.amp.autocast(device_type="cuda", enabled=self.use_amp):
                     logits = self.model(inputs)
                     loss   = self.loss_fn(logits, labels)
@@ -256,9 +246,10 @@ class Trainer:
         self.model.train()
         try:
             _b = next(iter(train_loader))
+            _labels = _b["label"].to(self.device).long().clamp_(0, 4)
             with torch.amp.autocast(device_type="cuda", enabled=self.use_amp):
                 _out  = self.model(_b["image"].to(self.device))
-                _loss = self.loss_fn(_out, _b["label"].to(self.device)) / self.accum_steps
+                _loss = self.loss_fn(_out, _labels) / self.accum_steps
             self.scaler.scale(_loss).backward()
             self.scaler.step(self.optimizer)
             self.scaler.update()

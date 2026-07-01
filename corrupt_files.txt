@@ -1,0 +1,5 @@
+/home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-02062-100.npz
+/home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-02242-101.npz
+/home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-02548-101.npz
+/home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-02768-100.npz
+/home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-03026-101.npz

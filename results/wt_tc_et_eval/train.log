@@ -23,3 +23,148 @@
 2026-06-22 16:16:39 | INFO     |   TC: DSC=0.0140 HD95=95.27mm Sens=0.6192 Prec=0.0072 (n_valid=269/269)
 2026-06-22 16:16:39 | INFO     |   ET: DSC=0.3807 HD95=15.84mm Sens=0.5734 Prec=0.4986 (n_valid=269/269)
 2026-06-22 16:16:39 | INFO     | Saved results -> /home/mci/arsyadl/mmsk/results/wt_tc_et_eval/Baseline1_wt_tc_et.json
+2026-06-25 15:42:40 | INFO     | Log file: /home/mci/arsyadl/mmsk/results/wt_tc_et_eval/train.log
+2026-06-25 15:42:40 | INFO     | Device: cuda:0
+2026-06-25 15:42:40 | INFO     | Variant: Baseline1  |  Architecture: unet
+2026-06-25 15:42:43 | INFO     | Loaded checkpoint from epoch 142
+2026-06-25 15:42:43 | INFO     | [Validation] Scanning 269 .npz files ...
+2026-06-25 15:42:43 | DEBUG    |   [1/269] OK: BraTS-GLI-02405-100.npz
+2026-06-25 15:42:53 | DEBUG    |   [101/269] OK: BraTS-GLI-02507-101.npz
+2026-06-25 15:43:04 | DEBUG    |   [201/269] OK: BraTS-GLI-02584-101.npz
+2026-06-25 15:43:11 | INFO     | [Validation] 269 healthy, 0 dropped.
+2026-06-25 15:43:11 | INFO     | Validation cases: 269
+2026-06-25 15:43:11 | INFO     | Starting WT/TC/ET evaluation ...
+2026-06-25 15:45:46 | INFO     |   Evaluated 25/269 cases
+2026-06-25 15:48:52 | INFO     |   Evaluated 50/269 cases
+2026-06-25 15:51:50 | INFO     |   Evaluated 75/269 cases
+2026-06-25 15:54:53 | INFO     |   Evaluated 100/269 cases
+2026-06-25 15:57:37 | INFO     |   Evaluated 125/269 cases
+2026-06-25 16:00:09 | INFO     |   Evaluated 150/269 cases
+2026-06-25 16:02:39 | INFO     |   Evaluated 175/269 cases
+2026-06-25 16:05:09 | INFO     |   Evaluated 200/269 cases
+2026-06-25 16:06:57 | INFO     |   Evaluated 225/269 cases
+2026-06-25 16:09:29 | INFO     |   Evaluated 250/269 cases
+2026-06-25 16:10:46 | INFO     |   WT: DSC=0.0634 HD95=83.29mm Sens=0.8623 Prec=0.0337 (n_valid=269/269)
+2026-06-25 16:10:46 | INFO     |   TC: DSC=0.0142 HD95=95.28mm Sens=0.6276 Prec=0.0073 (n_valid=269/269)
+2026-06-25 16:10:46 | INFO     |   ET: DSC=0.5017 HD95=9.64mm Sens=0.6247 Prec=0.6611 (n_valid=269/269)
+2026-06-25 16:10:46 | INFO     | Saved results -> /home/mci/arsyadl/mmsk/results/wt_tc_et_eval/Baseline1_wt_tc_et.json
+2026-06-25 16:12:18 | INFO     | Log file: /home/mci/arsyadl/mmsk/results/wt_tc_et_eval/train.log
+2026-06-25 16:12:18 | INFO     | Device: cuda:0
+2026-06-25 16:12:18 | INFO     | Variant: Baseline2  |  Architecture: unet
+2026-06-25 16:12:20 | INFO     | Loaded checkpoint from epoch 254
+2026-06-25 16:12:20 | INFO     | [Validation] Scanning 269 .npz files ...
+2026-06-25 16:12:20 | DEBUG    |   [1/269] OK: BraTS-GLI-02405-100.npz
+2026-06-25 16:12:30 | DEBUG    |   [101/269] OK: BraTS-GLI-02507-101.npz
+2026-06-25 16:12:40 | DEBUG    |   [201/269] OK: BraTS-GLI-02584-101.npz
+2026-06-25 16:12:47 | INFO     | [Validation] 269 healthy, 0 dropped.
+2026-06-25 16:12:47 | INFO     | Validation cases: 269
+2026-06-25 16:12:47 | INFO     | Starting WT/TC/ET evaluation ...
+2026-06-25 16:12:51 | INFO     |   Evaluated 25/269 cases
+2026-06-25 16:12:56 | INFO     |   Evaluated 50/269 cases
+2026-06-25 16:13:00 | INFO     |   Evaluated 75/269 cases
+2026-06-25 16:13:05 | INFO     |   Evaluated 100/269 cases
+2026-06-25 16:13:09 | INFO     |   Evaluated 125/269 cases
+2026-06-25 16:13:13 | INFO     |   Evaluated 150/269 cases
+2026-06-25 16:13:16 | INFO     |   Evaluated 175/269 cases
+2026-06-25 16:13:20 | INFO     |   Evaluated 200/269 cases
+2026-06-25 16:13:23 | INFO     |   Evaluated 225/269 cases
+2026-06-25 16:13:27 | INFO     |   Evaluated 250/269 cases
+2026-06-25 16:13:29 | INFO     |   WT: DSC=0.8235 HD95=7.39mm Sens=0.8539 Prec=0.8102 (n_valid=269/269)
+2026-06-25 16:13:29 | INFO     |   TC: DSC=0.7691 HD95=4.45mm Sens=0.7830 Prec=0.8465 (n_valid=269/269)
+2026-06-25 16:13:29 | INFO     |   ET: DSC=0.5505 HD95=7.68mm Sens=0.6624 Prec=0.6993 (n_valid=269/269)
+2026-06-25 16:13:29 | INFO     | Saved results -> /home/mci/arsyadl/mmsk/results/wt_tc_et_eval/Baseline2_wt_tc_et.json
+2026-06-25 17:10:21 | INFO     | Log file: /home/mci/arsyadl/mmsk/results/wt_tc_et_eval/train.log
+2026-06-25 17:10:21 | INFO     | Device: cuda:0
+2026-06-25 17:10:21 | INFO     | Variant: Proposed  |  Architecture: mmsk
+2026-06-25 17:10:21 | INFO     | Loaded checkpoint from epoch 26
+2026-06-25 17:10:21 | INFO     | [Validation] Scanning 269 .npz files ...
+2026-06-25 17:10:21 | DEBUG    |   [1/269] OK: BraTS-GLI-02405-100.npz
+2026-06-25 17:10:31 | DEBUG    |   [101/269] OK: BraTS-GLI-02507-101.npz
+2026-06-25 17:10:41 | DEBUG    |   [201/269] OK: BraTS-GLI-02584-101.npz
+2026-06-25 17:10:48 | INFO     | [Validation] 269 healthy, 0 dropped.
+2026-06-25 17:10:48 | INFO     | Validation cases: 269
+2026-06-25 17:10:48 | INFO     | Starting WT/TC/ET evaluation ...
+2026-06-25 19:55:02 | INFO     | Log file: /home/mci/arsyadl/mmsk/results/wt_tc_et_eval/train.log
+2026-06-25 19:55:02 | INFO     | Device: cuda:0
+2026-06-25 19:55:02 | INFO     | Variant: Proposed  |  Architecture: mmsk
+2026-06-25 19:55:02 | ERROR    | Checkpoint not found: /home/mci/arsyadl/mmsk/results/proposed_mmsk_tversky/hasil/best_model.pth
+2026-06-25 19:55:41 | INFO     | Log file: /home/mci/arsyadl/mmsk/results/wt_tc_et_eval/train.log
+2026-06-25 19:55:41 | INFO     | Device: cuda:0
+2026-06-25 19:55:41 | INFO     | Variant: Proposed  |  Architecture: mmsk
+2026-06-25 19:55:42 | INFO     | Loaded checkpoint from epoch 26
+2026-06-25 19:55:42 | INFO     | [Validation] Scanning 269 .npz files ...
+2026-06-25 19:55:42 | DEBUG    |   [1/269] OK: BraTS-GLI-02405-100.npz
+2026-06-25 19:55:52 | DEBUG    |   [101/269] OK: BraTS-GLI-02507-101.npz
+2026-06-25 19:56:02 | DEBUG    |   [201/269] OK: BraTS-GLI-02584-101.npz
+2026-06-25 19:56:08 | INFO     | [Validation] 269 healthy, 0 dropped.
+2026-06-25 19:56:08 | INFO     | Validation cases: 269
+2026-06-25 19:56:08 | INFO     | Starting WT/TC/ET evaluation ...
+2026-06-25 19:56:23 | INFO     |   Evaluated 25/269 cases
+2026-06-25 19:56:37 | INFO     |   Evaluated 50/269 cases
+2026-06-25 19:56:52 | INFO     |   Evaluated 75/269 cases
+2026-06-25 19:57:06 | INFO     |   Evaluated 100/269 cases
+2026-06-25 19:57:20 | INFO     |   Evaluated 125/269 cases
+2026-06-25 19:57:34 | INFO     |   Evaluated 150/269 cases
+2026-06-25 19:57:47 | INFO     |   Evaluated 175/269 cases
+2026-06-25 19:58:01 | INFO     |   Evaluated 200/269 cases
+2026-06-25 19:58:14 | INFO     |   Evaluated 225/269 cases
+2026-06-25 19:58:29 | INFO     |   Evaluated 250/269 cases
+2026-06-25 19:58:39 | INFO     |   WT: DSC=0.7883 HD95=9.96mm Sens=0.8379 Prec=0.7800 (n_valid=269/269)
+2026-06-25 19:58:39 | INFO     |   TC: DSC=0.7139 HD95=7.93mm Sens=0.7592 Prec=0.7777 (n_valid=269/269)
+2026-06-25 19:58:39 | INFO     |   ET: DSC=0.4824 HD95=13.07mm Sens=0.5830 Prec=0.6908 (n_valid=269/269)
+2026-06-25 19:58:39 | INFO     | Saved results -> /home/mci/arsyadl/mmsk/results/wt_tc_et_eval/Proposed_wt_tc_et.json
+2026-06-28 14:24:34 | INFO     | Log file: /home/mci/arsyadl/mmsk/results/wt_tc_et_eval/train.log
+2026-06-28 14:24:34 | INFO     | Device: cuda:0
+2026-06-28 14:24:34 | INFO     | Variant: Baseline 1  |  Architecture: unet
+2026-06-28 14:24:34 | WARNING  | --log-gate requested but architecture != 'mmsk'; no Select attention exists for this architecture. Disabling.
+2026-06-28 14:24:38 | INFO     | Loaded checkpoint from epoch 155
+2026-06-28 14:24:38 | INFO     | [Validation] Scanning 269 .npz files ...
+2026-06-28 14:24:38 | DEBUG    |   [1/269] OK: BraTS-GLI-02405-100.npz
+2026-06-28 14:24:49 | DEBUG    |   [101/269] OK: BraTS-GLI-02507-101.npz
+2026-06-28 14:24:59 | DEBUG    |   [201/269] OK: BraTS-GLI-02584-101.npz
+2026-06-28 14:25:06 | INFO     | [Validation] 269 healthy, 0 dropped.
+2026-06-28 14:25:06 | INFO     | Validation cases: 269
+2026-06-28 14:25:06 | INFO     | Starting WT/TC/ET evaluation ...
+2026-06-28 14:27:42 | INFO     |   Evaluated 25/269 cases
+2026-06-28 14:30:49 | INFO     |   Evaluated 50/269 cases
+2026-06-28 14:33:47 | INFO     |   Evaluated 75/269 cases
+2026-06-28 14:35:23 | INFO     | Log file: /home/mci/arsyadl/mmsk/results/wt_tc_et_eval/train.log
+2026-06-28 14:35:23 | INFO     | Device: cuda:0
+2026-06-28 14:35:23 | INFO     | Variant: Baseline 2  |  Architecture: unet
+2026-06-28 14:35:23 | WARNING  | --log-gate requested but architecture != 'mmsk'; no Select attention exists for this architecture. Disabling.
+2026-06-28 14:35:26 | INFO     | Loaded checkpoint from epoch 254
+2026-06-28 14:35:26 | INFO     | [Validation] Scanning 269 .npz files ...
+2026-06-28 14:35:26 | DEBUG    |   [1/269] OK: BraTS-GLI-02405-100.npz
+2026-06-28 14:35:36 | DEBUG    |   [101/269] OK: BraTS-GLI-02507-101.npz
+2026-06-28 14:35:46 | DEBUG    |   [201/269] OK: BraTS-GLI-02584-101.npz
+2026-06-28 14:35:53 | INFO     | [Validation] 269 healthy, 0 dropped.
+2026-06-28 14:35:53 | INFO     | Validation cases: 269
+2026-06-28 14:35:53 | INFO     | Starting WT/TC/ET evaluation ...
+2026-06-28 14:35:57 | INFO     |   Evaluated 25/269 cases
+2026-06-28 14:36:01 | INFO     |   Evaluated 50/269 cases
+2026-06-28 14:36:06 | INFO     |   Evaluated 75/269 cases
+2026-06-28 14:36:11 | INFO     |   Evaluated 100/269 cases
+2026-06-28 14:36:15 | INFO     |   Evaluated 125/269 cases
+2026-06-28 14:36:19 | INFO     |   Evaluated 150/269 cases
+2026-06-28 14:36:22 | INFO     |   Evaluated 175/269 cases
+2026-06-28 14:36:26 | INFO     |   Evaluated 200/269 cases
+2026-06-28 14:36:29 | INFO     |   Evaluated 225/269 cases
+2026-06-28 14:36:33 | INFO     |   Evaluated 250/269 cases
+2026-06-28 14:36:35 | INFO     |   WT: DSC macro=0.8235 / micro=0.9151  |  Sens macro=0.8539 / micro=0.9353  |  Prec macro=0.8102 / micro=0.8957  |  HD95 macro=7.39mm  (present=269/269, empty=0)
+2026-06-28 14:36:35 | INFO     |   TC: DSC macro=0.7691 / micro=0.8896  |  Sens macro=0.7798 / micro=0.8876  |  Prec macro=0.8355 / micro=0.8916  |  HD95 macro=4.40mm  (present=265/269, empty=4)
+2026-06-28 14:36:35 | INFO     |   ET: DSC macro=0.5505 / micro=0.8024  |  Sens macro=0.5872 / micro=0.7952  |  Prec macro=0.6185 / micro=0.8098  |  HD95 macro=6.64mm  (present=220/269, empty=49)
+2026-06-28 14:36:35 | INFO     | Saved results -> /home/mci/arsyadl/mmsk/results/wt_tc_et_eval/Baseline 2_wt_tc_et.json
+2026-06-28 14:36:51 | INFO     |   Evaluated 100/269 cases
+2026-06-28 14:39:36 | INFO     |   Evaluated 125/269 cases
+2026-06-28 14:42:08 | INFO     |   Evaluated 150/269 cases
+2026-06-28 14:44:37 | INFO     |   Evaluated 175/269 cases
+2026-06-28 14:44:44 | INFO     | Log file: /home/mci/arsyadl/mmsk/results/wt_tc_et_eval/train.log
+2026-06-28 14:44:44 | INFO     | Device: cuda:0
+2026-06-28 14:44:44 | INFO     | Variant: Ablation 2  |  Architecture: mmsk
+2026-06-28 14:47:06 | INFO     |   Evaluated 200/269 cases
+2026-06-28 14:48:53 | INFO     |   Evaluated 225/269 cases
+2026-06-28 14:51:24 | INFO     |   Evaluated 250/269 cases
+2026-06-28 14:52:40 | INFO     |   WT: DSC macro=0.0632 / micro=0.0654  |  Sens macro=0.8577 / micro=0.8913  |  Prec macro=0.0336 / micro=0.0340  |  HD95 macro=83.25mm  (present=269/269, empty=0)
+2026-06-28 14:52:40 | INFO     |   TC: DSC macro=0.0145 / micro=0.0146  |  Sens macro=0.6409 / micro=0.6702  |  Prec macro=0.0074 / micro=0.0074  |  HD95 macro=95.23mm  (present=265/269, empty=4)
+2026-06-28 14:52:40 | INFO     |   ET: DSC macro=0.4962 / micro=0.7942  |  Sens macro=0.5827 / micro=0.7768  |  Prec macro=0.5902 / micro=0.8125  |  HD95 macro=9.46mm  (present=221/269, empty=48)
+2026-06-28 14:52:40 | INFO     | Saved results -> /home/mci/arsyadl/mmsk/results/wt_tc_et_eval/Baseline 1_wt_tc_et.json
