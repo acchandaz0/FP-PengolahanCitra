@@ -1,1 +1,1 @@
-python train_ablation2_mmsk_dice.py --dataset_json dataset.json --epochs 300 --output_dir ./results/ablation2_mmsk_dice --vram_gb 14 --resume ./results/ablation2_mmsk_dice/checkpoint_epoch70.pth
+CUDA_LAUNCH_BLOCKING=1 python train_proposed_mmsk_tversky.py --dataset_json dataset.json --epochs 300 --output_dir ./results/proposed_mmsk_tversky --resume ./results/proposed_mmsk_tversky/best_model.pth

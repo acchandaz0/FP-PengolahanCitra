@@ -1,0 +1,36 @@
+2026-06-22 15:48:34 | INFO     | Log file: /home/mci/arsyadl/mmsk/results/wt_tc_et_eval/train.log
+2026-06-22 15:48:34 | INFO     | Device: cuda:0
+2026-06-22 15:48:34 | INFO     | Variant: Baseline1  |  Architecture: unet
+2026-06-22 15:48:37 | INFO     | Loaded checkpoint from epoch 7
+2026-06-22 15:48:37 | INFO     | [Validation] Scanning 269 .npz files ...
+2026-06-22 15:48:37 | DEBUG    |   [1/269] OK: BraTS-GLI-02405-100.npz
+2026-06-22 15:48:47 | DEBUG    |   [101/269] OK: BraTS-GLI-02507-101.npz
+2026-06-22 15:48:57 | DEBUG    |   [201/269] OK: BraTS-GLI-02584-101.npz
+2026-06-22 15:49:04 | INFO     | [Validation] 269 healthy, 0 dropped.
+2026-06-22 15:49:04 | INFO     | Validation cases: 269
+2026-06-22 15:49:04 | INFO     | Starting WT/TC/ET evaluation ...
+2026-06-22 15:51:40 | INFO     |   Evaluated 25/269 cases
+2026-06-22 15:54:45 | INFO     |   Evaluated 50/269 cases
+2026-06-22 15:57:44 | INFO     |   Evaluated 75/269 cases
+2026-06-22 16:00:47 | INFO     |   Evaluated 100/269 cases
+2026-06-22 16:03:32 | INFO     |   Evaluated 125/269 cases
+2026-06-22 16:06:04 | INFO     |   Evaluated 150/269 cases
+2026-06-22 16:08:34 | INFO     |   Evaluated 175/269 cases
+2026-06-22 16:11:03 | INFO     |   Evaluated 200/269 cases
+2026-06-22 16:12:50 | INFO     |   Evaluated 225/269 cases
+2026-06-22 16:15:22 | INFO     |   Evaluated 250/269 cases
+2026-06-22 16:16:39 | INFO     |   WT: DSC=0.0637 HD95=83.29mm Sens=0.8723 Prec=0.0339 (n_valid=269/269)
+2026-06-22 16:16:39 | INFO     |   TC: DSC=0.0140 HD95=95.27mm Sens=0.6192 Prec=0.0072 (n_valid=269/269)
+2026-06-22 16:16:39 | INFO     |   ET: DSC=0.3807 HD95=15.84mm Sens=0.5734 Prec=0.4986 (n_valid=269/269)
+2026-06-22 16:16:39 | INFO     | Saved results -> /home/mci/arsyadl/mmsk/results/wt_tc_et_eval/Baseline1_wt_tc_et.json
+2026-07-01 12:08:28 | INFO     | Log file: results/wt_tc_et_eval/train.log
+2026-07-01 12:08:28 | INFO     | Device: cuda:0
+2026-07-01 12:08:28 | INFO     | Variant: Ablasi1  |  Architecture: sk
+2026-07-01 12:08:28 | ERROR    | Checkpoint not found: FP-PengolahanCitra/results/ablation1_sk_tversky/best_model.pth
+2026-07-01 12:09:39 | INFO     | Log file: results/wt_tc_et_eval/train.log
+2026-07-01 12:09:39 | INFO     | Device: cuda:0
+2026-07-01 12:09:39 | INFO     | Variant: Ablasi1  |  Architecture: sk
+2026-07-01 12:09:39 | ERROR    | Checkpoint not found: FP-PengolahanCitra/results/ablation1_sk_tversky/best_model.pth
+2026-07-01 12:10:59 | INFO     | Log file: results/wt_tc_et_eval/train.log
+2026-07-01 12:10:59 | INFO     | Device: cuda:0
+2026-07-01 12:10:59 | INFO     | Variant: Ablasi1  |  Architecture: sk

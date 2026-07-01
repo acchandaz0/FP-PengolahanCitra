@@ -1,0 +1,69 @@
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.cudart module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.runtime module instead.
+2026-06-19 13:52:33 | INFO     | Log file: results/proposed_mmsk_tversky/train.log
+2026-06-19 13:52:33 | INFO     | VRAM cap       : 20 GB / 51 GB (fraction=0.394)
+2026-06-19 13:52:33 | INFO     | Device         : cuda:0
+2026-06-19 13:52:33 | INFO     | Model          : MMSK-3D U-Net (cross-modal gating)
+2026-06-19 13:52:33 | INFO     | Loss           : Tversky (α=0.3, β=0.7)   [PROPOSED]
+2026-06-19 13:52:33 | INFO     | out_channels   : 5
+2026-06-19 13:52:33 | INFO     | Label space    : BraTS 2024 raw {0,1,2,3,4}
+2026-06-19 13:52:33 | INFO     | Output dir     : results/proposed_mmsk_tversky
+2026-06-19 13:52:33 | INFO     | Total parameters: 11,838,757
+2026-06-19 13:52:33 | INFO     | AMP             : ON
+2026-06-19 13:52:33 | WARNING  | FLOPs: skipped — fvcore/thop unavailable or incompatible (compiled model?). Set to -1.0.
+2026-06-19 13:52:33 | INFO     | Pre-flight: validating .npz files ...
+2026-06-19 13:52:33 | INFO     | [Validation] Scanning 1344 .npz files ...
+2026-06-19 13:54:26 | WARNING  | [CORRUPT] BraTS-GLI-02890-101.npz -> Bad CRC-32 for file 'images.npy'
+2026-06-19 13:54:54 | INFO     | [Validation] 1343 healthy, 1 dropped.
+2026-06-19 13:54:54 | WARNING  |   x /home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-02890-101.npz  (Bad CRC-32 for file 'images.npy')
+2026-06-19 13:54:54 | INFO     | [Validation] Scanning 269 .npz files ...
+2026-06-19 13:55:04 | WARNING  | [CORRUPT] BraTS-GLI-02505-100.npz -> Bad CRC-32 for file 'images.npy'
+2026-06-19 13:55:21 | INFO     | [Validation] 268 healthy, 1 dropped.
+2026-06-19 13:55:21 | WARNING  |   x /home/mci/arsyadl/braTS/preprocessed_test/BraTS-GLI-02505-100.npz  (Bad CRC-32 for file 'images.npy')
+2026-06-19 13:55:21 | INFO     | Probing batch_size=2, accum_steps=2 ...
+2026-06-19 13:55:23 | INFO     | Probe OK — bs=2, accum=2, effective_batch=4
+2026-06-19 13:55:23 | INFO     | Train batches  : 671 (bs=2)
+2026-06-19 13:55:23 | INFO     | Val batches    : 268
+2026-06-19 13:55:23 | INFO     | Accum steps    : 2 (effective batch=4)
+2026-06-19 13:55:23 | INFO     | Starting training for 300 epochs
+2026-06-19 13:55:23 | INFO     | ============================================================
+2026-06-19 13:55:24 | INFO     | Resumed from best_model.pth | epoch=26 | best_dsc=0.7643
+2026-06-19 13:55:24 | INFO     | Epoch 27/300
+Load failed [614] /home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-02336-100.npz: Bad CRC-32 for file 'images.npy'
+/home/mci/arsyadl/pytan/venv/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py:52: RuntimeWarning: Bad CRC-32 for file 'images.npy'
+  data = [self.dataset[idx] for idx in possibly_batched_index]
+Load failed [152] /home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-02085-100.npz: Bad CRC-32 for file 'images.npy'
+/home/mci/arsyadl/pytan/venv/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py:52: RuntimeWarning: Bad CRC-32 for file 'images.npy'
+  data = [self.dataset[idx] for idx in possibly_batched_index]
+2026-06-19 14:06:04 | INFO     | Inference time: 387.1 ms/volume (avg over 10 passes)
+2026-06-19 14:06:04 | INFO     |   Train Loss: 0.3094 | Val Loss: 0.3554 | Mean DSC: 0.7422
+2026-06-19 14:06:04 | INFO     |   DSC   NCR/ED/NET/ET : 0.5409 / 0.8545 / 0.8427 / 0.7306
+2026-06-19 14:06:04 | INFO     |   HD95  NCR/ED/NET/ET : 9.64 / 10.27 / 7.34 / 14.88  mm
+2026-06-19 14:06:04 | INFO     |   Sens  NCR/ED/NET/ET : 0.4007 / 0.8719 / 0.8781 / 0.8078
+2026-06-19 14:06:04 | INFO     |   Prec  NCR/ED/NET/ET : 0.8319 / 0.8378 / 0.8101 / 0.6669
+2026-06-19 14:06:04 | INFO     |   Time: 640.1s | Elapsed: 0.18h | ETA: 48h 33m | LR: 9.80e-05
+2026-06-19 14:06:04 | INFO     | ------------------------------------------------------------
+2026-06-19 14:06:04 | INFO     | Epoch 28/300
+Load failed [381] /home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-02185-102.npz: Bad CRC-32 for file 'images.npy'
+/home/mci/arsyadl/pytan/venv/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py:52: RuntimeWarning: Bad CRC-32 for file 'images.npy'
+  data = [self.dataset[idx] for idx in possibly_batched_index]
+Load failed [614] /home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-02336-100.npz: Bad CRC-32 for file 'images.npy'
+2026-06-19 14:10:00 | WARNING  | Batch 304: Out-of-bounds label detected! Min=0, Max=128. Clamping.
+Load failed [1302] /home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-03028-100.npz: Bad CRC-32 for file 'images.npy'
+/home/mci/arsyadl/pytan/venv/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py:52: RuntimeWarning: Bad CRC-32 for file 'images.npy'
+  data = [self.dataset[idx] for idx in possibly_batched_index]
+Load failed [152] /home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-02085-100.npz: Bad CRC-32 for file 'images.npy'
+/home/mci/arsyadl/pytan/venv/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py:52: RuntimeWarning: Bad CRC-32 for file 'images.npy'
+  data = [self.dataset[idx] for idx in possibly_batched_index]
+/pytorch/aten/src/ATen/native/cuda/ScatterGatherKernel.cu:365: operator(): block: [424,0,0], thread: [82,0,0] Assertion `idx_dim >= 0 && idx_dim < index_size && "index out of bounds"` failed.
+Traceback (most recent call last):
+  File "/home/mci/arsyadl/mmsk/train_proposed_mmsk_tversky.py", line 466, in <module>
+    trainer.run(dataset["train"], dataset["val"], args.epochs,
+  File "/home/mci/arsyadl/mmsk/train_proposed_mmsk_tversky.py", line 320, in run
+    val_loss, m      = self.validate(val_loader)
+  File "/home/mci/arsyadl/mmsk/train_proposed_mmsk_tversky.py", line 184, in validate
+    val_loss += loss.item()
+RuntimeError: CUDA error: device-side assert triggered
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+

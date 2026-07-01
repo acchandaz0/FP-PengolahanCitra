@@ -1,0 +1,6 @@
+gradio>=4.0
+numpy>=1.24.0
+pillow
+# torch — install versi yang cocok dengan CUDA server-mu (jangan dari sini kalau
+# environment lab sudah punya torch). Lihat https://pytorch.org untuk perintahnya.
+torch>=2.0.0
