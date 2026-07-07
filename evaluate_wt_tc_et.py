@@ -1,471 +1,443 @@
 """
-Baseline 1: Standard 3D U-Net + Dice Loss
+evaluate_wt_tc_et.py — Post-hoc WT/TC/ET evaluation from a trained checkpoint.
 
-Ablation Study Role:
-    Baseline 1 (3D U-Net + Dice)  vs  Baseline 2 (3D U-Net + Tversky)
-    → Isolates loss function contribution; architecture unchanged.
+Universal: works for ALL FIVE variants
+    Baseline1 (unet), Baseline2 (unet), Ablasi1 (sk),
+    Ablasi2 (mmsk),   Proposed  (mmsk).
 
-    Baseline 1 (3D U-Net + Dice)  vs  Ablation 1 (SK + Tversky)
-    → Isolates SK architecture contribution against plain U-Net floor.
+Aggregation
+-----------
+For each region this script now reports BOTH:
+    * MACRO  — per-case metric computed first, then averaged across cases
+               (the BraTS-challenge convention). Reported as
+               dsc_macro_mean / dsc_macro_std, etc.
+    * MICRO  — global TP/FP/FN pooled across ALL cases, then the metric
+               computed once. Reported as dsc_micro, sensitivity_micro,
+               precision_micro.
+HD95 has no micro form (it is a per-case distance metric), so only its
+macro mean/std is reported.
 
-    Baseline 1 vs Proposed (MMSK + Tversky)
-    → Full system gain (architecture + loss combined).
+The per-case arrays (per_case) are still stored in full for the later
+Wilcoxon signed-rank tests.
 
-BUGFIX vs the previous version
-------------------------------
-The previous train_epoch() and validate() each ran the forward pass + loss
-TWICE (two identical `with autocast(...)` blocks back-to-back). That:
-    * doubled compute (slower epochs), and
-    * in train_epoch, built the graph twice while backprop/accounting used a
-      mix of the two — corrupting the gradient step and the logged loss.
-Each now runs the forward pass exactly ONCE. If your existing B1 checkpoint
-was trained with the buggy version, retrain or at least treat its collapse
-with caution (it may be partly an artifact of the double-forward, not purely
-a Dice-loss collapse).
+Purpose
+-------
+All five ablation training scripts only log metrics on the RAW 5-class label
+space (BG, NCR, ED, NET, ET) via StreamingMetrics. The thesis (Bab III,
+Pasca-pemrosesan dan Evaluasi) commits to reporting BraTS-standard composite
+regions WT/TC/ET instead. This script bridges that gap.
 
-Metrics recorded per epoch:
-    DSC, HD95, Sensitivity, Precision per class (NCR/ED/NET/ET)
-Also recorded in results.json:
-    FLOPs (GFLOPs), parameter count, inference time, training time
+Usage
+-----
+    # Ablasi1 (SK / BGSK, bare state_dict checkpoint)
+    python evaluate_wt_tc_et.py \
+        --checkpoint results/ablation1_sk_tversky/best_model.pth \
+        --dataset_json dataset.json \
+        --architecture sk \
+        --variant_name "Ablasi1" \
+        --output_dir results/wt_tc_et_eval
+
+    # Ablasi2 (MMSK + Dice)
+    python evaluate_wt_tc_et.py \
+        --checkpoint results/ablation2_mmsk_dice/best_model.pth \
+        --dataset_json dataset.json \
+        --architecture mmsk \
+        --variant_name "Ablasi2" \
+        --output_dir results/wt_tc_et_eval
+
+    # Proposed (MMSK + Tversky), with gate interpretability
+    python evaluate_wt_tc_et.py \
+        --checkpoint results/proposed_mmsk_tversky/best_model.pth \
+        --dataset_json dataset.json \
+        --architecture mmsk \
+        --variant_name "Proposed" \
+        --output_dir results/wt_tc_et_eval \
+        --log-gate
+
+    # Baseline1 / Baseline2 (MONAI 3D U-Net)
+    #   --architecture unet   (omit --log-gate)
+
+Output
+------
+    <output_dir>/<variant_name>_wt_tc_et.json
 """
 
-import torch
-import json
-import time
 import argparse
+import json
+import sys
 from pathlib import Path
+
+import numpy as np
+import torch
 from torch.utils.data import DataLoader
-from monai.networks.nets import UNet
-from monai.losses import DiceLoss
+from scipy.spatial import cKDTree
 
-from brats_utils import (
-    BraTSNpzDataset,
-    validate_npz_files,
-    setup_logger,
-    count_flops,
-    StreamingMetrics,
-    OUT_CHANNELS,
-    FG_CLASS_NAMES,
-)
+from brats_utils import BraTSNpzDataset, validate_npz_files, setup_logger
 
 
-class Trainer:
-    def __init__(self, gpu_id: int, output_dir: str, vram_gb: float = 20.0):
-        self.output_dir = Path(output_dir)
-        self.logger     = setup_logger("baseline1", self.output_dir)
-        self.device     = torch.device(
-            f"cuda:{gpu_id}" if torch.cuda.is_available() else "cpu"
-        )
+# ── Composite region definitions (mirrors alg:wt_tc_et_conversion) ─────────────
+# Raw label convention: 0=BG, 1=NCR, 2=ED, 3=NET, 4=ET
+REGION_RAW_LABELS = {
+    "WT": (1, 2, 3, 4),   # NCR + ED + NET + ET
+    "TC": (1, 3, 4),      # NCR + NET + ET
+    "ET": (4,),           # ET only
+}
+REGIONS = ["WT", "TC", "ET"]
 
-        # ── VRAM cap ──────────────────────────────────────────────────────
-        if self.device.type == "cuda":
-            total_vram = torch.cuda.get_device_properties(gpu_id).total_memory / 1e9
-            fraction   = min(vram_gb / total_vram, 1.0)
-            torch.cuda.set_per_process_memory_fraction(fraction, device=gpu_id)
-            self.logger.info(
-                f"VRAM cap       : {vram_gb:.0f} GB / {total_vram:.0f} GB "
-                f"(fraction={fraction:.3f})"
-            )
 
-        self.logger.info(f"Device         : {self.device}")
-        self.logger.info(f"Model          : Standard 3D U-Net (MONAI)")
-        self.logger.info(f"Loss           : Dice  [Baseline 1]")
-        self.logger.info(f"out_channels   : {OUT_CHANNELS}")
-        self.logger.info(f"Label space    : BraTS 2024 raw {{0,1,2,3,4}}")
-        self.logger.info(f"Output dir     : {self.output_dir}")
+# ── Model loading (architecture-agnostic) ───────────────────────────────────────
+def load_model(architecture: str, checkpoint_path: Path, device: torch.device,
+               out_channels: int = 5, store_attention: bool = False,
+               logger=None):
+    """
+    Instantiate the correct architecture class and load weights.
 
-        # ── Model ──────────────────────────────────────────────────────────
-        self.model = UNet(
-            spatial_dims=3,
-            in_channels=4,
-            out_channels=OUT_CHANNELS,
-            channels=(32, 64, 128, 256),
-            strides=(2, 2, 2),
+    store_attention only matters for MMSK: set True ONLY when --log-gate is on,
+    so that the forward pass returns (logits, attn_maps). When False, MMSK
+    returns a plain logits tensor (identical to how the training scripts run
+    validate()), which avoids the tuple-unpack bug.
+    """
+    if architecture == "mmsk":
+        from mmsk_3d_unet import MMSK3DUNet
+        model = MMSK3DUNet(in_channels=4, out_channels=out_channels,
+                           store_attention=store_attention)
+
+    elif architecture == "unet":
+        # MONAI standard 3D U-Net, matches Baseline 1 / Baseline 2 config
+        from monai.networks.nets import UNet
+        model = UNet(
+            spatial_dims=3, in_channels=4, out_channels=out_channels,
+            channels=(32, 64, 128, 256), strides=(2, 2, 2),
             num_res_units=2,
-        ).to(self.device)
-
-        # ── Loss ───────────────────────────────────────────────────────────
-        self.loss_fn = DiceLoss(
-            to_onehot_y=True,
-            softmax=True,
-            include_background=False,
         )
 
-        # ── Optimizer / Scheduler ──────────────────────────────────────────
-        self.optimizer = torch.optim.AdamW(
-            self.model.parameters(), lr=1e-4, weight_decay=1e-5,
+    elif architecture == "sk":
+        # SK-3D U-Net (BGSK, no modal gate) — matches Ablasi1 training script
+        from bgsk_3d_unet_patched import BGSK3DUNet
+        model = BGSK3DUNet(in_channels=4, out_channels=out_channels)
+
+    else:
+        raise ValueError(f"Unknown architecture: {architecture}")
+
+    ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)
+
+    # Two checkpoint formats:
+    #   - full dict  (Baseline1, Ablasi2, Proposed): has "model_state_dict"
+    #   - bare state_dict (Ablasi1): OrderedDict of tensors, no wrapper keys
+    if isinstance(ckpt, dict) and "model_state_dict" in ckpt:
+        state_dict = ckpt["model_state_dict"]
+        epoch = ckpt.get("epoch", None)
+    else:
+        state_dict = ckpt              # bare state_dict
+        epoch = None
+
+    # Strip a possible "module." prefix (DataParallel), harmless if absent
+    state_dict = {k.replace("module.", "", 1): v for k, v in state_dict.items()}
+
+    try:
+        model.load_state_dict(state_dict, strict=True)
+    except RuntimeError as e:
+        # Informative diagnosis instead of a raw traceback — helps spot the
+        # known checkpoint/architecture mismatches (e.g. sk_bn present/absent).
+        model_keys = set(model.state_dict().keys())
+        ckpt_keys = set(state_dict.keys())
+        missing = sorted(model_keys - ckpt_keys)
+        unexpected = sorted(ckpt_keys - model_keys)
+        msg = (
+            f"load_state_dict FAILED for architecture='{architecture}'.\n"
+            f"  model has {len(model_keys)} keys, checkpoint has {len(ckpt_keys)} keys.\n"
+            f"  missing in checkpoint ({len(missing)}): {missing[:8]}{' ...' if len(missing) > 8 else ''}\n"
+            f"  unexpected in checkpoint ({len(unexpected)}): {unexpected[:8]}{' ...' if len(unexpected) > 8 else ''}\n"
+            f"  -> the model class does not match this checkpoint's architecture.\n"
+            f"     Check the correct model module/class, or the sk_bn variant."
         )
-        self.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-            self.optimizer, T_max=300,
-        )
+        if logger is not None:
+            logger.error(msg)
+        raise RuntimeError(msg) from e
 
-        # ── AMP ────────────────────────────────────────────────────────────
-        self.use_amp     = self.device.type == "cuda"
-        self.scaler      = torch.amp.GradScaler(device="cuda", enabled=self.use_amp)
-        self.accum_steps = 1   # set properly in run() after OOM probe
+    model.to(device).eval()
 
-        total = sum(p.numel() for p in self.model.parameters())
-        self.logger.info(f"Total parameters: {total:,}")
-        self.logger.info(f"AMP             : {'ON' if self.use_amp else 'OFF (CPU)'}")
+    epoch_1indexed = (epoch + 1) if epoch is not None else None
+    return model, epoch_1indexed
 
-        # ── FLOPs (computed once at startup) ───────────────────────────────
-        self.flops_giga = count_flops(
-            self.model, device=self.device, logger=self.logger,
-        )
 
-        # ── Inference timing (populated after first validate call) ─────────
-        self.inference_time_s = None
+# ── Region conversion (mirrors alg:wt_tc_et_conversion) ────────────────────────
+def to_region_masks(label_volume: np.ndarray) -> dict:
+    """label_volume: (D,H,W) int {0..4} -> dict region -> binary (D,H,W) bool."""
+    return {region: np.isin(label_volume, raw_labels)
+            for region, raw_labels in REGION_RAW_LABELS.items()}
 
-    # ──────────────────────────────────────────────────────────────────────────
-    def train_epoch(self, loader: DataLoader) -> float:
-        self.model.train()
-        epoch_loss = 0.0
-        self.optimizer.zero_grad()
 
+# ── HD95 (same implementation as brats_utils._hd95_single) ─────────────────────
+def hd95_single(pred_bin: np.ndarray, gt_bin: np.ndarray,
+                spacing_mm: float = 1.0) -> float:
+    pred_pts = np.argwhere(pred_bin)
+    gt_pts = np.argwhere(gt_bin)
+    if len(pred_pts) == 0 or len(gt_pts) == 0:
+        return float("nan")
+    tree_gt = cKDTree(gt_pts * spacing_mm)
+    tree_pred = cKDTree(pred_pts * spacing_mm)
+    d_pred_to_gt, _ = tree_gt.query(pred_pts * spacing_mm)
+    d_gt_to_pred, _ = tree_pred.query(gt_pts * spacing_mm)
+    return float(max(np.percentile(d_pred_to_gt, 95),
+                     np.percentile(d_gt_to_pred, 95)))
+
+
+def region_case_metrics(pred_bin: np.ndarray, gt_bin: np.ndarray,
+                        spacing_mm: float = 1.0) -> dict:
+    """
+    DSC, HD95, Sensitivity, Precision for one region, one case.
+    Also returns the raw TP/FP/FN voxel counts so the caller can pool them
+    across cases for the MICRO aggregation.
+    """
+    eps = 1e-8
+    tp = float(np.logical_and(pred_bin, gt_bin).sum())
+    fp = float(np.logical_and(pred_bin, np.logical_not(gt_bin)).sum())
+    fn = float(np.logical_and(np.logical_not(pred_bin), gt_bin).sum())
+
+    dsc = (2 * tp + eps) / (2 * tp + fp + fn + eps)
+    sens = (tp + eps) / (tp + fn + eps)
+    prec = (tp + eps) / (tp + fp + eps)
+    hd95 = hd95_single(pred_bin, gt_bin, spacing_mm)
+
+    return {"dsc": dsc, "hd95": hd95, "sensitivity": sens, "precision": prec,
+            "tp": tp, "fp": fp, "fn": fn}
+
+
+# ── Main evaluation loop ─────────────────────────────────────────────────────────
+def evaluate(model, loader, device, architecture: str, log_gate: bool,
+             logger) -> dict:
+    per_case = {r: {"dsc": [], "hd95": [], "sensitivity": [], "precision": []}
+                for r in REGIONS}
+
+    # MICRO accumulators: global TP/FP/FN pooled across every case.
+    micro_acc = {r: {"tp": 0.0, "fp": 0.0, "fn": 0.0} for r in REGIONS}
+    # GT presence bookkeeping (how many cases actually contain the region).
+    gt_present = {r: 0 for r in REGIONS}
+    gt_empty = {r: 0 for r in REGIONS}
+
+    gate_layer_key = "bottleneck"
+    gate_sub_idx = 1  # 0 = mmsk1, 1 = mmsk2 (second conv in the block)
+    gate_acc = {r: {"a1_sum": 0.0, "a2_sum": 0.0, "n_voxels": 0} for r in REGIONS}
+
+    n_cases = 0
+    with torch.no_grad():
         for batch_idx, batch in enumerate(loader):
-            inputs = batch["image"].to(self.device)
-            labels = batch["label"].to(self.device)
+            images = batch["image"].to(device)   # (1,4,D,H,W)
+            labels = batch["label"].to(device)   # (1,1,D,H,W)
 
-            # guard label: cegah index-out-of-bounds di one_hot/scatter_
-            labels = labels.long().clamp_(0, 4)
-
-            # ── single forward + loss (no duplicate block) ──
-            with torch.amp.autocast(device_type="cuda", enabled=self.use_amp):
-                outputs = self.model(inputs)
-                loss    = self.loss_fn(outputs, labels) / self.accum_steps
-
-            self.scaler.scale(loss).backward()
-
-            if (batch_idx + 1) % self.accum_steps == 0 or \
-               (batch_idx + 1) == len(loader):
-                self.scaler.step(self.optimizer)
-                self.scaler.update()
-                self.optimizer.zero_grad()
-
-            epoch_loss += loss.item() * self.accum_steps
-            if batch_idx % 10 == 0:
-                self.logger.debug(
-                    f"  Batch {batch_idx:>4}/{len(loader)} | "
-                    f"Loss: {loss.item() * self.accum_steps:.4f}"
-                )
-
-        return epoch_loss / len(loader)
-
-    # ──────────────────────────────────────────────────────────────────────────
-    def validate(self, loader: DataLoader):
-        """
-        Evaluate on validation set using StreamingMetrics (accumulates
-        TP/FP/FN per batch, no CPU memory spike from stacking all logits).
-        """
-        self.model.eval()
-        val_loss = 0.0
-        sm = StreamingMetrics(num_classes=OUT_CHANNELS)
-
-        with torch.no_grad():
-            for batch in loader:
-                inputs = batch["image"].to(self.device)
-                labels = batch["label"].to(self.device)
-
-                # guard label: cegah index-out-of-bounds di one_hot/scatter_
-                labels = labels.long().clamp_(0, 4)
-
-                # ── single forward + loss (no duplicate block) ──
-                with torch.amp.autocast(device_type="cuda", enabled=self.use_amp):
-                    logits = self.model(inputs)
-                    loss   = self.loss_fn(logits, labels)
-
-                val_loss += loss.item()
-                sm.add_batch(logits.cpu(), labels.cpu())
-
-        m = sm.compute()
-
-        # ── Inference timing (first epoch only) ────────────────────────────
-        if self.inference_time_s is None:
-            torch.cuda.empty_cache()
-            dummy = torch.zeros(1, 4, 128, 128, 128, device=self.device)
-            with torch.no_grad():
-                for _ in range(3):
-                    _ = self.model(dummy)
-                torch.cuda.synchronize()
-                n_timed = 10
-                t0 = time.time()
-                for _ in range(n_timed):
-                    _ = self.model(dummy)
-                torch.cuda.synchronize()
-            self.inference_time_s = (time.time() - t0) / n_timed
-            self.logger.info(
-                f"Inference time: {self.inference_time_s * 1000:.1f} ms/volume "
-                f"(avg over {n_timed} passes)"
-            )
-            del dummy
-            torch.cuda.empty_cache()
-
-        return val_loss / len(loader), m
-
-    # ──────────────────────────────────────────────────────────────────────────
-    def run(self, train_files: list, val_files: list,
-            epochs: int = 300, resume_path: str | None = None,
-            num_workers: int = 4):
-
-        self.logger.info("Pre-flight: validating .npz files ...")
-        train_files = validate_npz_files(train_files, self.logger)
-        val_files   = validate_npz_files(val_files,   self.logger)
-
-        if not train_files:
-            raise RuntimeError("No valid training files after validation scan.")
-        if not val_files:
-            raise RuntimeError("No valid validation files after validation scan.")
-
-        train_ds = BraTSNpzDataset(train_files, augment=True)
-        val_ds   = BraTSNpzDataset(val_files,   augment=False)
-
-        _OOM = (torch.OutOfMemoryError, torch.cuda.OutOfMemoryError)
-
-        def make_loaders(bs):
-            tl = DataLoader(
-                train_ds, batch_size=bs, shuffle=True,
-                num_workers=num_workers, pin_memory=(num_workers > 0),
-                drop_last=True,
-                persistent_workers=(num_workers > 0),
-            )
-            vl = DataLoader(
-                val_ds, batch_size=1, shuffle=False,
-                num_workers=num_workers, pin_memory=(num_workers > 0),
-                persistent_workers=(num_workers > 0),
-            )
-            return tl, vl
-
-        # OOM probe: try bs=4 first (plain U-Net is lighter than MMSK),
-        # fall back to bs=2+accum=2 if needed
-        batch_size, self.accum_steps = 4, 1
-        self.logger.info(
-            f"Probing batch_size={batch_size}, accum_steps={self.accum_steps} ..."
-        )
-        train_loader, val_loader = make_loaders(batch_size)
-
-        self.model.train()
-        try:
-            _b = next(iter(train_loader))
-            _labels = _b["label"].to(self.device).long().clamp_(0, 4)
-            with torch.amp.autocast(device_type="cuda", enabled=self.use_amp):
-                _out  = self.model(_b["image"].to(self.device))
-                _loss = self.loss_fn(_out, _labels) / self.accum_steps
-            self.scaler.scale(_loss).backward()
-            self.scaler.step(self.optimizer)
-            self.scaler.update()
-            self.optimizer.zero_grad()
-            torch.cuda.empty_cache()
-            self.logger.info(
-                f"Probe OK — bs={batch_size}, accum={self.accum_steps}, "
-                f"effective_batch={batch_size * self.accum_steps}"
-            )
-        except _OOM:
-            torch.cuda.empty_cache()
-            self.optimizer.zero_grad()
-            batch_size, self.accum_steps = 2, 2
-            train_loader, val_loader = make_loaders(batch_size)
-            self.logger.warning(
-                f"OOM at bs=4 — fallback: bs={batch_size}, "
-                f"accum={self.accum_steps}, "
-                f"effective_batch={batch_size * self.accum_steps}"
-            )
-
-        self.logger.info(f"Train batches  : {len(train_loader)} (bs={batch_size})")
-        self.logger.info(f"Val batches    : {len(val_loader)}")
-        self.logger.info(
-            f"Accum steps    : {self.accum_steps} "
-            f"(effective batch={batch_size * self.accum_steps})"
-        )
-        self.logger.info(f"Starting training for {epochs} epochs")
-        self.logger.info("=" * 65)
-
-        results     = []
-        best_dsc    = 0.0
-        start_time  = time.time()
-        start_epoch = 0
-
-        # ── Resume from checkpoint ─────────────────────────────────────────
-        if resume_path is not None:
-            ckpt_path = Path(resume_path)
-            if not ckpt_path.exists():
-                raise FileNotFoundError(f"Checkpoint not found: {ckpt_path}")
-            ckpt = torch.load(ckpt_path, map_location=self.device, weights_only=False)
-            if "model_state_dict" in ckpt:
-                self.model.load_state_dict(ckpt["model_state_dict"])
-                self.optimizer.load_state_dict(ckpt["optimizer_state_dict"])
-                if "scaler_state_dict" in ckpt:
-                    self.scaler.load_state_dict(ckpt["scaler_state_dict"])
-                if "scheduler_state_dict" in ckpt:
-                    self.scheduler.load_state_dict(ckpt["scheduler_state_dict"])
-                best_dsc    = ckpt.get("best_dsc", 0.0)
-                start_epoch = ckpt.get("epoch", 0) + 1
-                results     = ckpt.get("results", [])
+            # ── Robust forward: works whether the model returns a plain
+            #    tensor or a (logits, attn_maps) tuple/list. Fixes the
+            #    tuple-unpack bug for MMSK. ────────────────────────────────
+            out = model(images)
+            if isinstance(out, (tuple, list)):
+                logits = out[0]
+                attn_maps = out[1] if len(out) > 1 else None
             else:
-                # bare state_dict (e.g. old best_model.pth from original script)
-                self.model.load_state_dict(ckpt)
-                self.logger.warning(
-                    f"Loaded raw state_dict from {ckpt_path.name} — "
-                    f"optimizer/scaler/scheduler not restored (epoch resets to 0)"
-                )
-            self.logger.info(
-                f"Resumed from   : {ckpt_path.name} | "
-                f"start_epoch={start_epoch} | best_dsc={best_dsc:.4f}"
-            )
+                logits = out
+                attn_maps = None
 
-        for epoch in range(start_epoch, epochs):
-            epoch_start = time.time()
-            self.logger.info(f"Epoch {epoch+1}/{epochs}")
+            probs = torch.softmax(logits, dim=1)
+            preds = probs.argmax(dim=1).squeeze(0).cpu().numpy()   # (D,H,W)
+            gt = labels.squeeze(0).squeeze(0).cpu().numpy()        # (D,H,W)
 
-            train_loss  = self.train_epoch(train_loader)
+            pred_masks = to_region_masks(preds)
+            gt_masks = to_region_masks(gt)
 
-            torch.cuda.empty_cache()
-            val_loss, m = self.validate(val_loader)
-            self.scheduler.step()
+            for region in REGIONS:
+                m = region_case_metrics(pred_masks[region], gt_masks[region])
+                for key in ("dsc", "hd95", "sensitivity", "precision"):
+                    per_case[region][key].append(m[key])
+                # Pool raw counts for micro aggregation
+                micro_acc[region]["tp"] += m["tp"]
+                micro_acc[region]["fp"] += m["fp"]
+                micro_acc[region]["fn"] += m["fn"]
+                # Track GT presence for this region
+                if gt_masks[region].sum() > 0:
+                    gt_present[region] += 1
+                else:
+                    gt_empty[region] += 1
 
-            epoch_time = time.time() - epoch_start
-            elapsed    = time.time() - start_time
-            lr         = self.optimizer.param_groups[0]["lr"]
+            # ── Gate weight logging (Select attention [a1,a2], MMSK only) ──
+            if architecture == "mmsk" and log_gate and attn_maps is not None:
+                try:
+                    attn_pair = attn_maps[gate_layer_key][gate_sub_idx]  # [1,2,C]
+                    a1 = attn_pair[0, 0].mean().item()
+                    a2 = attn_pair[0, 1].mean().item()
+                    for region in REGIONS:
+                        voxel_count = int(gt_masks[region].sum())
+                        if voxel_count > 0:
+                            gate_acc[region]["a1_sum"] += a1 * voxel_count
+                            gate_acc[region]["a2_sum"] += a2 * voxel_count
+                            gate_acc[region]["n_voxels"] += voxel_count
+                except (KeyError, IndexError, TypeError) as e:
+                    if batch_idx == 0:
+                        logger.warning(
+                            f"Gate logging skipped: attn_maps structure "
+                            f"unexpected ({e}). Metrics unaffected; adjust "
+                            f"gate_layer_key/gate_sub_idx to match MMSK3DUNet."
+                        )
 
-            done    = epoch - start_epoch + 1
-            eta_sec = (elapsed / done) * (epochs - epoch - 1)
-            eta_h   = int(eta_sec // 3600)
-            eta_m   = int((eta_sec % 3600) // 60)
+            n_cases += 1
+            if (batch_idx + 1) % 25 == 0:
+                logger.info(f"  Evaluated {batch_idx + 1}/{len(loader)} cases")
 
-            dsc  = m["dsc"]
-            hd   = m["hd95"]
-            sens = m["sensitivity"]
-            prec = m["precision"]
+    gate_stats = None
+    if architecture == "mmsk" and log_gate:
+        gate_stats = {}
+        for region in REGIONS:
+            nv = gate_acc[region]["n_voxels"]
+            if nv > 0:
+                gate_stats[region] = {
+                    "a1_mean": gate_acc[region]["a1_sum"] / nv,
+                    "a2_mean": gate_acc[region]["a2_sum"] / nv,
+                    "n_voxels": nv,
+                }
+            else:
+                gate_stats[region] = {"a1_mean": float("nan"),
+                                      "a2_mean": float("nan"), "n_voxels": 0}
 
-            self.logger.info(
-                f"  Train Loss: {train_loss:.4f} | Val Loss: {val_loss:.4f} | "
-                f"Mean DSC: {m['dsc_mean']:.4f}"
-            )
-            self.logger.info(
-                f"  DSC   NCR/ED/NET/ET : "
-                f"{dsc[0]:.4f} / {dsc[1]:.4f} / {dsc[2]:.4f} / {dsc[3]:.4f}"
-            )
-            self.logger.info(
-                f"  HD95  NCR/ED/NET/ET : "
-                f"{hd[0]:.2f} / {hd[1]:.2f} / {hd[2]:.2f} / {hd[3]:.2f}  mm"
-            )
-            self.logger.info(
-                f"  Sens  NCR/ED/NET/ET : "
-                f"{sens[0]:.4f} / {sens[1]:.4f} / {sens[2]:.4f} / {sens[3]:.4f}"
-            )
-            self.logger.info(
-                f"  Prec  NCR/ED/NET/ET : "
-                f"{prec[0]:.4f} / {prec[1]:.4f} / {prec[2]:.4f} / {prec[3]:.4f}"
-            )
-            self.logger.info(
-                f"  Time: {epoch_time:.1f}s | Elapsed: {elapsed/3600:.2f}h | "
-                f"ETA: {eta_h}h {eta_m}m | LR: {lr:.2e}"
-            )
-
-            results.append({
-                "epoch":         epoch,
-                "train_loss":    train_loss,
-                "val_loss":      val_loss,
-                "dsc_mean":      m["dsc_mean"],
-                "dsc":           dsc,
-                "hd95":          hd,
-                "sensitivity":   sens,
-                "precision":     prec,
-                "lr":            lr,
-                "epoch_time_s":  epoch_time,
-                "elapsed_hours": elapsed / 3600,
-            })
-
-            # ── Save best model (full checkpoint, resume-compatible) ───────
-            if m["dsc_mean"] > best_dsc:
-                best_dsc = m["dsc_mean"]
-                torch.save({
-                    "epoch":                epoch,
-                    "model_state_dict":     self.model.state_dict(),
-                    "optimizer_state_dict": self.optimizer.state_dict(),
-                    "scaler_state_dict":    self.scaler.state_dict(),
-                    "scheduler_state_dict": self.scheduler.state_dict(),
-                    "best_dsc":             best_dsc,
-                    "results":              results,
-                }, self.output_dir / "best_model.pth")
-                self.logger.info(f"  ✓ New best model saved (DSC: {best_dsc:.4f})")
-
-            # ── Periodic checkpoint every 10 epochs ───────────────────────
-            if (epoch + 1) % 10 == 0:
-                ckpt = self.output_dir / f"checkpoint_epoch{epoch+1}.pth"
-                torch.save({
-                    "epoch":                epoch,
-                    "model_state_dict":     self.model.state_dict(),
-                    "optimizer_state_dict": self.optimizer.state_dict(),
-                    "scaler_state_dict":    self.scaler.state_dict(),
-                    "scheduler_state_dict": self.scheduler.state_dict(),
-                    "best_dsc":             best_dsc,
-                    "results":              results,
-                }, ckpt)
-                self.logger.info(f"  Checkpoint saved → {ckpt.name}")
-
-            self.logger.info("-" * 65)
-
-        # ── Final summary ──────────────────────────────────────────────────
-        total_time   = time.time() - start_time
-        best_epoch_r = max(results, key=lambda x: x["dsc_mean"])
-
-        with open(self.output_dir / "results.json", "w") as f:
-            json.dump({
-                "model":                      "Baseline1_3DUNet_Dice",
-                "loss":                       "Dice",
-                "architecture":               "Standard 3D U-Net (MONAI)",
-                "ablation_role":              "Performance floor",
-                "out_channels":               OUT_CHANNELS,
-                "label_space":                "BraTS2024 raw {0,1,2,3,4}",
-                "fg_class_names":             FG_CLASS_NAMES,
-                "total_parameters":           sum(p.numel() for p in self.model.parameters()),
-                "flops_giga":                 self.flops_giga,
-                "inference_time_s":           self.inference_time_s,
-                "batch_size":                 batch_size,
-                "accum_steps":                self.accum_steps,
-                "effective_batch":            batch_size * self.accum_steps,
-                "best_dsc":                   best_dsc,
-                "best_epoch":                 best_epoch_r["epoch"] + 1,
-                "best_dsc_per_class":         best_epoch_r["dsc"],
-                "best_hd95_per_class":        best_epoch_r["hd95"],
-                "best_sensitivity_per_class": best_epoch_r["sensitivity"],
-                "best_precision_per_class":   best_epoch_r["precision"],
-                "total_time_hours":           total_time / 3600,
-                "results":                    results,
-            }, f, indent=2)
-
-        self.logger.info("=" * 65)
-        self.logger.info("Training complete! [Baseline 1: 3D U-Net + Dice]")
-        self.logger.info(f"Best Mean DSC : {best_dsc:.4f}  (epoch {best_epoch_r['epoch']+1})")
-        self.logger.info(f"Total time    : {total_time/3600:.2f} hours")
-        if self.inference_time_s is not None:
-            self.logger.info(f"Inference     : {self.inference_time_s*1000:.1f} ms/volume")
-        self.logger.info("=" * 65)
+    return per_case, micro_acc, gt_present, gt_empty, gate_stats, n_cases
 
 
-# ── Entry point ────────────────────────────────────────────────────────────────
-if __name__ == "__main__":
-    p = argparse.ArgumentParser(
-        description="Baseline 1: Standard 3D U-Net + Dice Loss"
+def summarize(per_case: dict, micro_acc: dict, gt_present: dict,
+              gt_empty: dict, n_cases: int) -> dict:
+    """
+    Build the per-region summary with BOTH aggregations:
+        MACRO  — mean/std over per-case values (NaN ignored, for HD95).
+        MICRO  — computed from globally pooled TP/FP/FN.
+    """
+    eps = 1e-8
+    summary = {}
+    for region in REGIONS:
+        summary[region] = {}
+
+        # ── MACRO (per-case mean/std) ──────────────────────────────────────
+        for key in ("dsc", "hd95", "sensitivity", "precision"):
+            vals = np.array(per_case[region][key], dtype=float)
+            valid = vals[~np.isnan(vals)]
+            summary[region][f"{key}_macro_mean"] = (
+                float(np.mean(valid)) if len(valid) else float("nan"))
+            summary[region][f"{key}_macro_std"] = (
+                float(np.std(valid)) if len(valid) else float("nan"))
+            summary[region][f"{key}_n_valid"] = int(len(valid))
+
+        # ── MICRO (global pooled TP/FP/FN) ─────────────────────────────────
+        tp = micro_acc[region]["tp"]
+        fp = micro_acc[region]["fp"]
+        fn = micro_acc[region]["fn"]
+        summary[region]["dsc_micro"] = float(
+            (2 * tp + eps) / (2 * tp + fp + fn + eps))
+        summary[region]["sensitivity_micro"] = float((tp + eps) / (tp + fn + eps))
+        summary[region]["precision_micro"] = float((tp + eps) / (tp + fp + eps))
+
+        # ── Case bookkeeping ───────────────────────────────────────────────
+        summary[region]["n_cases_total"] = int(n_cases)
+        summary[region]["n_cases_gt_present"] = int(gt_present[region])
+        summary[region]["n_cases_gt_empty"] = int(gt_empty[region])
+
+    return summary
+
+
+# ── Entry point ──────────────────────────────────────────────────────────────────
+def main():
+    parser = argparse.ArgumentParser(
+        description="Post-hoc WT/TC/ET evaluation from a trained checkpoint "
+                    "(universal: unet / sk / mmsk; reports micro + macro)."
     )
-    p.add_argument("--gpu",          type=int,   default=0)
-    p.add_argument("--dataset_json", type=str,   required=True)
-    p.add_argument("--output_dir",   type=str,   default="./output_baseline1")
-    p.add_argument("--epochs",       type=int,   default=300)
-    p.add_argument("--vram_gb",      type=float, default=20.0)
-    p.add_argument("--resume",       type=str,   default=None,
-                   help="Path to checkpoint .pth to resume from")
-    p.add_argument("--num_workers",  type=int,   default=4,
-                   help="DataLoader worker processes. Use 0 to disable "
-                        "multiprocessing (safest on shared servers, "
-                        "slower but eliminates segfault from worker crashes)")
-    args = p.parse_args()
+    parser.add_argument("--checkpoint", type=str, required=True)
+    parser.add_argument("--dataset_json", type=str, required=True,
+                        help="Same JSON used for training, must have a 'val' key.")
+    parser.add_argument("--architecture", type=str, required=True,
+                        choices=["mmsk", "unet", "sk"])
+    parser.add_argument("--variant_name", type=str, required=True,
+                        help='e.g. "Baseline1", "Baseline2", "Ablasi1", '
+                             '"Ablasi2", "Proposed"')
+    parser.add_argument("--output_dir", type=str, required=True)
+    parser.add_argument("--gpu", type=int, default=0)
+    parser.add_argument("--num_workers", type=int, default=4)
+    parser.add_argument("--log-gate", action="store_true",
+                        help="Log mean [a1,a2] per region. MMSK architecture only.")
+    args = parser.parse_args()
 
+    output_dir = Path(args.output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    logger = setup_logger(f"eval_{args.variant_name}", output_dir)
+
+    device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
+    logger.info(f"Device: {device}")
+    logger.info(f"Variant: {args.variant_name}  |  Architecture: {args.architecture}")
+
+    if args.log_gate and args.architecture != "mmsk":
+        logger.warning(
+            "--log-gate requested but architecture != 'mmsk'; "
+            "no Select attention exists for this architecture. Disabling."
+        )
+        args.log_gate = False
+
+    # ── Load model ──────────────────────────────────────────────────────────
+    checkpoint_path = Path(args.checkpoint)
+    if not checkpoint_path.exists():
+        logger.error(f"Checkpoint not found: {checkpoint_path}")
+        sys.exit(1)
+    model, epoch = load_model(
+        args.architecture, checkpoint_path, device,
+        store_attention=args.log_gate, logger=logger,
+    )
+    logger.info(f"Loaded checkpoint from epoch {epoch}")
+
+    # ── Load validation data ───────────────────────────────────────────────
     with open(args.dataset_json) as f:
-        ds = json.load(f)
+        dataset = json.load(f)
+    val_files = validate_npz_files(dataset["val"], logger)
+    if not val_files:
+        logger.error("No valid validation files after validation scan.")
+        sys.exit(1)
+    val_ds = BraTSNpzDataset(val_files, augment=False)
+    val_loader = DataLoader(val_ds, batch_size=1, shuffle=False,
+                            num_workers=args.num_workers, pin_memory=True)
+    logger.info(f"Validation cases: {len(val_loader)}")
 
-    Trainer(args.gpu, args.output_dir, vram_gb=args.vram_gb).run(
-        ds["train"], ds["val"], args.epochs,
-        resume_path=args.resume,
-        num_workers=args.num_workers,
+    # ── Evaluate ────────────────────────────────────────────────────────────
+    logger.info("Starting WT/TC/ET evaluation ...")
+    per_case, micro_acc, gt_present, gt_empty, gate_stats, n_cases = evaluate(
+        model, val_loader, device, args.architecture, args.log_gate, logger
     )
+    summary = summarize(per_case, micro_acc, gt_present, gt_empty, n_cases)
+
+    for region in REGIONS:
+        s = summary[region]
+        logger.info(
+            f"  {region}: "
+            f"DSC[macro={s['dsc_macro_mean']:.4f} / micro={s['dsc_micro']:.4f}]  "
+            f"HD95={s['hd95_macro_mean']:.2f}mm  "
+            f"Sens[macro={s['sensitivity_macro_mean']:.4f} / micro={s['sensitivity_micro']:.4f}]  "
+            f"Prec[macro={s['precision_macro_mean']:.4f} / micro={s['precision_micro']:.4f}]  "
+            f"(gt_present={s['n_cases_gt_present']}/{s['n_cases_total']}, "
+            f"gt_empty={s['n_cases_gt_empty']})"
+        )
+    if gate_stats is not None:
+        for region in REGIONS:
+            logger.info(
+                f"  Gate {region}: a1={gate_stats[region]['a1_mean']:.4f} "
+                f"a2={gate_stats[region]['a2_mean']:.4f}"
+            )
+
+    # ── Save output ─────────────────────────────────────────────────────────
+    out = {
+        "variant": args.variant_name,
+        "architecture": args.architecture,
+        "checkpoint_epoch": epoch,
+        "n_cases": n_cases,
+        "summary": summary,
+        "per_case": per_case,
+        "gate_weights": gate_stats,
+    }
+    out_path = output_dir / f"{args.variant_name}_wt_tc_et.json"
+    with open(out_path, "w") as f:
+        json.dump(out, f, indent=2)
+    logger.info(f"Saved results -> {out_path}")
+
+
+if __name__ == "__main__":
+    main()

@@ -34,3 +34,12 @@
 2026-07-01 12:10:59 | INFO     | Log file: results/wt_tc_et_eval/train.log
 2026-07-01 12:10:59 | INFO     | Device: cuda:0
 2026-07-01 12:10:59 | INFO     | Variant: Ablasi1  |  Architecture: sk
+2026-07-04 15:21:09 | INFO     | Log file: results/wt_tc_et_eval/train.log
+2026-07-04 15:21:09 | INFO     | Device: cuda:0
+2026-07-04 15:21:09 | INFO     | Variant: Ablasi2  |  Architecture: mmsk
+2026-07-04 15:21:10 | ERROR    | load_state_dict FAILED for architecture='mmsk'.
+  model has 240 keys, checkpoint has 310 keys.
+  missing in checkpoint (0): []
+  unexpected in checkpoint (70): ['bottleneck.mmsk1.sk_bn.bias', 'bottleneck.mmsk1.sk_bn.num_batches_tracked', 'bottleneck.mmsk1.sk_bn.running_mean', 'bottleneck.mmsk1.sk_bn.running_var', 'bottleneck.mmsk1.sk_bn.weight', 'bottleneck.mmsk2.sk_bn.bias', 'bottleneck.mmsk2.sk_bn.num_batches_tracked', 'bottleneck.mmsk2.sk_bn.running_mean'] ...
+  -> the model class does not match this checkpoint's architecture.
+     Check the correct model module/class, or the sk_bn variant.

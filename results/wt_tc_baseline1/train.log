@@ -1,0 +1,9 @@
+2026-07-05 20:54:31 | INFO     | Log file: results/wt_tc_baseline1/train.log
+2026-07-05 20:54:31 | INFO     | Device: cuda:0
+2026-07-05 20:54:31 | INFO     | Variant: Baseline1  |  Architecture: unet
+2026-07-05 20:54:34 | ERROR    | load_state_dict FAILED for architecture='unet'.
+  model has 49 keys, checkpoint has 49 keys.
+  missing in checkpoint (36): ['model.1.submodule.0.conv.unit0.adn.A.weight', 'model.1.submodule.0.conv.unit0.conv.bias', 'model.1.submodule.0.conv.unit0.conv.weight', 'model.1.submodule.0.conv.unit1.adn.A.weight', 'model.1.submodule.0.conv.unit1.conv.bias', 'model.1.submodule.0.conv.unit1.conv.weight', 'model.1.submodule.0.residual.bias', 'model.1.submodule.0.residual.weight'] ...
+  unexpected in checkpoint (36): ['model.1.sub0.conv.unit0.adn.A.weight', 'model.1.sub0.conv.unit0.conv.bias', 'model.1.sub0.conv.unit0.conv.weight', 'model.1.sub0.conv.unit1.adn.A.weight', 'model.1.sub0.conv.unit1.conv.bias', 'model.1.sub0.conv.unit1.conv.weight', 'model.1.sub0.residual.bias', 'model.1.sub0.residual.weight'] ...
+  -> the model class does not match this checkpoint's architecture.
+     Check the correct model module/class, or the sk_bn variant.
