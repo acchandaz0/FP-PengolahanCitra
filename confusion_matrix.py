@@ -72,7 +72,7 @@ def build_model(variant, device):
         from bgsk_3d_unet_patched import BGSK3DUNet
         model = BGSK3DUNet(in_channels=4, out_channels=OUT_CHANNELS)
     elif v in ("ablation2", "a2", "proposed", "usulan"):
-        from mmsk_3d_unet import MMSK3DUNet
+        from mmsk.mmsk_3d_unet_old import MMSK3DUNet
         model = MMSK3DUNet(in_channels=4, out_channels=OUT_CHANNELS,
                            store_attention=False)
     else:

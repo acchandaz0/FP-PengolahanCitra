@@ -83,23 +83,19 @@ class MMSKConv3D(nn.Module):
         self.sk_fc1 = nn.Linear(out_ch, d, bias=False)
         self.sk_fc2 = nn.ModuleList([nn.Linear(d, out_ch, bias=False) for _ in range(M)])
 
-        # ── Cross-modal gating module (SPATIAL) ───────────────────────────
-        # Produces a PER-VOXEL gate G ∈ (0,1)^{B×out_ch×D×H×W} from the raw
-        # MRI modalities, so modality signals can steer branch selection
-        # differently at every spatial location (e.g. emphasise T1ce inside
-        # the enhancing core, FLAIR at the diffuse WT boundary).
-        #
-        # Implemented with 1×1×1 convolutions: a 1×1×1 conv is a per-voxel
-        # linear layer over the channel axis, so spatial resolution is
-        # preserved (unlike the previous GAP→FC design which averaged the
-        # whole volume into a single vector and discarded all location info).
+        # ── Cross-modal gating module ─────────────────────────────────────
+        # Takes raw MRI modalities (always 4 channels at full resolution),
+        # produces a channel-wise gate G ∈ ℝ^{out_ch} via GAP + FC.
+        # G is applied as a multiplicative modulation BEFORE SK selection,
+        # so modality signals can steer which branch wins attention.
         modal_bottleneck = max(num_modalities * 4, 16)
         self.modal_gate = nn.Sequential(
-            nn.Conv3d(num_modalities, modal_bottleneck, kernel_size=1, bias=False),
-            nn.BatchNorm3d(modal_bottleneck),
+            nn.AdaptiveAvgPool3d(1),                              # [B, 4, 1,1,1]
+            nn.Flatten(),                                          # [B, 4]
+            nn.Linear(num_modalities, modal_bottleneck, bias=False),
             nn.ReLU(inplace=True),
-            nn.Conv3d(modal_bottleneck, out_ch, kernel_size=1, bias=False),
-            nn.Sigmoid(),                                          # G ∈ (0,1)^{B,out_ch,D,H,W}
+            nn.Linear(modal_bottleneck, out_ch, bias=False),
+            nn.Sigmoid(),                                          # G ∈ (0,1)^{out_ch}
         )
 
     def forward(self, x, modalities):
@@ -129,13 +125,14 @@ class MMSKConv3D(nn.Module):
         )                                                  # [B, M, out_ch]
         attn_base = torch.softmax(attn_logits, dim=1)     # [B, M, out_ch]
 
-        # 3. Cross-modal gate G from raw MRI modalities (PER-VOXEL)
-        #    modalities is resized to match x's spatial dims by the caller,
-        #    so G has the same D×H×W as the feature maps U.
-        G_spatial = self.modal_gate(modalities)           # [B, out_ch, D, H, W]
+        # 3. Cross-modal gate G from raw MRI modalities
+        G = self.modal_gate(modalities)                   # [B, out_ch]
+        # Reshape for broadcasting: [B, 1, out_ch, 1, 1, 1] — but we apply
+        # gate to U_fuse spatially, then re-select.
+        G_spatial = G.view(B, self.out_ch, 1, 1, 1)       # [B, out_ch, 1,1,1]
 
-        # 4. Modulate fused feature with the spatial gate (cross-modal influence)
-        U_gated = [u * G_spatial for u in U]              # per-voxel modulation
+        # 4. Modulate fused feature with gate (cross-modal influence)
+        U_gated = [u * G_spatial for u in U]              # modulate each branch
 
         # 5. Aggregate with SK attention weights
         # attn_base: [B, M, out_ch] → expand to [B, M, out_ch, 1, 1, 1]
@@ -246,25 +243,17 @@ class MMSK3DUNet(nn.Module):
         modalities = x  # raw input always passed as cross-modal signal
 
         # ── Encoder ──────────────────────────────────────────────────────
-        # The spatial gate needs `modalities` resized to each block's feature
-        # resolution. _resize_modalities is a no-op when dims already match.
-        e1, attn_e1 = self.enc1(x, self._resize_modalities(modalities, x))
-        p1 = self.pool1(e1)
-        e2, attn_e2 = self.enc2(p1, self._resize_modalities(modalities, p1))
-        p2 = self.pool2(e2)
-        e3, attn_e3 = self.enc3(p2, self._resize_modalities(modalities, p2))
-        p3 = self.pool3(e3)
+        e1, attn_e1 = self.enc1(x, modalities)
+        e2, attn_e2 = self.enc2(self.pool1(e1), modalities)
+        e3, attn_e3 = self.enc3(self.pool2(e2), modalities)
 
         # ── Bottleneck ────────────────────────────────────────────────────
-        b,  attn_b  = self.bottleneck(p3, self._resize_modalities(modalities, p3))
+        b,  attn_b  = self.bottleneck(self.pool3(e3), modalities)
 
         # ── Decoder ───────────────────────────────────────────────────────
-        c3 = torch.cat([self.up3(b),  e3], dim=1)
-        d3, attn_d3 = self.dec3(c3, self._resize_modalities(modalities, c3))
-        c2 = torch.cat([self.up2(d3), e2], dim=1)
-        d2, attn_d2 = self.dec2(c2, self._resize_modalities(modalities, c2))
-        c1 = torch.cat([self.up1(d2), e1], dim=1)
-        d1, attn_d1 = self.dec1(c1, self._resize_modalities(modalities, c1))
+        d3, attn_d3 = self.dec3(torch.cat([self.up3(b),  e3], dim=1), modalities)
+        d2, attn_d2 = self.dec2(torch.cat([self.up2(d3), e2], dim=1), modalities)
+        d1, attn_d1 = self.dec1(torch.cat([self.up1(d2), e1], dim=1), modalities)
 
         # ── Output ────────────────────────────────────────────────────────
         logits = self.out_conv(d1)

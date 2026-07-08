@@ -49,7 +49,7 @@ from brats_utils import (
     OUT_CHANNELS,
     FG_CLASS_NAMES,
 )
-from mmsk_3d_unet import MMSK3DUNet
+from mmsk.mmsk_3d_unet import MMSK3DUNet
 
 
 class Trainer:

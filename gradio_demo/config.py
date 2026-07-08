@@ -1,17 +1,26 @@
 """Konfigurasi demo — cukup ubah path & konstanta di file ini."""
 
-# === 1. PATH YANG HARUS KAMU ISI ==========================================
-# Checkpoint bobot terbaik hasil training.
-# Biarkan None dulu kalau mau menguji UI tanpa model (hanya ground truth tampil).
-CHECKPOINT_PATH = None
-# contoh: CHECKPOINT_PATH = "/home/mci/arsyadl/mmsk/checkpoints/best_model.pth"
+# === 1. MODEL YANG DIBANDINGKAN ===========================================
+# "Nama tampil di UI"  ->  path checkpoint (.pth) best model tiap model.
+# Radio "Model" di UI mengambil kunci-kunci dict ini. Ganti path PLACEHOLDER
+# di bawah dengan checkpoint asli tiap model (nanti kamu isi sendiri) dan
+# ganti pula label-nya bila perlu.
+# Set None kalau ingin sebuah model menampilkan ground truth saja (tanpa prediksi).
+MODELS = {
+    "Proposed — MMSK-3D U-Net": "/home/mci/arsyadl/mmsk/gradio_demo/proposed_best_model.pth",
+    "Model 2":                  "/PLACEHOLDER/ganti/model2_best_model.pth",
+    "Model 3":                  "/PLACEHOLDER/ganti/model3_best_model.pth",
+    "Model 4":                  "/PLACEHOLDER/ganti/model4_best_model.pth",
+    "Model 5":                  "/PLACEHOLDER/ganti/model5_best_model.pth",
+}
+# Model yang aktif saat pertama kali dibuka.
+DEFAULT_MODEL = "Proposed — MMSK-3D U-Net"
 
 # Kasus contoh untuk dropdown:  "Nama yang tampil" -> path file .npz
 SAMPLE_CASES = {
     "Kasus 1 — seimbang (02303)": "/home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-02303-100.npz",
-    # tambah kasus lain bila perlu:
-    # "Kasus 2 — ET besar":        "/home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-XXXXX-100.npz",
-    # "Kasus 3 — tumor kecil":     "/home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-XXXXX-100.npz",
+    "Kasus 2 — ET besar (02793)": "/home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-02793-100.npz",
+    "Kasus 3 — tumor kecil (02798)": "/home/mci/arsyadl/braTS/preprocessed/BraTS-GLI-02798-100.npz",
 }
 
 # === 2. SKEMA LABEL & WARNA ===============================================

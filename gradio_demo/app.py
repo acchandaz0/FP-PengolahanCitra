@@ -23,8 +23,8 @@ def _overlay(img_slice, seg_slice, coloring):
     return vis.overlay_per_label(img_slice, seg_slice)
 
 
-def update(case_name, z, modality, coloring, plane):
-    case = inference.get_case(case_name)
+def update(case_name, z, modality, coloring, plane, model_name):
+    case = inference.get_case(case_name, model_name)
     images, seg, pred = case["images"], case["seg"], case["pred"]
     z = int(z)
     ch = MODALITY_IDX[modality]
@@ -45,16 +45,19 @@ def update(case_name, z, modality, coloring, plane):
         )
     else:
         pr_img = np.zeros_like(raw_img)
-        dice_md = "_Model belum di-set. Isi `CHECKPOINT_PATH` di `config.py` untuk menampilkan prediksi._"
+        dice_md = (
+            f"_Prediksi untuk **{model_name}** belum tersedia. Isi path checkpoint "
+            f"model ini pada `MODELS` di `config.py` untuk menampilkannya._"
+        )
 
     return raw_img, gt_img, pr_img, dice_md
 
 
-def reset_and_update(case_name, modality, coloring, plane):
+def reset_and_update(case_name, modality, coloring, plane, model_name):
     """Saat ganti plane atau kasus: lompat ke irisan paling informatif bidang itu."""
-    seg = inference.get_case(case_name)["seg"]
+    seg = inference.get_case(case_name, model_name)["seg"]
     z = inference.best_slice(seg, plane)
-    raw_img, gt_img, pr_img, dice_md = update(case_name, z, modality, coloring, plane)
+    raw_img, gt_img, pr_img, dice_md = update(case_name, z, modality, coloring, plane, model_name)
     return gr.update(value=z), raw_img, gt_img, pr_img, dice_md
 
 
@@ -75,6 +78,10 @@ with gr.Blocks(title="Segmentasi Glioma — MMSK-3D U-Net") as demo:
         "irisan. Tiga panel: citra mentah, ground truth, dan hasil segmentasi model."
     )
 
+    model = gr.Radio(
+        list(config.MODELS), value=config.DEFAULT_MODEL, label="Model"
+    )
+
     with gr.Row():
         case = gr.Dropdown(
             list(config.SAMPLE_CASES), value=list(config.SAMPLE_CASES)[0], label="Kasus"
@@ -90,23 +97,24 @@ with gr.Blocks(title="Segmentasi Glioma — MMSK-3D U-Net") as demo:
     slider = gr.Slider(0, 127, step=1, value=0, label="Irisan")
     legend = gr.HTML(_legend_html(COLOR_LABEL))
 
-    with gr.Row():
-        raw_out = gr.Image(label="Raw", type="numpy")
-        gt_out = gr.Image(label="Ground Truth", type="numpy")
-        pr_out = gr.Image(label="Hasil Segmentasi", type="numpy")
+    with gr.Row(equal_height=True):
+        raw_out = gr.Image(label="Raw", type="numpy", height=440)
+        gt_out = gr.Image(label="Ground Truth", type="numpy", height=440)
+        pr_out = gr.Image(label="Hasil Segmentasi", type="numpy", height=440)
 
     dice_out = gr.Markdown()
 
-    render_inputs = [case, slider, modality, coloring, plane]
+    render_inputs = [case, slider, modality, coloring, plane, model]
     render_outputs = [raw_out, gt_out, pr_out, dice_out]
-    reset_inputs = [case, modality, coloring, plane]
+    reset_inputs = [case, modality, coloring, plane, model]
     reset_outputs = [slider, raw_out, gt_out, pr_out, dice_out]
 
-    # geser slider / ganti modalitas / ganti warna -> render ulang di slice yang sama
+    # geser slider / ganti modalitas / warna / model -> render ulang di slice yang sama
     slider.change(update, render_inputs, render_outputs)
     modality.change(update, render_inputs, render_outputs)
     coloring.change(update, render_inputs, render_outputs)
     coloring.change(_legend_html, coloring, legend)
+    model.change(update, render_inputs, render_outputs)
 
     # ganti plane / kasus -> reset slider ke irisan paling informatif lalu render
     plane.change(reset_and_update, reset_inputs, reset_outputs)
@@ -115,10 +123,10 @@ with gr.Blocks(title="Segmentasi Glioma — MMSK-3D U-Net") as demo:
     def _init():
         inference.warmup()
         first = list(config.SAMPLE_CASES)[0]
-        seg = inference.get_case(first)["seg"]
+        seg = inference.get_case(first, config.DEFAULT_MODEL)["seg"]
         z = inference.best_slice(seg, "Aksial")
         raw_img, gt_img, pr_img, dice_md = update(
-            first, z, config.DEFAULT_MODALITY, COLOR_LABEL, "Aksial"
+            first, z, config.DEFAULT_MODALITY, COLOR_LABEL, "Aksial", config.DEFAULT_MODEL
         )
         return gr.update(value=z), raw_img, gt_img, pr_img, dice_md
 
